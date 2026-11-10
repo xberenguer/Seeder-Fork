@@ -71,6 +71,7 @@ static void drawSeedPage(void){
     case SHOW_DATA1:    ui::seedAddress(myWallet.firstAddress, st, tot); break;
     case SHOW_ENTROPY:  ui::seedEntropy(myWallet.entropyHex, st, tot); break;
     case SHOW_EXPORTQR: ui::seedQr(myWallet.mnemonic, myWallet.nWords); break;
+    case SHOW_COMPACTQR: ui::seedCompactQr(entropy, myWallet.nWords); break;
     case SHOW_EXPORTZPUB: ui::seedZpubQr(watchOnlyExport(), myWallet.fingerprint); break;
     case SHOW_EXIT:     ui::seedExit(); break;
   }
