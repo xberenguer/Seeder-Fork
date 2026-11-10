@@ -1,5 +1,17 @@
 # Modelo de seguridad de la SEEDER
 
+> **M5StickS3 port note:** see [README-STICKS3.md](README-STICKS3.md) for
+> validation status and port-specific limits. This experimental port has been
+> flashed and ROM-verified on a StickS3; functional hardware testing remains
+> incomplete. Its custom partition table excludes flash crash
+> dumps and filesystems. ROM readback confirmed that first startup initializes
+> NVS and stores `M5GFX / AUTODETECT = 26`, the StickS3 board-identification hint;
+> no seed material is intentionally persisted. Full merged-image verification
+> must run before the application boots; see the flash/verify sequence in
+> [README-STICKS3.md](README-STICKS3.md). The inherited exit action
+> clears application fields, not every library/stack copy of the seed; complete
+> RAM erasure on exit has not been verified.
+
 Este documento explica **de qué te protege la SEEDER, de qué no**, y cómo comprobar
 por tu cuenta que hace lo que dice. Está escrito para que puedas desconfiar del
 aparato con criterio, que es la única forma sana de usar uno.
@@ -31,7 +43,9 @@ Y como la entropía es tuya, **puedes rehacer las cuentas por fuera**: la pantal
 ## Decisiones de diseño
 
 - **La semilla nunca se escribe en flash.** Sólo vive en RAM y desaparece al
-  desconectar. No hay EEPROM, no hay NVS, no hay persistencia de ningún tipo.
+  desconectar. La aplicación no guarda la semilla en EEPROM ni NVS. El port
+  M5StickS3 sí inicializa NVS y M5GFX guarda allí el identificador de placa
+  `AUTODETECT = 26`; esta excepción no contiene datos de la semilla.
 - **La semilla nunca sale por el puerto serie.** El firmware no imprime *nada*
   por UART. `SEEDER_DEBUG` sólo habilita trazas de botones y jamás toca la
   semilla ni la entropía.
@@ -65,6 +79,16 @@ Si no coinciden, el aparato te está mintiendo.
 ```bash
 esptool.py --port COM3 --no-stub verify_flash 0x0 seeder-firmware-merged.bin
 ```
+
+**En el port M5StickS3**, usa la secuencia de
+[README-STICKS3.md](README-STICKS3.md): escribe con `--after no_reset` y verifica
+con `--before no_reset --after hard_reset --no-stub`, siempre antes del
+subcomando. Así se comprueba la imagen completa antes de ejecutar la aplicación.
+Después del primer arranque, NVS contiene el identificador de placa y deja de
+coincidir con los bytes borrados de la imagen combinada. En ese caso verifica
+por separado el bootloader, la tabla de particiones y la aplicación originales,
+o compara esos mismos rangos en una lectura hecha por la ROM. Una diferencia
+en esos segmentos inmutables sigue siendo un fallo de verificación.
 
 Con `--no-stub` **la aplicación de la SEEDER ni se ejecuta**: las líneas DTR/RTS
 meten al chip en modo descarga por hardware y quien responde es el bootloader de

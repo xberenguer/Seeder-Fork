@@ -2,3 +2,5 @@
 .vscode/
 dist/
 *.bin
+.venv/
+__pycache__/

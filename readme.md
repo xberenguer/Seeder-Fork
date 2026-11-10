@@ -1,4 +1,46 @@
-# SEEDER - Sovereign seed generator
+# Seeder Fork
+
+Hardware ports of [BitMaker-hub/Seeder](https://github.com/BitMaker-hub/Seeder),
+sharing the original coin/dice seed calculations. Device support is added as
+build targets in this repository; additional boards do not require a new repo.
+
+| Device | Build target | Validation |
+|---|---|---|
+| M5Stack StickS3 | `sticks3` | Built, flashed and ROM-verified; device display observed |
+| LilyGO T-Display | `tdisplay` | Build checked; no physical testing in this fork |
+| LilyGO T-Display-S3 | `tdisplay-s3` | Build checked; no physical testing in this fork |
+
+The Waveshare round S3 display is not supported yet. A future port will need
+its own hardware configuration and a layout suited to the circular screen.
+
+## M5StickS3 port
+
+Experimental port of [BitMaker-hub/Seeder](https://github.com/BitMaker-hub/Seeder)
+for the M5Stack StickS3 (K150). The original MIT license and author credits are
+retained.
+
+- Blue interface matched to the StickS3 button's hue.
+- Original full-size receiving-address text, with a white/grey checkerboard and
+  an address QR alongside it.
+- Original 12/24-word coin/dice calculations, seed QR, and watch-only zpub QR.
+- Wi-Fi and Bluetooth are not initialized; no networking or OTA features.
+
+Rendered UI previews using a public test address:
+
+![StickS3 menu](Images/StickS3-menu.png)
+![StickS3 receiving address](Images/StickS3-address.png)
+
+Build with `pio run -e sticks3`. See [README-STICKS3.md](README-STICKS3.md) for
+controls, flashing, verification, and current limitations.
+
+The StickS3 firmware has been flashed and verified through the ROM bootloader.
+Device photos confirm the address display. Broader functional, battery/power,
+and physical-camera QR testing remain incomplete. Host checks cover 78 public
+crypto vectors and 24 QR decoding assertions; they are not a security audit.
+
+The original project documentation follows below.
+
+---
 
 Un dispositivo DIY que te permite crear tus propias semillas de Bitcoin en cuestión
 de segundos, sin depender de nadie ni de nada para salvaguardar tus fondos.
