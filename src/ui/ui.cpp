@@ -1,16 +1,21 @@
 #include <Arduino.h>
-#include <TFT_eSPI.h>
+#include "../display.h"
 #include "theme.h"
 #include "ui.h"
 #include "../Lib/images.h"
-#include "../Lib/Free_Fonts.h"
+#if defined(SEEDER_BOARD_STICKS3)
+  #define FMB24 (&lgfx::fonts::FreeMonoBold24pt7b)
+  #define FMB18 (&lgfx::fonts::FreeMonoBold18pt7b)
+  #define FM9   (&lgfx::fonts::FreeMono9pt7b)
+  #define GFXFF 1
+#else
+  #include "../Lib/Free_Fonts.h"
+#endif
 #include "../qrcoded.h"
 #include "brand.h"
 #if !defined(SEEDER_BOARD_TDISPLAY_S3)
   #include "../Lib/images_splash85.h"
 #endif
-
-extern TFT_eSPI tft;
 
 /* Los bitmaps del splash no escalan con la placa, asi que cada una usa el suyo:
    a tamano nativo el grupo se comia los 135 px de la pequena y dejaba los
@@ -46,7 +51,13 @@ void tiny(const char *s, int x, int y, uint16_t col, char datum, int sp, uint8_t
   int px = x;
   if(datum == 'C')      px = x - w/2;
   else if(datum == 'R') px = x - w;
+#if defined(SEEDER_BOARD_STICKS3)
+  // M5GFX preserves a current GFX font when setTextFont(1) is requested.
+  // Select the 6x8 font explicitly so labels recover after bigNumber().
+  tft.setFont(&lgfx::fonts::Font0);
+#else
   tft.setTextFont(1);
+#endif
   tft.setTextSize(size);
   tft.setTextColor(col, UI_BG);
   for(int i=0; i<n; i++){ tft.drawChar(s[i], px, y, 1); px += adv; }
@@ -127,17 +138,30 @@ void bar(int x, int y, int w, int h, float frac){
    sobra: la posición en el raíl ya señala el botón físico. */
 static void rail(const char *topAct, const char *botAct, bool showKeys){
   tft.drawFastVLine(UI_RAIL_X, 0, UI_H, UI_TRACK);
+#if !defined(SEEDER_BOARD_STICKS3)
   caret(UI_RAIL_CX, SY(12), SX(9), SY(6), UI_DIM);
+#endif
   if(showKeys){
+#if defined(SEEDER_BOARD_STICKS3)
+    tiny("B MOVE", UI_RAIL_CX, UI_RAIL_TOP_Y, UI_ACCENT, 'C', 0);
+    tiny("A OK", UI_RAIL_CX, UI_RAIL_BOT_Y, UI_ACCENT, 'C', 0);
+#else
     tiny("MOVE", UI_RAIL_CX, UI_RAIL_TOP_Y,    UI_ACCENT, 'C', 1);
-    tiny(topAct, UI_RAIL_CX, UI_RAIL_TOP_Y+SY(10), UI_DIM,    'C', 0);
     tiny("OK",   UI_RAIL_CX, UI_RAIL_BOT_Y,    UI_ACCENT, 'C', 1);
+#endif
+    tiny(topAct, UI_RAIL_CX, UI_RAIL_TOP_Y+SY(10), UI_DIM,    'C', 0);
     tiny(botAct, UI_RAIL_CX, UI_RAIL_BOT_Y+SY(10), UI_DIM,    'C', 0);
   }else{
+#if defined(SEEDER_BOARD_STICKS3)
+    tiny("B", UI_RAIL_CX, UI_RAIL_TOP_Y-SY(8), UI_DIM, 'C', 0);
+    tiny("A", UI_RAIL_CX, UI_RAIL_BOT_Y-SY(8), UI_DIM, 'C', 0);
+#endif
     tiny(topAct, UI_RAIL_CX, UI_RAIL_TOP_Y+SY(4), UI_ACCENT, 'C', 1);
     tiny(botAct, UI_RAIL_CX, UI_RAIL_BOT_Y+SY(4), UI_ACCENT, 'C', 1);
   }
+#if !defined(SEEDER_BOARD_STICKS3)
   caret(UI_RAIL_CX, SY(124), SX(9), SY(-6), UI_DIM);
+#endif
 }
 
 static void eyebrow(const char *s){ tiny(s, UI_M, SY(10), UI_ACCENT, 'L', 1); }
@@ -148,8 +172,14 @@ static int bigNumber(int n, int baselineY){
   tft.fillRect(0, baselineY-36, SX(100), 40, UI_BG);   //alto por la fuente, ancho por la placa
   tft.setFreeFont(FMB24);
   tft.setTextColor(UI_TEXT);
+#if defined(SEEDER_BOARD_STICKS3)
+  tft.setTextDatum(lgfx::textdatum_t::baseline_left);
+#endif
   tft.setCursor(UI_M, baselineY);
   tft.print(buf);
+#if defined(SEEDER_BOARD_STICKS3)
+  tft.setTextDatum(TL_DATUM);
+#endif
   return tft.getCursorX();
 }
 
@@ -221,10 +251,10 @@ void splash(void){
   tft.fillScreen(UI_BG);
 }
 
-/* Cabecera de marca: verde macizo con tinta negra. Es lo que separa el menú
+/* Cabecera de marca: color de acento con tinta negra. Es lo que separa el menú
    de las pantallas de trabajo, y por eso vuelve. Sin la palabra MENU: ya se
    ve. El logotipo y la hoja son recortes del arte original (ver brand.h). */
-static void greenHead(void){
+static void accentHead(void){
   tft.fillRect(0, 0, UI_W, UI_HEAD_H, UI_ACCENT);
   /* Los dos son bitmaps: no escalan, se colocan. Uno pegado al margen
      izquierdo y el otro al derecho, centrados en la franja. */
@@ -238,6 +268,10 @@ static void greenHead(void){
    desplazarse, abajo un check para confirmar. */
 static void thinRail(void){
   tft.drawFastVLine(UI_MRAIL_X, UI_HEAD_H, UI_H-UI_HEAD_H, UI_TRACK);
+#if defined(SEEDER_BOARD_STICKS3)
+  tiny("B", UI_MRAIL_CX, SY(46), UI_ACCENT, 'C', 0);
+  tiny("A", UI_MRAIL_CX, SY(90), UI_ACCENT, 'C', 0);
+#endif
   caret(UI_MRAIL_CX, SY(62), SX(13), SY(-8), UI_DIM);
   caret(UI_MRAIL_CX, SY(68), SX(13), SY( 8), UI_DIM);
   for(int i=0; i<2; i++){                       //grosor 2, no hay drawWideLine
@@ -256,7 +290,7 @@ static void listRow(int y, bool sel, uint16_t col, const char *lab, const char *
 
 void menu(bool diceSelected){
   tft.fillScreen(UI_BG);
-  greenHead();
+  accentHead();
   thinRail();
 
   const uint16_t dc = diceSelected ? UI_ACCENT : UI_DIM;
@@ -271,7 +305,7 @@ void menu(bool diceSelected){
 
 void words(uint8_t nWords){
   tft.fillScreen(UI_BG);
-  greenHead();
+  accentHead();
   thinRail();
 
   const bool w12 = (nWords == 12);
@@ -283,8 +317,14 @@ void words(uint8_t nWords){
      pantalla anterior, para que las dos casen. */
   tft.setFreeFont(FMB18);
   tft.setTextDatum(BC_DATUM);
+#if defined(SEEDER_BOARD_STICKS3)
+  // The numeric font argument selects Font0 in M5GFX, overriding FreeFont.
+  tft.setTextColor(c1); tft.drawString("12", SX(36), SY(74));
+  tft.setTextColor(c2); tft.drawString("24", SX(36), SY(118));
+#else
   tft.setTextColor(c1); tft.drawString("12", SX(36), SY(74),  GFXFF);
   tft.setTextColor(c2); tft.drawString("24", SX(36), SY(118), GFXFF);
+#endif
   tft.setTextDatum(TL_DATUM);
 
   listRow(SY(44), w12,  c1, "WORDS", "128 BITS OF ENTROPY", SX(72));
@@ -377,9 +417,15 @@ void holdEnter(void){
   tiny("RELEASE TO CANCEL", UI_RAIL_X/2, SY(92), UI_DIM,  'C', 1);
 
   tft.fillRect(UI_RAIL_X+1, 0, UI_W - UI_RAIL_X - 1, UI_H, UI_BG);
+#if defined(SEEDER_BOARD_STICKS3)
+  tiny("A OK", UI_RAIL_CX, SY(96), UI_ACCENT, 'C', 0);
+#else
   tiny("OK",   UI_RAIL_CX, SY(96),  UI_ACCENT, 'C', 1);
+#endif
   tiny("HOLD", UI_RAIL_CX, SY(106), UI_TEXT,   'C', 0);
+#if !defined(SEEDER_BOARD_STICKS3)
   caret(UI_RAIL_CX, SY(124), SX(9), SY(-6), UI_DIM);   //senala el boton fisico
+#endif
   holdFilled = 0;
 }
 
@@ -427,10 +473,45 @@ void mnemonic(const String &mn, uint8_t nWords, uint8_t from, uint8_t step, uint
 void seedAddress(const String &addr, uint8_t step, uint8_t total){
   head("FIRST ADDRESS", step, total);
   bodyLine("m/84'/0'/0'/0/0", SY(30), UI_ACCENT);
-  int y = SY(48);
-  for(int i=0; i<(int)addr.length(); i += UI_BIG_CPL){
-    bigLine(addr.substring(i, min((int)addr.length(), i + UI_BIG_CPL)), y, UI_TEXT);
-    y += UI_BIG_LH;
+
+  const int groupChars = 5;
+  const int charWidth = UI_TINY_W * UI_BIG_BODY;
+
+  // A BIP84 receiving address is 42 bytes: version 3-M fits it with a
+  // four-module quiet zone. Encode the address itself, without seed data.
+  QRCode qrcode;
+  uint8_t buf[qrcode_getBufferSize(3)];
+  int textWidth = UI_W - 2*UI_M;
+  if(qrcode_initText(&qrcode, buf, 3, ECC_MEDIUM, addr.c_str()) >= 0){
+    const int quiet = 4;
+    const int bodyTop = SY(22), bodyHeight = UI_H - bodyTop;
+    const int px = (bodyHeight - SY(2)) / (qrcode.size + 2*quiet);
+    const int side = (qrcode.size + 2*quiet) * px;
+    const int left = UI_W - SX(2) - side;
+    const int top = bodyTop + (bodyHeight - side) / 2;
+    tft.fillRect(left, top, side, side, UI_QR_LIGHT);
+    for(uint8_t row=0; row<qrcode.size; row++)
+      for(uint8_t col=0; col<qrcode.size; col++)
+        if(qrcode_getModule(&qrcode, col, row))
+          tft.fillRect(left + (col+quiet)*px, top + (row+quiet)*px,
+                       px, px, UI_QR_DARK);
+
+    textWidth = left - UI_M - SX(8);
+  }
+
+  // Preserve the original full-width letters and continuous line wrapping.
+  // Colour up to five characters at a time, reversing colours on each row.
+  const int charsPerLine = max(1, textWidth / charWidth);
+  const int lineHeight = max(UI_TINY_H * UI_BIG_BODY, SY(18));
+  for(int start=0, row=0; start<(int)addr.length(); start += charsPerLine, row++){
+    const int end = min((int)addr.length(), start + charsPerLine);
+    const int y = SY(44) + row * lineHeight;
+    for(int i=start, column=0; i<end; i += groupChars, column++){
+      tiny(addr.substring(i, min(end, i + groupChars)),
+           UI_M + (i-start)*charWidth, y,
+           ((row + column) % 2) ? UI_ADDR_GREY : UI_ADDR_WHITE,
+           'L', 0, UI_BIG_BODY);
+    }
   }
 }
 
@@ -556,9 +637,15 @@ void seedExit(void){
   const int bx = SX(126), by = SY(100), bw = SX(106), bh = SY(30);
   tft.drawRoundRect(bx,   by,   bw,   bh,   6, UI_ACCENT);
   tft.drawRoundRect(bx+1, by+1, bw-2, bh-2, 5, UI_ACCENT);
+#if defined(SEEDER_BOARD_STICKS3)
+  tiny("HOLD A", bx + bw/2, by + (bh-8*UI_BIG_BODY)/2, UI_ACCENT, 'C', 1, UI_BIG_BODY);
+#else
   tiny("HOLD OK", bx + bw/2, by + (bh-8*UI_BIG_BODY)/2, UI_ACCENT, 'C', 1, UI_BIG_BODY);
+#endif
   /* la punta señala al botón OK físico, en el borde derecho */
+#if !defined(SEEDER_BOARD_STICKS3)
   tft.fillTriangle(UI_W-SX(6), by+SY(9), UI_W-SX(6), by+SY(21), UI_W-SX(1), by+SY(15), UI_ACCENT);
+#endif
 }
 
 }  // namespace ui

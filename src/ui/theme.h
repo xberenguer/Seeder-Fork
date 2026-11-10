@@ -15,13 +15,15 @@
 /*** Colores (RGB565) *************************************************
  Tres niveles de brillo, no dos. Sin el nivel apagado todo grita a la vez
  y nada guía la mirada: era el motivo de que la v1 se viera dura.        */
-#define UI_ACCENT     0x86F3   // verde SEEDER: lo que importa ahora
+#define UI_ACCENT     0x3C9A   // StickS3 button-blue hue, bright enough for LCD text
 #define UI_TEXT       0xD6BA   // texto principal
 #define UI_DIM        0x4A49   // texto secundario y pistas
 #define UI_TRACK      0x2945   // reglas y fondo de barras
 #define UI_BG         0x0000
 #define UI_QR_LIGHT   0xFFFF   // fondo y zona tranquila del QR
 #define UI_QR_DARK    0x0000   // los módulos, oscuros sobre claro como manda
+#define UI_ADDR_WHITE 0xFFFF
+#define UI_ADDR_GREY  0xA514   // readable grey on black for address groups
 
 /*** Métricas *********************************************************/
 #define UI_M          SX(10)     // margen izquierdo del contenido
