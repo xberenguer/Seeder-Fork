@@ -49,6 +49,7 @@ IMG = img_dims()
 BOARDS = {
     "T-Display    (ESP32)":    dict(w=240, h=135),
     "T-Display-S3 (ESP32-S3)": dict(w=320, h=170),
+    "M5StickS3    (ESP32-S3)": dict(w=240, h=135),
 }
 
 # Avance horizontal por carácter de cada fuente GFX, medido de sus cabeceras
@@ -296,7 +297,7 @@ def main():
     if bad:
         print(f"AUDITORÍA FALLIDA: {bad} problemas")
         return 1
-    print("Auditoría correcta: la misma composición cabe en las dos placas.")
+    print("Auditoría correcta: la composición cabe en las tres placas.")
     return 0
 
 
