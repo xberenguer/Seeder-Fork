@@ -21,22 +21,30 @@ retained.
 
 - Blue interface matched to the StickS3 button's hue.
 - Original full-size receiving-address text, with a white/grey checkerboard and
-  an address QR alongside it.
+  an address QR alongside it, using the equivalent uppercase Bech32 form
+  for larger modules.
 - Original 12/24-word coin/dice calculations, seed QR, and watch-only zpub QR.
+- An additional CompactSeedQR export page after the original seed QR, with
+  a full-height white panel and a code that fills the available space inside
+  its white border.
 - Wi-Fi and Bluetooth are not initialized; no networking or OTA features.
 
-Rendered UI previews using a public test address:
+Rendered UI previews using public test data:
 
 ![StickS3 menu](Images/StickS3-menu.png)
 ![StickS3 receiving address](Images/StickS3-address.png)
+![StickS3 CompactSeedQR](Images/StickS3-compact.png)
 
 Build with `pio run -e sticks3`. See [README-STICKS3.md](README-STICKS3.md) for
 controls, flashing, verification, and current limitations.
 
-The StickS3 firmware has been flashed and verified through the ROM bootloader.
+The initial StickS3 firmware has been flashed and verified through the ROM bootloader.
 Device photos confirm the address display. Broader functional, battery/power,
 and physical-camera QR testing remain incomplete. Host checks cover 78 public
-crypto vectors and 24 QR decoding assertions; they are not a security audit.
+crypto vectors and 176 native-rendered QR decoding/blur checks; they are not
+a security audit.
+CompactSeedQR has additional binary round-trip tests in `tests/qr`; scanning
+the new screen with a physical SeedSigner still needs device testing.
 
 The original project documentation follows below.
 

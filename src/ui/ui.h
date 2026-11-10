@@ -39,6 +39,7 @@ void mnemonic(const String &mn, uint8_t nWords, uint8_t from, uint8_t step, uint
 void seedAddress(const String &addr, uint8_t step, uint8_t total);
 void seedEntropy(const String &hex, uint8_t step, uint8_t total);
 void seedQr(const String &data, uint8_t nWords);
+void seedCompactQr(const uint8_t *entropy, uint8_t nWords);
 void seedZpubQr(const String &data, const String &fingerprint);
 void seedExit(void);
 

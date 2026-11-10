@@ -21,8 +21,19 @@ target the ESP32 StickC, StickC Plus, or StickC Plus2.
   watch-only zpub QR. The First Address page also shows its receiving-address
   QR beside the complete address text. The address keeps its original full-size
   lettering and continuous line wrapping. White/grey colour sections of up to
-  five characters reverse on each row; the QR contains the original address.
+  five characters reverse on each row. The QR uses the equivalent uppercase
+  Bech32 form of the address, enabling a less dense code and larger modules.
+  Its white border matches the watch-only screen; the white square fills all
+  available height below the address header.
   It does not generate random entropy for you.
+- Adds a **Compact QR** page immediately after the original mnemonic-text QR.
+  It follows [SeedSigner's CompactSeedQR specification](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md#compactseedqr-specification):
+  the original 16/32 entropy bytes in QR byte mode, with low error correction.
+  The 12/24-word codes are 21×21 / 25×25 modules. Export codes occupy a
+  full-height 135×135 white square on StickS3, flush with the top, bottom and
+  right edges. A six-pixel white border surrounds the 123×123 code area. Cell
+  boundaries snap directly to LCD pixels, using all available space without
+  filtering. The original export remains available on the previous page.
 - Disables application/library logging, sensors, audio, and external accessories.
   The application does not initialize Wi-Fi or Bluetooth or save seed data.
 - Uses a custom partition table without a crash-dump partition or filesystem.
@@ -116,6 +127,17 @@ power interactions still need testing on a physical StickS3. This port adds no
 automatic sleep, wake, or inactivity timeout.
 
 ## Validation and limits
+
+The additional CompactSeedQR page passes 19 independent binary encoder
+round trips, including all nine official SeedSigner vectors, plus two address
+QR round trips that preserve the same witness program/scriptPubKey. Native display
+renders pass 128 binary decoding checks at both display sizes, including
+controlled blur, plus 16 address and 32 mnemonic/zpub decoding checks. All
+44 rendered module matrices match independent reference encodings. The original
+mnemonic-text export and watch-only payloads remain unchanged; their panels
+also fill the screen height. A physical SeedSigner camera scan of the new
+screen still needs testing. Run
+`python tests/qr/verify.py` after installing `tests/qr/requirements.txt`.
 
 The port compiles for all three board targets. The StickS3 image has been flashed
 and verified against the build through its ROM bootloader. Device photos confirm

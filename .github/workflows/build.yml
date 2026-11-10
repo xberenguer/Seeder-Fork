@@ -24,6 +24,10 @@ jobs:
           python -m pip install -r tests/crypto/requirements.txt
           python tests/crypto/build.py
           python tests/crypto/verify.py
+      - name: Verify CompactSeedQR binary round trips
+        run: |
+          python -m pip install -r tests/qr/requirements.txt
+          python tests/qr/verify.py
 
   firmware:
     needs: audit

@@ -80,6 +80,8 @@ extern "C"
 
     int8_t qrcode_initText(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, const char *data);
     int8_t qrcode_initBytes(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, uint8_t *data, uint16_t length);
+    // Explicit QR byte mode, including for payloads that look like ASCII text.
+    int8_t qrcode_initBinary(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, const uint8_t *data, uint16_t length);
 
     bool qrcode_getModule(QRCode *qrcoded, uint8_t x, uint8_t y);
 

@@ -170,21 +170,33 @@ def audit(board, sym):
         ("entropía, 8 bytes por fila, 4 filas",
          sx(8), sx(8) + 7 * sx(29) + 24, sy(32), sy(32) + 3 * sy(26) + 16),
     ]
-    # El QR elige versión según la longitud, y luego el mayor píxel por módulo
-    # que deje 2 módulos de margen, ensanchando el margen hasta 4 con lo que
-    # sobre. Se comprueban los PEORES casos: 12 palabras de 8 letras son 107
-    # caracteres (versión 6, 41 módulos) y 24 de 8 son 215 (versión 9, 53).
-    # El bloque incluye la zona tranquila, que también se pinta.
-    for words, mods in (("12 palabras", 41), ("24 palabras", 53)):
-        px = 1
-        while (mods + 4) * (px + 1) <= sym["UI_H"] and px < 6:
-            px += 1
-        quiet = min((sym["UI_H"] - mods * px) // (2 * px), 4)
-        qw, b = mods * px, quiet * px
-        x1 = sym["UI_W"] - sx(2)
-        blocks.append((f"QR, {words} ({mods} módulos a {px}px, margen {quiet})",
-                       x1 - qw - 2 * b, x1,
-                       (sym["UI_H"] - qw) // 2 - b, (sym["UI_H"] - qw) // 2 + qw + b))
+    # Full-height export squares retain the legacy WATCH ONLY white margin.
+    watch_px = 1
+    while (41 + 4) * (watch_px + 1) <= sym["UI_H"] and watch_px < 6:
+        watch_px += 1
+    border = min((sym["UI_H"] - 41 * watch_px) // (2 * watch_px), 4) * watch_px
+    for label, mods in (("12-word text", 41), ("24-word text", 53),
+                        ("12-word compact", 21), ("24-word compact", 25)):
+        core = sym["UI_H"] - 2 * border
+        side = sym["UI_H"]
+        left = sym["UI_W"] - side
+        blocks.append((f"QR {label} ({core}px core/{mods} mod, border {border}px)",
+                       left, sym["UI_W"], 0, sym["UI_H"]))
+        if sym["UI_M"] + 13 * sym["UI_TINY_W"] >= left:
+            problems.append(f"QR {label}: el codigo pisa los rotulos")
+        if core < mods:
+            problems.append(f"QR {label}: no cabe un pixel por modulo")
+    body_top = sy(22)
+    address_side = sym["UI_H"] - body_top
+    address_left = sym["UI_W"] - address_side
+    address_top = body_top
+    blocks.append((f"QR direccion (25 mod, borde {border}px)",
+                   address_left, sym["UI_W"], address_top, sym["UI_H"]))
+    address_cpl = (address_left - sym["UI_M"] - sx(8)) // 12
+    address_rows = (42 + address_cpl - 1) // address_cpl
+    blocks.append(("texto direccion, 42 caracteres sin comprimir",
+                   sym["UI_M"], sym["UI_M"] + address_cpl * 12,
+                   sy(44), sy(44) + (address_rows - 1) * max(16, sy(18)) + 16))
     blocks += [
         ("splash: logotipos + Powered by uBitcoin",
          (sym["UI_W"]-sym["SPL_PW"])//2, (sym["UI_W"]-sym["SPL_PW"])//2 + sym["SPL_PW"],
@@ -247,17 +259,12 @@ def audit(board, sym):
         anchos = [("?", 0)]
     largo, ancho = max(anchos, key=lambda a: a[1])
     texto = sym["UI_M"] + ancho
-    for caso, mods in (("zpub / 12 palabras", 41), ("descriptor", 45), ("24 palabras", 53)):
-        px = 1
-        while (mods + 4) * (px + 1) <= sym["UI_H"] and px < 6:
-            px += 1
-        quiet = min((sym["UI_H"] - mods * px) // (2 * px), 4)
-        qleft = sym["UI_W"] - sx(2) - mods * px - 2 * quiet * px
-        ok = texto < qleft
-        if not ok:
-            problems.append(f"QR {caso}: el codigo pisa el rotulo \"{largo}\" ({qleft} < {texto})")
-        print(f"    {'ok ' if ok else 'MAL'} {'QR ' + caso + ': rotulo | codigo':52s} "
-              f"x ..{texto:3d} | {qleft:3d}..  ({mods} mod, {px}px)")
+    qleft = sym["UI_W"] - sym["UI_H"]
+    ok = texto < qleft
+    if not ok:
+        problems.append(f'QR: el codigo pisa el rotulo "{largo}" ({qleft} < {texto})')
+    print(f"    {'ok ' if ok else 'MAL'} {'QR: rotulo | panel de altura completa':52s} "
+          f"x ..{texto:3d} | {qleft:3d}..{sym['UI_W']} ")
 
     # --- creditos del splash -------------------------------------------
     # El bounding box solo, por como se calcula top, no puede fallar nunca:

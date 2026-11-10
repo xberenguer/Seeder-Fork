@@ -771,11 +771,11 @@ static void rs_getRemainder(uint8_t degree, uint8_t *coeff, uint8_t *data, uint8
 
 #pragma mark - QrCode
 
-static int8_t encodeDataCodewords(BitBucket *dataCodewords, const uint8_t *text, uint16_t length, uint8_t version)
+static int8_t encodeDataCodewords(BitBucket *dataCodewords, const uint8_t *text, uint16_t length, uint8_t version, bool forceByte)
 {
     int8_t mode = MODE_BYTE;
 
-    if (isNumeric((char *)text, length))
+    if (!forceByte && isNumeric((char *)text, length))
     {
         mode = MODE_NUMERIC;
         bb_appendBits(dataCodewords, 1 << MODE_NUMERIC, 4);
@@ -801,7 +801,7 @@ static int8_t encodeDataCodewords(BitBucket *dataCodewords, const uint8_t *text,
             bb_appendBits(dataCodewords, accumData, accumCount * 3 + 1);
         }
     }
-    else if (isAlphanumeric((char *)text, length))
+    else if (!forceByte && isAlphanumeric((char *)text, length))
     {
         mode = MODE_ALPHANUMERIC;
         bb_appendBits(dataCodewords, 1 << MODE_ALPHANUMERIC, 4);
@@ -941,8 +941,9 @@ uint16_t qrcode_getBufferSize(uint8_t version)
 }
 
 // @TODO: Return error if data is too big.
-int8_t qrcode_initBytes(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, uint8_t *data, uint16_t length)
+static int8_t qrcode_initData(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, const uint8_t *data, uint16_t length, bool forceByte)
 {
+    if (version < 1 || version > 40 || ecc > ECC_HIGH || (!data && length)) return -1;
     uint8_t size = version * 4 + 17;
     qrcoded->version = version;
     qrcoded->size = size;
@@ -960,12 +961,16 @@ int8_t qrcode_initBytes(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint
     uint16_t dataCapacity = moduleCount / 8 - NUM_ERROR_CORRECTION_CODEWORDS[eccFormatBits];
 #endif
 
+    // Reject oversized binary payloads before writing into the bit buffer.
+    if (forceByte && 4U + getModeBits(version, MODE_BYTE) + (uint32_t)length * 8U > (uint32_t)dataCapacity * 8U)
+        return -1;
+
     struct BitBucket codewords;
     uint8_t codewordBytes[bb_getBufferSizeBytes(moduleCount)];
     bb_initBuffer(&codewords, codewordBytes, (int32_t)sizeof(codewordBytes));
 
     // Place the data code words into the buffer
-    int8_t mode = encodeDataCodewords(&codewords, data, length, version);
+    int8_t mode = encodeDataCodewords(&codewords, data, length, version, forceByte);
 
     if (mode < 0)
     {
@@ -1025,6 +1030,16 @@ int8_t qrcode_initBytes(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint
     applyMask(&modulesGrid, &isFunctionGrid, mask);
 
     return 0;
+}
+
+int8_t qrcode_initBytes(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, uint8_t *data, uint16_t length)
+{
+    return qrcode_initData(qrcoded, modules, version, ecc, data, length, false);
+}
+
+int8_t qrcode_initBinary(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, const uint8_t *data, uint16_t length)
+{
+    return qrcode_initData(qrcoded, modules, version, ecc, data, length, true);
 }
 
 int8_t qrcode_initText(QRCode *qrcoded, uint8_t *modules, uint8_t version, uint8_t ecc, const char *data)

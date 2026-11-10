@@ -470,6 +470,36 @@ void mnemonic(const String &mn, uint8_t nWords, uint8_t from, uint8_t step, uint
   }
 }
 
+// Retain the WATCH ONLY white-border thickness while filling the QR panel.
+static void textQrGeometry(uint8_t modules, int &px, int &border){
+  px = 1;
+  while((modules + 4) * (px+1) <= UI_H && px < 6) px++;
+  const int quiet = min((UI_H - modules*px) / (2*px), 4);
+  border = quiet * px;
+}
+
+static int watchOnlyQrBorder(void){
+  int px, border;
+  textQrGeometry(41, px, border); // Account zpub: version 6, 41 modules.
+  return border;
+}
+
+static void drawQrPanel(QRCode &qr, int left, int top, int side, int border){
+  const int core = side - 2*border;
+  tft.fillRect(left, top, side, side, UI_QR_LIGHT);
+  // Divide the entire available core into crisp pixel cells. Adjacent cells
+  // share boundaries, so there are no gaps, clipping or filtered grey edges.
+  for(uint8_t row=0; row<qr.size; row++){
+    const int y0 = row*core/qr.size, y1 = (row+1)*core/qr.size;
+    for(uint8_t col=0; col<qr.size; col++){
+      if(!qrcode_getModule(&qr, col, row)) continue;
+      const int x0 = col*core/qr.size, x1 = (col+1)*core/qr.size;
+      tft.fillRect(left + border + x0, top + border + y0,
+                   x1-x0, y1-y0, UI_QR_DARK);
+    }
+  }
+}
+
 void seedAddress(const String &addr, uint8_t step, uint8_t total){
   head("FIRST ADDRESS", step, total);
   bodyLine("m/84'/0'/0'/0/0", SY(30), UI_ACCENT);
@@ -477,24 +507,19 @@ void seedAddress(const String &addr, uint8_t step, uint8_t total){
   const int groupChars = 5;
   const int charWidth = UI_TINY_W * UI_BIG_BODY;
 
-  // A BIP84 receiving address is 42 bytes: version 3-M fits it with a
-  // four-module quiet zone. Encode the address itself, without seed data.
+  // BIP173 recommends uppercase inside QR codes, enabling alphanumeric mode.
+  // The same BIP84 address now fits version 2-L, allowing larger modules.
+  String qrAddress = addr;
+  qrAddress.toUpperCase();
   QRCode qrcode;
-  uint8_t buf[qrcode_getBufferSize(3)];
+  uint8_t buf[qrcode_getBufferSize(2)];
   int textWidth = UI_W - 2*UI_M;
-  if(qrcode_initText(&qrcode, buf, 3, ECC_MEDIUM, addr.c_str()) >= 0){
-    const int quiet = 4;
+  if(qrcode_initText(&qrcode, buf, 2, ECC_LOW, qrAddress.c_str()) >= 0){
+    const int border = watchOnlyQrBorder();
     const int bodyTop = SY(22), bodyHeight = UI_H - bodyTop;
-    const int px = (bodyHeight - SY(2)) / (qrcode.size + 2*quiet);
-    const int side = (qrcode.size + 2*quiet) * px;
-    const int left = UI_W - SX(2) - side;
-    const int top = bodyTop + (bodyHeight - side) / 2;
-    tft.fillRect(left, top, side, side, UI_QR_LIGHT);
-    for(uint8_t row=0; row<qrcode.size; row++)
-      for(uint8_t col=0; col<qrcode.size; col++)
-        if(qrcode_getModule(&qrcode, col, row))
-          tft.fillRect(left + (col+quiet)*px, top + (row+quiet)*px,
-                       px, px, UI_QR_DARK);
+    const int side = bodyHeight;
+    const int left = UI_W - side;
+    drawQrPanel(qrcode, left, bodyTop, side, border);
 
     textWidth = left - UI_M - SX(8);
   }
@@ -544,25 +569,17 @@ static uint8_t qrVersionFor(size_t len){
    que decir exactamente cual de las dos, porque no se pueden tratar igual. */
 static void qrPage(const char *tag, const char *l1, const char *l2,
                    const char *l3, const char *extra, const String &value,
-                   const String &data){
-  const uint8_t version = qrVersionFor(data.length());
+                   const String &data, const uint8_t *binary = nullptr,
+                   uint8_t binaryLength = 0){
+  const bool compact = binary != nullptr;
+  const uint8_t version = compact ? (binaryLength == 16 ? 1 : 2)
+                                  : qrVersionFor(data.length());
   QRCode qrcode;
   uint8_t buf[qrcode_getBufferSize(11)];        // dimensionado al peor caso
-  if(qrcode_initText(&qrcode, buf, version, 0, data.c_str()) < 0) return;
-
-  /* El módulo manda para escanear, pero la zona tranquila hace falta o no
-     hay código que valga: se coge el mayor píxel por módulo que deje al
-     menos 2 módulos de margen claro, y luego se ensancha el margen con lo
-     que sobre, hasta los 4 que pide la norma.
-
-     Medido contra un decodificador de verdad, con y sin desenfoque: en la
-     T-Display salen 3px con 2 módulos para 12 palabras y 2px con 4 para 24;
-     en la S3, 3px y 4 módulos en los dos casos. */
-  const int QUIET_MIN = 2, QUIET_MAX = 4;
-  int px = 1;
-  while((qrcode.size + 2*QUIET_MIN) * (px+1) <= UI_H && px < 6) px++;
-  int quiet = (UI_H - qrcode.size*px) / (2*px);
-  if(quiet > QUIET_MAX) quiet = QUIET_MAX;
+  const int8_t result = compact
+    ? qrcode_initBinary(&qrcode, buf, version, ECC_LOW, binary, binaryLength)
+    : qrcode_initText(&qrcode, buf, version, ECC_LOW, data.c_str());
+  if(result < 0) return;
 
   tft.fillScreen(UI_BG);
   tiny(tag, UI_M, SY(10), UI_ACCENT, 'L', 1);
@@ -577,20 +594,8 @@ static void qrPage(const char *tag, const char *l1, const char *l2,
     tiny(value, UI_M, SY(94), UI_TEXT, 'L', 0);
   }
 
-  /* Oscuro sobre claro, que es como se define un QR. Estaba al revés: los
-     módulos oscuros se pintaban en blanco y el fondo negro hacía de zona
-     tranquila, así que salía un código invertido. Muchos lectores de móvil
-     no leen un QR invertido, y comprobado con un decodificador: el de antes
-     no se leía ni sin desenfoque, y éste sí. */
-  const int qw = qrcode.size * px, b = quiet * px;
-  const int qx = UI_W - qw - b - SX(2);
-  const int qy = (UI_H - qw) / 2;
-
-  tft.fillRect(qx - b, qy - b, qw + 2*b, qw + 2*b, UI_QR_LIGHT);
-  for(uint8_t y=0; y<qrcode.size; y++)
-    for(uint8_t x=0; x<qrcode.size; x++)
-      if(qrcode_getModule(&qrcode, x, y))
-        tft.fillRect(qx + x*px, qy + y*px, px, px, UI_QR_DARK);
+  // Full-height square: the white panel reaches every top/bottom/right pixel.
+  drawQrPanel(qrcode, UI_W - UI_H, 0, UI_H, watchOnlyQrBorder());
 }
 
 /* La semilla entera: quien lo escanee puede gastar. Dice cuantas palabras
@@ -605,6 +610,18 @@ void seedQr(const String &data, uint8_t nWords){
   else
     qrPage("EXPORT", "24 SEED WORDS", "CAN SPEND", "NEVER A PHONE",
            "SCAN WITH AN", "OFFLINE WALLET", data);
+}
+
+// CompactSeedQR is the original BIP39 entropy, without its checksum bits.
+// Keep the explicit byte count: entropy can include NUL, CR/LF and high bytes.
+void seedCompactQr(const uint8_t *entropy, uint8_t nWords){
+  if(!entropy || (nWords != 12 && nWords != 24)) return;
+  if(nWords == 12)
+    qrPage("COMPACT QR", "12 SEED WORDS", "CAN SPEND", "NEVER A PHONE",
+           "SCAN WITH AN", "OFFLINE WALLET", "", entropy, 16);
+  else
+    qrPage("COMPACT QR", "24 SEED WORDS", "CAN SPEND", "NEVER A PHONE",
+           "SCAN WITH AN", "OFFLINE WALLET", "", entropy, 32);
 }
 
 /* Solo la clave publica de cuenta. Sirve para mirar el saldo y nada mas, y
