@@ -1,5 +1,5 @@
 {
-  "firmware": "2.2.0-sticks3.2",
+  "firmware": "2.2.0-sticks3.3",
   "type": "production ui.cpp rendered through native M5GFX LGFXSprite; public fixtures; not photographs or physical scan evidence",
   "native_size": [
     240,
@@ -18,7 +18,7 @@
     },
     {
       "render": "Images/StickS3-address.png",
-      "sha256": "c5584d674375ecefb487c8ab7de0aa45d334605085c6908443a5b2feec17e69f"
+      "sha256": "1c651af111eeca30f629f4b58c96f654fb24a5e37a45cce6ff9b44603361643d"
     },
     {
       "render": "Images/StickS3-export.png",
@@ -38,7 +38,7 @@
     },
     {
       "render": "Images/StickS3-splash.png",
-      "sha256": "fbbde676133c0faef99a04166cda014fe2c7cc2e308ee7c1f5d15ca66b64f1fa"
+      "sha256": "fe326bb567e71d4a59f3922961d0ac7765baad4d7d3eed677117535b938e9d05"
     }
   ]
 }

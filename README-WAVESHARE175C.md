@@ -141,6 +141,8 @@ Current `.9` builds and passes native layout/QR checks and production-workflow t
 
 Version .7 was flashed, readback-verified and physically accepted. Version .8 retains that layout, changes splash spelling/version and was also flashed/readback-verified. Host checks cover 25 frames, seven QR cases including text-export length variants, every Bech32 character in every address position, debounced generation/navigation/reset workflows, and 78 independent deterministic calculation vectors. All four source targets compile.
 
+The `.9` browser installer also completed a full Chrome backup/save/install/digest-verification/restart flow. Recovery imports were checked, but no restore write was attempted after the board became unavailable. The same frozen app had passed an independent ROM check before browser installation.
+
 Physical camera scanning, battery operation/runtime, complete RAM erasure and independent security auditing are not established by those checks. A software-rendered QR decode is not a physical-camera measurement.
 
 [Original MIT license](LICENSE) · [Dependency notices](THIRD-PARTY-NOTICES.txt) · [Official Waveshare hardware guide](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.75C)

@@ -518,7 +518,7 @@ void seedAddress(const String &addr, uint8_t step, uint8_t total){
   for(int i=0;i<(int)addr.length();++i) {
     const int col=i%10,row=i/10;
     tiny(addr.substring(i,i+1),SX(6)+col*11+(col/5)*4,SY(31)+row*SY(19),
-         (i/5)%2?UI_ADDR_WHITE:UI_ACCENT,'L',0,UI_BIG_BODY);
+         (row+col/5)%2?UI_ADDR_WHITE:UI_ACCENT,'L',0,UI_BIG_BODY);
   }
   return;
 #else
