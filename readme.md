@@ -1,65 +1,72 @@
 # Seeder Fork
 
-Offline seed generation, adapted for **M5Stack StickS3** and the round
-**Waveshare AMOLED 1.75C**. Based on [BitMaker's Seeder](https://github.com/BitMaker-hub/Seeder)
-v2.2.0, with the original coin/dice calculations, MIT license and credits retained.
+**A two-button, offline Bitcoin seed generator for M5Stack StickS3 and Waveshare AMOLED 1.75C.** Enter your own coin flips or dice rolls, write down the resulting 12 or 24 BIP39 words, check the first receiving address, and export to a compatible offline signing device or watch-only wallet.
 
-Enter physical coin flips or dice rolls, inspect the resulting BIP39 words and
-first BIP84 receiving address, then export the seed or a watch-only account key.
-Wi-Fi and Bluetooth are not initialized.
+<img src="Images/Seeder-devices.png" alt="Seeder running on M5Stack StickS3 at left and Waveshare AMOLED 1.75C at right" width="850">
 
-<img src="Images/Waveshare-device.jpg" alt="Seeder mnemonic words on the Waveshare CNC enclosure" width="600">
+*Two supported devices: StickS3 on the left; Waveshare 1.75C on the right. The StickS3 photograph shows an earlier green interface; the current rectangular fork uses blue accents, shown in the screenshots below.*
 
-*Test seed: 50 dice rolls of 1.*
+Seeder was created by **[BitMaker](https://github.com/BitMaker-hub/Seeder)** from an idea by **Lunaticoin**. This community fork builds on their Seeder v2.2.0, retains the original credits and [MIT license](LICENSE), and adds hardware ports and interface adaptations. It does not generate random entropy for you: the physical coin or die supplies the input.
 
-![Current round-screen interface](Images/Waveshare-overview.png)
+[Documentation hub](docs/README.md) · [StickS3 manual](README-STICKS3.md) · [Waveshare manual](README-WAVESHARE175C.md) · [Flashing guide](docs/flashing.md) · [Credits](docs/credits.md)
 
-*Exact production-code screen captures using public deterministic test data.*
+## Choose your device
 
-[Browse all 25 screens and 21 original-vs-round comparisons](docs/screenshots.md).
+| Device | Identify it before buying or flashing | Manual |
+| --- | --- | --- |
+| **M5Stack StickS3 / K150** | Rectangular 1.14-inch LCD; ESP32-S3; 8MB flash and 8MB PSRAM. Not StickC, StickC Plus or StickC Plus2. | [StickS3 manual, controls and installation](README-STICKS3.md) |
+| **Waveshare ESP32-S3-Touch-AMOLED-1.75C** | Round 1.75-inch 466×466 AMOLED in the CNC aluminum enclosure; 32MB flash and 8MB PSRAM. The **C** suffix matters. | [Waveshare manual, controls and installation](README-WAVESHARE175C.md) |
 
-## Devices
+Buy the exact models from the [M5Stack official StickS3 shop](https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit) or the [Waveshare official 1.75C shop](https://www.waveshare.com/esp32-s3-touch-amoled-1.75c.htm). The manuals explain battery options, hardware identity and the two interfaces.
 
-| Device | Target | Guide |
-|---|---|---|
-| Waveshare ESP32-S3-Touch-AMOLED-1.75C | `waveshare175c` | [Round-screen setup, controls and flashing](README-WAVESHARE175C.md) |
-| M5Stack StickS3 / K150 | `sticks3` | [StickS3 setup, controls and flashing](README-STICKS3.md) |
-| LilyGO T-Display | `tdisplay` | Original hardware target; shares this fork's rectangular UI |
-| LilyGO T-Display-S3 | `tdisplay-s3` | Original hardware target; shares this fork's rectangular UI |
+## Start here
 
-More boards can be added as build targets in this repository. The non-C Waveshare
-model and M5StickC family are not supported by the profiles above.
+1. Open your device's manual and identify its buttons and firmware image.
+2. Follow the [flashing guide](docs/flashing.md). StickS3 uses its own complete image; Waveshare preserves its factory map and installs only the app at `0x200000`.
+3. Try the complete workflow with public test data first, then read [Using Seeder](docs/using-seeder.md) and [Security](SECURITY.md) before entering private entropy.
 
-## What differs from the original?
+The planned [browser installer](https://xn--sg8hhb.ws/flasher/) will offer an optional short installation path. Until it is live and lists both correct Seeder targets, use the independently usable terminal instructions in the [flashing guide](docs/flashing.md).
 
-This is an adaptation with deliberate interface changes. Read the complete
-[upstream comparison](docs/fork-differences.md), including changes beyond hardware:
+## What it does
 
-- Round layout, enlarged original glyphs and sharper derivatives of BitMaker's
-  artwork; full-width green menu band and top-button controls.
-- Corrected `SOVEREIGN` spelling on the round splash, using the original letter shapes.
-- Receiving-address QR and five-character verification colors on both ports.
-- Clearer Export/Watch Only captions, page counters, thinner QR margins, and a
-  cancellable hold-to-reset line on the round display.
-- Blue styling, white/grey address grouping, full-height exports and an
-  additional CompactSeedQR page on the rectangular targets.
+| Choice | 12-word seed | 24-word seed |
+| --- | --- | --- |
+| Coin input | 128 flips | 256 flips |
+| Dice input | 50 rolls of a six-sided die | 99 rolls of a six-sided die |
 
-Seed calculations and original mnemonic/zpub payloads remain unchanged.
+After generation, review the numbered words, first BIP84 receiving address, entropy bytes and export pages. StickS3 also offers **CompactSeedQR**. **Export** and **Compact QR** contain the seed and permit spending; **Watch Only** contains the account public key and cannot sign transactions, but exposes wallet activity. [Every page and payload](docs/using-seeder.md#pages-and-qr-payloads) is explained in the shared guide.
 
-## Build and validation
+The firmware does not initialize Wi-Fi or Bluetooth and does not intentionally save seed material. It uses an empty BIP39 passphrase; it has no passphrase-entry or existing-seed import screen. Exit clears application-owned fields, but complete erasure of every library, stack or display-buffer copy has not been verified. See [the security model](SECURITY.md).
 
-Use the device guide for pinned dependencies and the correct flashing map.
-Waveshare requires a guarded **application-only** update at `0x200000`; StickS3
-has its own complete-image procedure. Do not interchange their images.
+## Current interface
 
-All four targets compile locally. The round UI has 25 rendered-frame checks,
-seven QR cases, approved-screen pixel regressions and simulated button workflows.
-Original calculations have 78 independent deterministic test vectors. Device
-flash readback, camera scans, battery tests and security audits are separate
-claims; see each guide for current limits.
+| StickS3: blue rectangular interface | Waveshare: green round interface |
+| --- | --- |
+| ![StickS3 menu](Images/StickS3-menu.png) | ![Waveshare menu](Images/Waveshare-menu.png) |
+| ![StickS3 first address](Images/StickS3-address.png) | ![Waveshare first address](Images/Waveshare-address.png) |
+| ![StickS3 CompactSeedQR](Images/StickS3-compact.png) | ![Waveshare seed export](Images/Waveshare-export.png) |
 
-Screenshots contain public test seeds. Read [SECURITY.md](SECURITY.md) before use.
-Original license: [MIT](LICENSE). Dependencies: [third-party notices](THIRD-PARTY-NOTICES.txt).
+*These screenshots are software renders of production UI code using public test fixtures, not device photographs or camera-scan evidence. Never use pictured test seeds for funds.*
+
+[Full Waveshare gallery and original comparisons](docs/screenshots.md) · [Artwork and photograph provenance](docs/artwork.md) · [All differences from upstream](docs/fork-differences.md)
+
+## Validation and development
+
+The tested StickS3 build is `2.2.0-sticks3-dev` from clean commit `38de080`; its complete image was flashed and ROM-verified. Waveshare `2.2.0-ws175c.8` was flashed and readback-verified; it retains the physically accepted .7 layout with a splash-spelling and version-label correction. Full physical input-flow, camera scanning, battery/power qualification and independent security auditing remain separate work.
+
+All four build targets compile: `sticks3`, `waveshare175c`, and the retained upstream LilyGO `tdisplay` / `tdisplay-s3` targets. Compiling a target does not establish physical validation for that board. The firmware remains native C/C++; the port does not change the original coin/dice seed calculations. Independent host checks cover 78 public deterministic calculation vectors, QR payloads and the device-specific interfaces. See each manual for the actual evidence and limits.
+
+[Build and flash](docs/flashing.md) · [Calculation test vectors](TESTVECTORS.md) · [Crypto test instructions](tests/crypto/README.md) · [Source license](LICENSE) · [Third-party notices](THIRD-PARTY-NOTICES.txt)
+
+## Credits
+
+- **BitMaker and Lunaticoin:** original Seeder design, idea, software, graphics and documentation; copyright and MIT terms remain intact.
+- **This fork:** StickS3 and Waveshare board support, added address QR and interface/export adaptations, documented in [fork differences](docs/fork-differences.md).
+- **SeedSigner:** the [CompactSeedQR format](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md#compactseedqr-specification) used by the rectangular target.
+- **Dependency authors:** uBitcoin, TFT_eSPI, M5Stack, Arduino_GFX and Espressif; see [the preserved notices](THIRD-PARTY-NOTICES.txt).
+
+The original Spanish Seeder documentation and its credits are preserved below.
+
 
 ## Original project documentation
 

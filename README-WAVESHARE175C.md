@@ -1,61 +1,133 @@
-# Seeder for Waveshare AMOLED 1.75C
+# Seeder on Waveshare AMOLED 1.75C
 
-An offline, two-button Seeder port for the **ESP32-S3-Touch-AMOLED-1.75C**:
-466x466 CO5300 AMOLED, 32MB flash and 8MB PSRAM. The non-C model uses different
-wiring and is not supported by this target.
+This manual covers **ESP32-S3-Touch-AMOLED-1.75C**, running Seeder `2.2.0-ws175c.8`. It adapts [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab) to the circular display, retaining their seed calculations, graphics language, MIT license and credits.
 
-**Firmware:** `2.2.0-ws175c.8` · **Reference:** BitMaker Seeder v2.2.0,
-[`ba6e9eb`](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab).
-Original MIT license and credits retained.
+[Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 
-![Round Seeder screens](Images/Waveshare-overview.png)
+<img src="Images/Waveshare-device.jpg" alt="Seeder mnemonic screen on the physical Waveshare AMOLED 1.75C" width="550">
 
-*Production-code renders using public test data. These are not camera photos.*
+*Test seed: 50 dice rolls of 1.*
 
-[Full gallery: all 25 screens and 21 comparisons with the original](docs/screenshots.md).
+[Hardware & buying](#hardware-and-buying) · [Install](#install-short-version) · [Buttons](#orientation-and-buttons) · [Generate a seed](#generate-12-or-24-words) · [Page reference](#review-every-page) · [Troubleshooting](#troubleshooting)
 
-## Interface
+## Hardware and buying
 
-Original green palette, fonts and design language, enlarged/repositioned for the
-round display. Higher-resolution splash/menu derivatives use BitMaker's original
-JPG masters. The green menu band reaches the curved edges.
-The splash corrects `SOVEREING` to `SOVEREIGN` using the existing letter shapes.
+| Item | Required model / specification |
+| --- | --- |
+| Product | Waveshare **ESP32-S3-Touch-AMOLED-1.75C** |
+| Controller / memory | ESP32-S3R8; 32MB flash; 8MB PSRAM |
+| Display | Round 1.75-inch CO5300 AMOLED; 466×466 pixels |
+| Enclosure | CNC-machined aluminum alloy enclosure |
+| Inputs | Two buttons: small BOOT and larger PWR; touch hardware is present but disabled in Seeder |
+| Connection | USB-C; battery support according to the purchased variant |
+| Touch / motion | CST9217 capacitive touch and QMI8658 six-axis IMU; not used for input or entropy |
+| Audio hardware | Dual microphones through ES7210, ES8311 codec and speaker; unused by Seeder |
+| Power management | AXP2101 charging/power-management IC; factory configuration retained |
 
-The First Address page combines a larger QR and complete lowercase address:
-18x24 character cells, green/white five-character groups and no reduced text size.
-The QR pattern is 250x250 pixels inside a 290x290 white panel. All QRs have a
-thinner two-module white margin. Export and Watch Only use clearer sentences,
-retain their page counters and preserve their original payloads.
+Use the [official Waveshare hardware documentation](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.75C) and [correct-model shop page](https://www.waveshare.com/esp32-s3-touch-amoled-1.75c.htm). The documented **SKU 33691 includes a battery**; **SKU 33692 does not**. Check the selected battery option before ordering. Follow Waveshare's instructions for a compatible battery and installation; this guide does not prescribe a substitute cell.
 
-**The interface is adapted, not pixel-identical to upstream.** The complete
-[comparison with BitMaker's original](docs/fork-differences.md) separates UI,
-behavior, export-format and hardware changes.
+The **C suffix is essential**. The non-C ESP32-S3-Touch-AMOLED-1.75 has different wiring and is unsupported by this firmware. The guarded installer also requires the C board's **32MB flash and complete seven-partition factory map**. A similar screen or enclosure does not establish compatibility.
 
-## Controls
+Seeder does not initialize Wi-Fi/Bluetooth and does not use touch or audio. The board's battery support is a hardware feature; Seeder-specific battery operation and runtime have not been measured. No battery-life claim is made.
 
-Hold the enclosure with both buttons across the top.
+## Install: short version
 
-| Screen | Small right BOOT: MOVE | Big left PWR: OK |
-|---|---|---|
-| Coin/dice and word-count menus | Change selection | Select |
-| Coin entry | Heads / bit 1 | Tails / bit 0 |
-| Dice entry | Cycle 1-6 | Record selected roll |
-| Generated seed pages | Previous page | Next page |
-| Write It Down / Exit | Previous page | Tap: first page; hold: reset countdown |
+1. Confirm the **1.75C / 32MB** model. [Get a matching successful Actions artifact or build from public source](docs/flashing.md#get-binaries-or-build-locally); this fork has no tagged binary release yet. Use this target's **application-only** file.
+2. Connect a USB-C data cable and identify the board's serial port and MAC.
+3. Run the project's **guarded Waveshare installer**. It checks identity and the factory map, verifies a private backup, then writes and verifies only the app at **`0x200000`**.
+4. Let it reset and test the complete workflow with public test inputs.
 
-During input, hold OK for three seconds to discard the entry. The warning
-appears after about 1.2 seconds; releasing during its countdown cancels without
-recording an extra flip/roll.
+Follow the [complete terminal instructions](docs/flashing.md#waveshare-175c-guarded-application-install). They work independently of the planned [browser installer](https://xn--sg8hhb.ws/flasher/). Use the terminal path until the browser page is live and supports this exact model and factory map.
 
-On Write It Down, hold OK until the line fills. RELEASE TO CANCEL appears after
-about 1.2 seconds; releasing then preserves the seed. A continuous three-second
-hold clears application seed fields and returns to the main menu. Touch is off.
-The PWR button also retains the board's hardware power behavior.
+The exact previously tested .8 app is `seeder-waveshare175c-2.2.0-ws175c.8.bin`, identified by its checksum in the full guide. A current Actions artifact or source rebuild has its own checksum and is not automatically byte-identical to that installed file.
 
-Page order: mnemonic 1-12, mnemonic 13-24 when applicable, First Address, Entropy,
-Export, Watch Only, Exit. This target does not add CompactSeedQR.
+**Preserve the factory bootloader, partition table, NVS, model and storage.** Do not use a generic merged image, a default `0x10000` app offset or chip erase on this target. The guarded installer refuses an unexpected map; treat that refusal as a compatibility issue to investigate.
 
-## Build
+## Orientation and buttons
+
+Hold the enclosure so that **both buttons are across the top**: **big PWR on the left**, **small BOOT on the right**. The display is oriented for this position.
+
+| Screen | Small right BOOT / MOVE | Big left PWR / OK |
+| --- | --- | --- |
+| Coin/dice menu | Toggle Coin / Dice | Select highlighted mode |
+| Word-count menu | Toggle 12 / 24 | Start input |
+| Coin entry | Record Heads = 1 | Record Tails = 0 |
+| Dice entry | Cycle the displayed value 1→2→…→6→1 | Record displayed roll |
+| Generated pages | Previous page | Next page |
+| Exit / Write It Down | Tap: Watch Only | Tap: first word page; hold **three seconds**: clear and return to menu |
+
+Ordinary taps take effect on release. The PWR key retains its board-level power behavior as well as its application input; power-off is distinct from Seeder's on-screen clear operation. Touch gestures are not controls in this build.
+
+## Generate 12 or 24 words
+
+1. At the main menu, use BOOT to choose **Coin** or **Dice** and PWR to select.
+2. Use BOOT to select **12** or **24** words, then PWR to start. Each new mode selection initially highlights 12 words.
+3. Enter every physical result using the appropriate button actions below.
+4. After the final required result, Seeder automatically generates the words and opens the first word page.
+
+| Mode | 12 words | 24 words | Entry |
+| --- | --- | --- | --- |
+| Coin | 128 flips | 256 flips | Tap BOOT for Heads or PWR for Tails |
+| Dice | 50 rolls | 99 rolls | Tap BOOT until the displayed face matches the physical die, then PWR to record |
+
+The die selection resets to **1** after every recorded roll. The display shows recent roll history and progress. Changing the selected face does not record a roll. There is no per-result undo: if you make an entry error, discard the whole unfinished input and begin again.
+
+**Discard unfinished input:** hold PWR continuously for three seconds. The warning starts at about 1.2 seconds; release during the visible warning to cancel and keep the entry. That canceled hold does not append an extra flip or roll. A brief press released before the hold warning is still a normal input tap.
+
+The randomness comes from the physical coin/die, not a random generator in the device. [Input calculations and independent checks](docs/using-seeder.md#how-the-input-becomes-a-seed) are documented in the shared guide.
+
+## Review every page
+
+Use **big PWR to go forward** and **small BOOT to go back**. Both directions wrap around. Tapping either button on generated pages does not clear the seed.
+
+| Page | Contents / purpose |
+| --- | --- |
+| Mnemonic 1–12 | Numbered BIP39 words; write down every word in order |
+| Mnemonic 13–24 | Shown only for a 24-word seed |
+| First Address | Mainnet BIP84 first receiving address `m/84'/0'/0'/0/0`, complete lowercase text and QR carrying equivalent uppercase Bech32 text |
+| Entropy (hex) | The 16 or 32 bytes used for the seed; verify only with an independent offline tool |
+| Export | Text QR containing all 12/24 words separated by spaces; full seed material |
+| Watch Only | Bare account zpub QR at `m/84'/0'/0'`; master fingerprint shown separately as text |
+| Exit / Write It Down | Backup reminder and cancellable clear operation |
+
+**This target has no CompactSeedQR page.** Export remains the original mnemonic-text payload. A signing device must support that actual text format; the title “Export” alone does not establish import compatibility.
+
+Export permits recovery/spending: scan it only with a compatible offline signing device, keep it private, and do not photograph it. Watch Only cannot sign spends but reveals the account's wallet activity; the separate fingerprint is not encoded in the bare zpub QR. First Address is only one address, not a complete account export. [Read the payload reference](docs/using-seeder.md#pages-and-qr-payloads) before scanning.
+
+## Clear the seed and return to the menu
+
+At **Write It Down / Exit**, hold the big PWR button. After about **1.2 seconds**, the reset line starts filling and the release-to-cancel message appears. Keep holding until **three seconds** to clear application-owned fields and return to the main menu.
+
+Release during the countdown to preserve the seed. To continue reviewing, tap BOOT for Watch Only or tap PWR to wrap to the first word page. Do not confuse a normal tap with the continuous clear hold.
+
+Exit overwrites application-owned seed, entropy, key/address and capture fields. It is **not a verified complete RAM scrub**: library, stack and display-buffer copies have not all been proven erased. Seeder does not intentionally save the seed as a file or restore it after a restart. Keep your own verified backup and read [Security](SECURITY.md).
+
+## Current interface and gallery
+
+![Waveshare production-code screen overview](Images/Waveshare-overview.png)
+
+*Software renders of production code using public deterministic fixtures. These are separate from the photograph above and from physical camera-scan testing.*
+
+The round layout keeps the original green palette, glyphs and design language while enlarging and repositioning content for the circle. It adds clearer Export/Watch Only captions and counters, a larger first-address QR, two-module QR margins and the cancellable Exit progress line. The First Address page retains complete address text at its intended size; five-character groups aid visual comparison. Version .8 corrects the splash spelling to “SOVEREIGN.”
+
+[All 25 rendered screens and 21 original comparisons](docs/screenshots.md) · [Complete adaptation differences](docs/fork-differences.md)
+
+## Troubleshooting
+
+| Symptom | Check / action |
+| --- | --- |
+| No connection | Try a data cable, close serial monitors, check the current port. Enter download mode by holding BOOT while powering/resetting, then release BOOT. |
+| Unexpected model, flash size or map | Stop and confirm the full C model and factory layout. Do not bypass the guard or apply a generic partition image. |
+| Black display after a manual flash | Confirm the C model and correct app-only image at `0x200000`. A non-C image or an app at `0x10000` is incompatible with this procedure. Use the guarded recovery path. |
+| Wrong coin/die result | There is no individual undo. Hold PWR for three seconds during input and start again. |
+| Big/small navigation seems reversed | Menus use small=change/big=select; generated pages use big=forward/small=back. |
+| QR does not scan | Check text-seed/zpub/address format support, distance, angle and reflections; the round build has no Compact QR. Physical camera scanning remains unqualified despite host decoding checks. |
+| Reset appeared but I want to keep reviewing | Release PWR during the visible countdown, before three seconds. The seed remains available. |
+| Installer failed after a write | Read its transaction/rollback result. A failed install attempts a verified restoration of overwritten sectors; an unverified rollback is not success. Keep backups private. |
+
+## Build and validation
+
+From the repository root, using Python 3:
 
 ```sh
 python3 -m venv .venv
@@ -63,52 +135,10 @@ python3 -m venv .venv
 .venv/bin/pio run -e waveshare175c
 ```
 
-Pinned dependencies: Espressif32 6.12.0 / Arduino-ESP32 2.0.17, Arduino_GFX 1.5.9
-and the original vendored TFT_eSPI 2.5.43. Output:
-`.pio/build/waveshare175c/firmware.bin` (application only, maximum 6MB).
+The application is `.pio/build/waveshare175c/firmware.bin`, with a 6MB maximum factory app slot. Build dependencies pin Espressif32 6.12.0 / Arduino-ESP32 2.0.17 and Arduino_GFX 1.5.9; the original vendored TFT_eSPI version is 2.5.43. Use the guarded installer even after a local build. [Full instructions](docs/flashing.md#waveshare-175c-guarded-application-install).
 
-## Flash with the guarded installer
+Version .7 was flashed, readback-verified and physically accepted. Version .8 retains that layout, changes splash spelling/version and was also flashed/readback-verified. Host checks cover 25 frames, seven QR cases including text-export length variants, every Bech32 character in every address position, debounced generation/navigation/reset workflows, and 78 independent deterministic calculation vectors. All four source targets compile.
 
-The factory application starts at **0x200000**. Preserve the board's factory
-bootloader and partition table; do not use a generic merged image or chip erase.
+Physical camera scanning, battery operation/runtime, complete RAM erasure and independent security auditing are not established by those checks. A software-rendered QR decode is not a physical-camera measurement.
 
-```sh
-.venv/bin/python scripts/flash_waveshare175c.py \
-  --port PORT --expect-mac DEVICE_MAC \
-  --application .pio/build/waveshare175c/firmware.bin \
-  --backup-dir dist/flash-backups
-```
-
-The installer checks device identity/32MB flash and the complete factory map,
-verifies a backup, writes only the application, verifies it and resets. A failed
-write attempts verified rollback. USB port names can change: identify the board
-by its MAC/USB serial rather than the port name alone. Keep device backups private.
-Recovery: hold BOOT while powering/resetting, release BOOT, then reinstall.
-
-## Validation
-
-- All four firmware targets compile.
-- 25 native-rendered frames: source/font provenance, approved-screen regression,
-  circular bounds, original glyph masks, captions and progress indicators.
-- Seven QR cases, including all four seed-export size variants, decode in sharp
-  and controlled-blur tests. White margins and module matrices are checked.
-- Every Bech32 character is checked in every address position; 18x24 cells and
-  five-character grouping remain intact.
-- Real debounced GPIO simulation covers coin/dice generation, page counters,
-  forward/back navigation, canceled resets and three-second Exit clearing.
-- Original calculation code is unchanged; 78 public vectors were independently
-  checked against embit.
-
-Run the UI checks after building:
-
-```sh
-.venv/bin/python -m pip install -r tests/round/requirements.txt
-.venv/bin/python tests/round/build.py
-.venv/bin/python tests/round/verify.py
-```
-
-Version .7 was flashed, readback-verified and approved on the device. Version .8
-retains that layout and corrects the splash spelling and version label; it was
-also flashed and readback-verified. Its build and rendered UI checks pass. Physical camera scanning, battery operation, complete RAM
-scrubbing and security auditing are separate from host tests. Read
-[SECURITY.md](SECURITY.md) and [third-party notices](THIRD-PARTY-NOTICES.txt).
+[Original MIT license](LICENSE) · [Dependency notices](THIRD-PARTY-NOTICES.txt) · [Official Waveshare hardware guide](https://docs.waveshare.com/ESP32-S3-Touch-AMOLED-1.75C)

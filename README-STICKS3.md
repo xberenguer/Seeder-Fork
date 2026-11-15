@@ -1,182 +1,136 @@
-# Seeder for M5StickS3
+# Seeder on M5Stack StickS3
 
-Experimental M5Stack **StickS3 (K150)** port of
-[BitMaker-hub/Seeder](https://github.com/BitMaker-hub/Seeder), based on upstream
-commit `ba6e9ebe226222cbb04415a635a934eeae372dab` (v2.2.0 source).
-The original MIT license and author credits are retained.
+This manual covers the **M5Stack StickS3, SKU K150**, running this fork's rectangular Seeder interface. The reference is [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab); the original MIT license and credits are retained. The tested clean firmware identifies itself as `2.2.0-sticks3-dev`, commit `38de080`.
 
-This targets the ESP32-S3 StickS3 with 8MB flash and 8MB PSRAM. It does not
-target the ESP32 StickC, StickC Plus, or StickC Plus2.
+[Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 
-## What the port changes
+[Hardware & buying](#hardware-and-buying) · [Install](#install-short-version) · [Buttons](#buttons) · [Generate a seed](#generate-12-or-24-words) · [Page reference](#review-every-page) · [Troubleshooting](#troubleshooting)
 
-- Adds the `sticks3` PlatformIO environment and M5Unified/M5GFX display and power
-  initialization, with pinned dependencies.
-- Uses the original 240×135 landscape layout, with A/B button labels and the
-  font handling needed by M5GFX.
-- Uses a blue accent matched to the StickS3 button's hue, including the menu
-  artwork and startup logo. Address text keeps its white/grey checkerboard.
-- Maps **B / side button / GPIO12** to MOVE and **A / front button / GPIO11** to OK.
-- Keeps the original BIP39 coin/dice calculation, BIP84 derivation, seed QR and
-  watch-only zpub QR. The First Address page also shows its receiving-address
-  QR beside the complete address text. The address keeps its original full-size
-  lettering and continuous line wrapping. White/grey colour sections of up to
-  five characters reverse on each row. The QR uses the equivalent uppercase
-  Bech32 form of the address, enabling a less dense code and larger modules.
-  Its white border matches the watch-only screen; the white square fills all
-  available height below the address header.
-  It does not generate random entropy for you.
-- Adds a **Compact QR** page immediately after the original mnemonic-text QR.
-  It follows [SeedSigner's CompactSeedQR specification](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md#compactseedqr-specification):
-  the original 16/32 entropy bytes in QR byte mode, with low error correction.
-  The 12/24-word codes are 21×21 / 25×25 modules. Export codes occupy a
-  full-height 135×135 white square on StickS3, flush with the top, bottom and
-  right edges. A six-pixel white border surrounds the 123×123 code area. Cell
-  boundaries snap directly to LCD pixels, using all available space without
-  filtering. The original export remains available on the previous page.
-- Disables application/library logging, sensors, audio, and external accessories.
-  The application does not initialize Wi-Fi or Bluetooth or save seed data.
-- Uses a custom partition table without a crash-dump partition or filesystem.
-  This matters because the precompiled Arduino SDK enables flash crash dumps.
-- Retains the original LilyGO build environments.
+## Hardware and buying
 
-## Build
+| Item | Required model / specification |
+| --- | --- |
+| Product | M5Stack **StickS3**, **K150** |
+| Controller | ESP32-S3-PICO-1-N8R8 |
+| Memory | 8MB flash; 8MB octal PSRAM |
+| Display | 1.14-inch ST7789P3 LCD, physically 135×240 pixels; Seeder uses 240×135 landscape |
+| Input | Front A/KEY1 (GPIO11), side B/KEY2 (GPIO12), separate power key |
+| USB / battery | USB-C; manufacturer-listed 250mAh built-in battery |
+| Motion hardware | BMI270 six-axis accelerometer/gyroscope; unused by Seeder |
+| Audio hardware | MEMS microphone, ES8311 codec and amplified speaker; unused by Seeder |
+| Other hardware | Infrared transmit/receive, Grove/Hat2 expansion interfaces; no accessory needed |
 
-Install Python 3 and PlatformIO, then run from this directory:
+Check the [official hardware documentation](https://docs.m5stack.com/en/core/StickS3) and buy from the [M5Stack official K150 product page](https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit). **M5StickC, StickC Plus and StickC Plus2 use different hardware and are not this target.** A USB-C data cable and a computer are sufficient for installation; Seeder needs no network connection during use.
+
+The hardware has radios, audio and sensors, but this application does not initialize Wi-Fi/Bluetooth or use its audio/sensor features. Battery capacity is a manufacturer specification, not a runtime estimate. Battery operation, power-key behavior and USB power interactions have not completed Seeder-specific physical qualification; no battery-life figure is published.
+
+## What the current screen looks like
+
+<img src="Images/StickS3-device.jpg" alt="Seeder on the physical M5Stack StickS3" width="500">
+
+*The device photograph shows an earlier green interface. The current rectangular build uses blue accents, matching the blue button; the software screenshots below show that appearance.*
+
+| Menu | First receiving address | CompactSeedQR |
+| --- | --- | --- |
+| ![Blue StickS3 menu](Images/StickS3-menu.png) | ![StickS3 address page](Images/StickS3-address.png) | ![StickS3 Compact QR](Images/StickS3-compact.png) |
+
+*Production-code software renders using public test data. They establish the intended pixel layout, not physical camera-scanning performance.*
+
+## Install: short version
+
+1. Confirm the model is **K150 StickS3**. [Download a matching successful Actions artifact or build from public source](docs/flashing.md#get-binaries-or-build-locally); this fork has no tagged binary release yet. Use the complete merged image and its matching checksum.
+2. Connect with a USB-C **data** cable. Close other serial tools and select this device's port.
+3. Write the **merged image at `0x0`**, verify it before application startup, then reset. Follow the commands in [the full flashing guide](docs/flashing.md#sticks3-complete-image).
+4. Test the menu, input and export flow with a public test seed.
+
+The optional [browser installer](https://xn--sg8hhb.ws/flasher/) is planned; use the terminal procedure until it is live and offers the exact StickS3 target. The independent build and esptool instructions do not depend on that site.
+
+The exact previously tested clean file is `seeder-sticks3-38de080-merged.bin`; its checksum is in the full guide. Current CI artifacts and local rebuilds are identified separately and must not be described as that exact installed binary merely because they share a firmware version.
+
+Flashing replaces the installed application and its flash layout. An application-only `firmware.bin` belongs at `0x10000`; it is **not** the complete image and must not be written at `0x0`.
+
+## Buttons
+
+Find **A** on the front and **B** on the side. The separate power key is not either Seeder input.
+
+| Screen | Side B / MOVE | Front A / OK |
+| --- | --- | --- |
+| Coin/dice menu | Toggle Coin / Dice | Select highlighted mode |
+| Word-count menu | Toggle 12 / 24 | Start input |
+| Coin entry | Record Heads = 1 | Record Tails = 0 |
+| Dice entry | Cycle the displayed value 1→2→…→6→1 | Record displayed roll |
+| Generated pages | Next page, wrapping at the end | Previous page, wrapping at the beginning |
+| Exit / Write It Down | Tap: first mnemonic page | Tap: Watch Only; hold about **1.2 seconds**: clear application fields and return to main menu |
+
+Ordinary taps take effect on release. During coin/dice entry, holding A for **three seconds** discards the whole unfinished entry. A warning appears after about 1.2 seconds; releasing during that warning cancels the discard and does not add a coin flip or die roll. This three-second input-discard action is different from the shorter Exit action.
+
+The manufacturer documents one power-key click as power on/reset and two clicks as power off. [Download mode](https://docs.m5stack.com/en/core/StickS3#download-mode) uses a power-key hold until the green LED blinks, followed by release. These hardware functions are separate from A/B navigation. This port adds no automatic sleep or inactivity timeout.
+
+## Generate 12 or 24 words
+
+1. At the main menu, use B to choose **Coin** or **Dice**, then A to select.
+2. Use B to choose **12** or **24** words, then A to begin. Each new mode selection starts with 12 words selected.
+3. Supply each physical result using the controls below. There is no individual undo/edit command; if a result is entered incorrectly, hold A for three seconds to discard the entry and start again.
+4. The final required input automatically opens the generation screen, then the first word page. No extra confirming flip or roll is needed.
+
+| Mode | 12 words | 24 words | How to enter |
+| --- | --- | --- | --- |
+| Coin | 128 flips | 256 flips | Flip a coin; tap B for Heads or A for Tails |
+| Dice | 50 rolls | 99 rolls | Roll a six-sided die; tap B until its face matches, then A to record |
+
+The selected die face returns to **1** after every recorded roll; the screen shows the three most recent recorded rolls. Tapping B to choose a face does not record it. The physical randomness comes from your coin or die, not an internal device RNG. [The shared guide](docs/using-seeder.md#how-the-input-becomes-a-seed) explains the exact calculation.
+
+## Review every page
+
+Tap **B** to follow this order; tap **A** to retrace it. The page cycle wraps, so neither tap alone clears the seed.
+
+| Page | What it contains / what to do |
+| --- | --- |
+| Mnemonic words 1–12 | Numbered BIP39 words; write them in order |
+| Mnemonic words 13–24 | Present only for a 24-word seed; continue numbering |
+| First Address | Mainnet native SegWit receiving address at `m/84'/0'/0'/0/0`; text plus QR. The QR uses equivalent uppercase Bech32 text. |
+| Entropy (hex) | The original 16 or 32 entropy bytes used to derive the words; use only an offline independent tool to verify |
+| Export | Space-separated mnemonic words in a text QR; contains the complete seed |
+| Compact QR | The original 16/32 entropy bytes in binary CompactSeedQR; contains the complete seed in a different format |
+| Watch Only | Bare BIP84 account **zpub** QR for `m/84'/0'/0'`, plus the master fingerprint shown as text |
+| Exit / Write It Down | Reminder to secure the backup; hold A about 1.2 seconds to leave |
+
+The receiving address is only the first address of one account, not a complete watch-only wallet. Watch Only can expose this account's wallet activity but cannot sign a spend. The zpub QR is a bare account key, not a complete output descriptor; the shown fingerprint is **not** embedded in that QR. [Payload details and wallet compatibility](docs/using-seeder.md#pages-and-qr-payloads) explain these distinctions.
+
+Export and Compact QR allow recovery/spending. Scan them only with a compatible **offline signing device**; keep them away from online phones, screenshots and cloud backups. CompactSeedQR requires a compatible binary decoder; an ordinary text scanner may display nothing useful. Physical SeedSigner camera scanning of this exact screen still needs validation.
+
+## Leave or restart
+
+- **During input:** hold A continuously for three seconds. Release during the visible warning to keep the unfinished entry.
+- **After generation:** navigate to Exit and hold A for about 1.2 seconds. This clears application-owned seed, entropy, key/address and capture fields and returns to the mode menu. There is no three-second Exit countdown on this target.
+- **Keep reviewing:** tap A from Exit for Watch Only, or B for the first word page.
+
+Seeder does not intentionally persist the seed. Exiting is not a verified complete RAM scrub: library, stack and display copies have not all been proven erased. A restart loses the application's current workflow; do not rely on it as a seed backup. Read [Security](SECURITY.md) for the limits.
+
+## Troubleshooting
+
+| Symptom | Check / action |
+| --- | --- |
+| No serial port or connection | Use a data cable, another USB port, and close serial monitors. Enter the official download mode with the separate power key. |
+| Black screen after flashing | Confirm K150, correct merged image and `0x0` address. A raw app at `0x0` cannot replace the complete image. See [recovery](docs/flashing.md#connection-and-recovery). |
+| Whole merged-image verification fails after a normal boot | NVS initialization and the M5GFX board hint change expected mutable bytes. Verify the original bootloader/table/app segments as described in the flashing guide; do not ignore immutable-segment mismatches. |
+| Navigation seems reversed | Generated pages use B **forward**, A **back**. A accepts only in menus/input. |
+| Wrong die/coin result was recorded | There is no per-result undo; discard the unfinished entry with the three-second A hold and restart. |
+| QR does not scan | Try the correct export format in a compatible offline device, adjust distance/angle and reduce reflections. Compare all words manually if needed. Host decoding tests do not guarantee every physical camera. |
+| Seed/address disagrees with an independent wallet | Check word order, empty BIP39 passphrase, mainnet BIP84 and `m/84'/0'/0'/0/0`. If an independently checked result still differs, stop using that seed with funds. |
+
+## Build and validation
+
+From the repository root, using Python 3:
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install platformio==6.2.0
+.venv/bin/python -m pip install platformio==6.2.0 esptool==4.9.0
 .venv/bin/pio run -e sticks3
 ```
 
-The build produces `.pio/build/sticks3/firmware.bin` (application only) and
-`dist/seeder-sticks3-merged.bin` (complete image for address **0x0**).
-The application alone belongs at **0x10000**; do not flash it at 0x0.
+Output: `dist/seeder-sticks3-merged.bin` for `0x0`; `.pio/build/sticks3/firmware.bin` for `0x10000`. A source rebuild is a new artifact; the tested clean prebuilt checksum does not automatically apply to it. See [full build/flash instructions](docs/flashing.md).
 
-The StickS3 environment pins Espressif32 6.12.0 (Arduino-ESP32 2.0.17), M5GFX
-0.3.0, and M5Unified commit `96576a14247ddc935149145aa6b51943464120f1`.
-Upstream uBitcoin and TFT_eSPI remain vendored; TFT_eSPI is excluded from the
-StickS3 build. M5Unified includes its own M5PM1 support. On first startup,
-Arduino initializes NVS and M5GFX stores the board-identification hint
-`M5GFX / AUTODETECT = 26` (StickS3). This behavior was confirmed by ROM readback;
-the port does not store seed material there.
+The clean `38de080` image was flashed, verified in its entirety through the ROM loader before startup, and restarted. The receiving-address screen has physical photographic evidence. Independent host checks cover 78 calculation vectors, 19 CompactSeedQR encoder round trips, native QR/module geometry and production-backend address/text rendering. These are separate from physical button-flow, camera, battery and signing-device checks, which remain incomplete. Complete RAM erasure and an independent security audit are not established.
 
-## Flash and verify
-
-Flashing replaces the firmware currently on the StickS3. For the supplied
-complete image, use [Espressif's browser flasher](https://espressif.github.io/esptool-js/)
-with address **0x0**, or use esptool from a terminal:
-
-```sh
-python -m pip install esptool==4.9.0
-python -m esptool --chip esp32s3 --port PORT --after no_reset write_flash 0x0 seeder-sticks3-merged.bin
-python -m esptool --chip esp32s3 --port PORT --before no_reset --after hard_reset --no-stub verify_flash 0x0 seeder-sticks3-merged.bin
-```
-
-Run these commands in order. The first leaves the chip in its ROM download
-mode, so firmware cannot change flash before verification. The second verifies
-the complete image through the ROM loader, then resets to start the application.
-
-After normal startup, the NVS initialization and board hint change bytes that
-were erased (`0xff`) in the merged image. A subsequent whole-image comparison
-can therefore fail even though the firmware is unchanged. This also applies
-after a browser flasher starts the application. For an already booted device,
-verify the original build's immutable segments instead:
-
-```sh
-python -m esptool --chip esp32s3 --port PORT --no-stub verify_flash \
-  0x0 .pio/build/sticks3/bootloader.bin \
-  0x8000 .pio/build/sticks3/partitions.bin \
-  0x10000 .pio/build/sticks3/firmware.bin
-```
-
-Alternatively, compare a ROM flash readback with the merged image at those
-same bootloader, partition-table, and application ranges. NVS is mutable data;
-any difference in those immutable segments is a verification failure. The
-first observed post-boot readback matched all three segments and differed only
-in the expected NVS board hint.
-
-Replace `PORT` with the device's serial port. On macOS it is usually
-`/dev/cu.usbmodem...`; on Windows it is a `COM` port.
-If normal flashing cannot connect, connect USB-C with a data cable, hold the
-separate **power button** until the green LED blinks, then release it to enter
-the manufacturer's documented download mode.
-
-For a downloaded package, check `SHA256SUMS` with `shasum -a 256 -c SHA256SUMS`
-(macOS) or `sha256sum -c SHA256SUMS` (Linux). Checksums detect file changes;
-they do not constitute a security audit or prove who built a file.
-
-## Controls
-
-| Screen | B: side / MOVE | A: front / OK |
-|---|---|---|
-| Menus | Change selection | Accept |
-| Coin entry | Heads / bit 1 | Tails / bit 0 |
-| Dice entry | Cycle 1–6 | Accept selected roll |
-| Seed pages | Next page | Previous page |
-| Exit page | Return to first page | Hold to clear application seed state and leave |
-
-During coin/dice entry, hold A for three seconds to discard the current entry.
-Releasing after the hold prompt appears cancels the discard without recording
-an extra coin flip or roll.
-
-The separate power key retains the manufacturer's hardware behavior: one press
-resets, two presses power off. Battery operation, power-key behavior, and USB
-power interactions still need testing on a physical StickS3. This port adds no
-automatic sleep, wake, or inactivity timeout.
-
-## Validation and limits
-
-The additional CompactSeedQR page passes 19 independent binary encoder
-round trips, including all nine official SeedSigner vectors, plus two address
-QR round trips that preserve the same witness program/scriptPubKey. Native display
-renders pass 128 binary decoding checks at both display sizes, including
-controlled blur, plus 16 address and 32 mnemonic/zpub decoding checks. All
-44 rendered module matrices match independent reference encodings. The original
-mnemonic-text export and watch-only payloads remain unchanged; their panels
-also fill the screen height. A physical SeedSigner camera scan of the new
-screen still needs testing. Run
-`python tests/qr/verify.py` after installing `tests/qr/requirements.txt`.
-
-The port compiles for all three board targets. The StickS3 image has been flashed
-and verified against the build through its ROM bootloader. Device photos confirm
-the receiving-address screen. The host crypto checks run production
-`src/btc.cpp` and vendored uBitcoin against independent embit reference results
-for 78 public deterministic 12/24-word coin/dice cases. These compare entropy,
-mnemonic, fingerprint, account zpub, and first address. They do not exercise
-physical buttons or verify the ESP32's runtime behavior.
-
-Run the geometry audit with `python scripts/audit_ui.py`; see
-`tests/crypto/README.md` for repeatable arithmetic checks. GitHub Actions builds
-all three targets and prepares complete flash images.
-
-**Hardware validation is partial.** Full input-flow coverage, physical-camera QR
-scanning, and battery/power behavior still need testing. Use public test seeds
-while checking these paths.
-Then independently verify any newly entered entropy offline as described in
-upstream [SECURITY.md](SECURITY.md).
-
-The upstream exit action clears application-owned seed fields, but is not a
-verified complete RAM scrub: uBitcoin also uses a static mnemonic buffer and
-temporary derivation buffers. This port does not change those routines. The
-upstream RAM-erasure claims should be read with that limitation. Hardware
-power-off behavior is a separate boundary that still needs physical validation.
-
-Hardware validation should cover both 12/24-word coin/dice paths, 8-letter words
-at both screen edges, hold/release cancellation, seed and watch-only QR scanning,
-battery startup, reset, and off/on with a generated public test seed displayed.
-
-The menu and address screens have also been rendered with the production M5GFX
-backend. Address text reconstruction and white/grey colouring pass four host
-checks; address, seed, and zpub QR payloads pass 24 independent decoding checks.
-These checks are separate from physical camera scanning and device testing.
-
-The original license is in [LICENSE](LICENSE). Additional M5Stack dependency
-notices are in [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt).
-
-## Hardware references
-
-- [Official StickS3 hardware, pinout and PlatformIO settings](https://docs.m5stack.com/en/core/StickS3)
-- [Official StickS3 button examples](https://docs.m5stack.com/en/arduino/m5sticks3/button)
-- [M5PM1 power management](https://docs.m5stack.com/en/arduino/m5sticks3/m5pm1)
+[Original MIT license](LICENSE) · [Dependency notices](THIRD-PARTY-NOTICES.txt) · [Fork differences](docs/fork-differences.md) · [Official M5Stack hardware guide](https://docs.m5stack.com/en/core/StickS3)
