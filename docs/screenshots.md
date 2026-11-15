@@ -2,17 +2,17 @@
 
 **Waveshare firmware: `2.2.0-ws175c.8`.** The .7 layout was approved on the physical device; .8 corrects only the splash spelling and version label.
 
-These are **software renders of production UI code**, not photographs. All seed words, keys and addresses are public deterministic test fixtures. Never use them for funds. The reference is [BitMaker v2.2.0 at ba6e9eb](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab).
+Apart from the single device photograph identified below, these are **software renders of production UI code**, not photographs. All seed words, keys and addresses are public deterministic test fixtures. Never use them for funds. The reference is [BitMaker v2.2.0 at ba6e9eb](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab).
 
 Comparison images show the original 240x135 frame at 2x nearest-neighbor scale on the left and the current native 466x466 frame on the right. This makes the pixel structure visible; it does not imply equal physical display size, calibrated colors or camera-scan performance. Original QR pages have no added counter. The original splash intentionally retains its spelling error in the left panel.
 
 [All differences](fork-differences.md) · [Controls and installation](../README-WAVESHARE175C.md)
 
-## Product visualization
+## Device photograph
 
-![Menu, generation and mnemonic screens in the CNC enclosure](../Images/Waveshare-device-hero.png)
+<img src="../Images/Waveshare-device.jpg" alt="Actual Waveshare device displaying mnemonic words" width="600">
 
-This AI-assisted product visualization uses owner-supplied enclosure photographs and the current native UI as references. It is presentation artwork, not a hardware photograph, CAD measurement or pixel-accurate screenshot. The exact production-code renders follow below. Only public deterministic test words are used. [Artwork provenance and final prompt](artwork.md).
+The owner supplied this photograph (`IMG_3524.HEIC`). It is converted to JPEG with metadata removed; the device and display are not generated or retouched. The photographed seed is public and must never be used for funds. The other images below are exact production-code screen captures, not additional hardware photographs. [Image provenance](artwork.md).
 
 ## Overview
 
