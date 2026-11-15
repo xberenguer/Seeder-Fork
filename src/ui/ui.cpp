@@ -536,7 +536,7 @@ void seedAddress(const String &addr, uint8_t step, uint8_t total){
     for(int i=start, column=0; i<end; i += groupChars, column++){
       tiny(addr.substring(i, min(end, i + groupChars)),
            UI_M + (i-start)*charWidth, y,
-           ((row + column) % 2) ? UI_ADDR_GREY : UI_ADDR_WHITE,
+           ((row + column) % 2) ? UI_ADDR_ALT : UI_ADDR_WHITE,
            'L', 0, UI_BIG_BODY);
     }
   }
