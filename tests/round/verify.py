@@ -39,9 +39,9 @@ ADDRESS_WHITE = rgb565(0xffff)
 DIM = rgb565(0x4a49)
 PUBLIC_ADDRESS = 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu'
 MENU_FRAMES = {'03-menu-coin', '04-menu-dice', '05-words-12', '06-words-24'}
-CAPTURE_FRAMES = {'07-coin-start', '08-coin-progress', '09-dice-progress', '10-hold'}
+CAPTURE_FRAMES = {'07-coin-start', '08-coin-progress', '09-dice-progress', '10-hold', '24-exit-hold-half', '25-exit-hold-full'}
 EXPORT_FRAMES = {'17-export-12', '18-export-24', '19-watch-only', '21-watch-only-24', '22-export-24-v7', '23-export-24-v9'}
-EXIT_FRAMES = {'20-exit','24-exit-hold-half','25-exit-hold-full'}
+EXIT_FRAMES = {'20-exit'}
 WHITE = rgb565(0xd6ba)
 QR_ROW_COLORS = {34: WHITE, 44: GREEN, 62: GREEN, 84: WHITE, 94: GREEN}
 COUNTERS = {'17-export-12': '4/5', '18-export-24': '5/6', '19-watch-only': '5/5', '21-watch-only-24': '6/6', '22-export-24-v7': '5/6', '23-export-24-v9': '5/6'}
@@ -255,13 +255,6 @@ for path in paths:
                 ('USE THIS KEY TO VIEW',384,GREEN),('WALLET ACTIVITY.',398,GREEN),
                 ('IT CANNOT SPEND BITCOIN.',412,GREEN),('FINGERPRINT',428,WHITE),
                 ('73c5da0a',442,GREEN)]
-    elif name in EXIT_FRAMES:
-        cover.rectangle((0,98,232,134),fill=1)
-        filled,holding = {'20-exit':(0,0),'24-exit-hold-half':(108,1),'25-exit-hold-full':(216,1)}[name]
-        assert exit_progress == [filled,holding], name + ': reset progress/state differs'
-        expected_captions = [('RELEASE TO CANCEL' if holding else 'HOLD OK TO RESET',322,GREEN)]
-        ImageDraw.Draw(projected).rectangle((125,350,340,353),fill=TRACK)
-        if filled: ImageDraw.Draw(projected).rectangle((125,350,124+filled,353),fill=GREEN)
     else:
         assert exit_progress is None
     assert len(captions) == len(expected_captions), name + ': caption count differs'
@@ -437,6 +430,9 @@ pixels = [int(h, 16) for h in re.findall(r'0x[0-9a-fA-F]+', body)]
 assert len(pixels) == 200 * 88
 splash = Image.open(frames / '01-splash-brand-original.ppm').convert('RGB')
 assert all(splash.getpixel((20 + i % 200, 15 + i // 200)) == rgb565(pixel) for i, pixel in enumerate(pixels)), 'Original splash source bitmap changed'
+
+# Exit confirmation must reuse the input-reset screen pixel for pixel.
+assert Image.open(a.output/'10-hold.png').tobytes() == Image.open(a.output/'24-exit-hold-half.png').tobytes(), 'Exit hold screen differs from input hold screen'
 
 chosen = ['03-menu-coin', '05-words-12', '09-dice-progress', '12-mnemonic-wide', '14-address', '17-export-12']
 sheet = Image.new('RGB', (3 * 486, 2 * 515), '#161b19'); draw = ImageDraw.Draw(sheet)
