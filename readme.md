@@ -34,7 +34,7 @@ Buy the exact models from the [M5Stack official StickS3 shop](https://shop.m5sta
 | Coin input | 128 flips | 256 flips |
 | Dice input | 50 rolls of a six-sided die | 99 rolls of a six-sided die |
 
-After generation, review the numbered words, first BIP84 receiving address, entropy bytes and export pages. StickS3 also offers **CompactSeedQR**. **Export** and **Compact QR** contain the seed and permit spending; **Watch Only** contains the account public key and cannot sign transactions, but exposes wallet activity. [Every page and payload](docs/using-seeder.md#pages-and-qr-payloads) is explained in the shared guide.
+After generation, review the numbered words, first BIP84 receiving address, entropy bytes and export pages. Both devices have the same review-page sequence. **Export** contains the seed and permits spending; **Watch Only** contains the account public key and cannot sign transactions, but exposes wallet activity. [Every page and payload](docs/using-seeder.md#pages-and-qr-payloads) is explained in the shared guide.
 
 The firmware does not initialize Wi-Fi or Bluetooth and does not intentionally save seed material. It uses an empty BIP39 passphrase; it has no passphrase-entry or existing-seed import screen. Exit clears application-owned fields, but complete erasure of every library, stack or display-buffer copy has not been verified. See [the security model](SECURITY.md).
 
@@ -44,15 +44,18 @@ The firmware does not initialize Wi-Fi or Bluetooth and does not intentionally s
 | --- | --- |
 | <img src="Images/StickS3-menu.png" alt="StickS3 green menu" width="300"> | <img src="Images/Waveshare-menu.png" alt="Waveshare green menu" width="320"> |
 | <img src="Images/StickS3-address.png" alt="StickS3 first address" width="300"> | <img src="Images/Waveshare-address.png" alt="Waveshare first address" width="320"> |
-| <img src="Images/StickS3-compact.png" alt="StickS3 CompactSeedQR" width="300"> | <img src="Images/Waveshare-export.png" alt="Waveshare seed export" width="320"> |
+| <img src="Images/StickS3-export.png" alt="StickS3 seed export" width="300"> | <img src="Images/Waveshare-export.png" alt="Waveshare seed export" width="320"> |
+| <img src="Images/StickS3-watch-only.png" alt="StickS3 watch-only account export" width="300"> | <img src="Images/Waveshare-watch-only.png" alt="Waveshare watch-only account export" width="320"> |
 
 *These screenshots are software renders of production UI code using public test fixtures, not device photographs or camera-scan evidence. Never use pictured test seeds for funds.*
 
-[Full Waveshare gallery and original comparisons](docs/screenshots.md) · [Artwork and photograph provenance](docs/artwork.md) · [All differences from upstream](docs/fork-differences.md)
+[Device feature comparison](docs/device-parity.md) · [Full Waveshare gallery and original comparisons](docs/screenshots.md) · [Artwork and photograph provenance](docs/artwork.md) · [All differences from upstream](docs/fork-differences.md)
 
 ## Validation and development
 
-The tested StickS3 build is `2.2.0-sticks3.1` (original green palette restored); its complete image was flashed and ROM-verified, and the green menu/both buttons were physically confirmed. Waveshare `2.2.0-ws175c.8` was flashed and readback-verified; it retains the physically accepted .7 layout with a splash-spelling and version-label correction. Full physical input-flow, camera scanning, battery/power qualification and independent security auditing remain separate work.
+**Current source: `2.2.0-sticks3.2` and `2.2.0-ws175c.9`.** The Waveshare button mapping is unchanged; StickS3 now follows it. These updates align page order, controls, captions and counters, remove the StickS3 Compact QR page, correct its splash spelling and give both ports the original-style HOLD OK box with the shared cancellable reset warning. They have build/host-test coverage; these exact builds have not yet been flashed or physically accepted.
+
+The last physically tested StickS3 build is `2.2.0-sticks3.1` (original green palette restored); its complete image was flashed and ROM-verified, and the green menu/both buttons were physically confirmed. Waveshare `2.2.0-ws175c.8` was flashed and readback-verified; it retains the physically accepted .7 layout with a splash-spelling and version-label correction. Full physical input-flow, camera scanning, battery/power qualification and independent security auditing remain separate work.
 
 All four build targets compile: `sticks3`, `waveshare175c`, and the retained upstream LilyGO `tdisplay` / `tdisplay-s3` targets. Compiling a target does not establish physical validation for that board. The firmware remains native C/C++; the port does not change the original coin/dice seed calculations. Independent host checks cover 78 public deterministic calculation vectors, QR payloads and the device-specific interfaces. See each manual for the actual evidence and limits.
 
@@ -62,7 +65,7 @@ All four build targets compile: `sticks3`, `waveshare175c`, and the retained ups
 
 - **BitMaker and Lunaticoin:** original Seeder design, idea, software, graphics and documentation; copyright and MIT terms remain intact.
 - **This fork:** StickS3 and Waveshare board support, added address QR and interface/export adaptations, documented in [fork differences](docs/fork-differences.md).
-- **SeedSigner:** the [CompactSeedQR format](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md#compactseedqr-specification) used by the rectangular target.
+- **SeedSigner:** the [CompactSeedQR specification](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md#compactseedqr-specification) used by earlier StickS3 builds and retained encoder tests. The current StickS3/Waveshare page sequence omits Compact QR.
 - **Dependency authors:** uBitcoin, TFT_eSPI, M5Stack, Arduino_GFX and Espressif; see [the preserved notices](THIRD-PARTY-NOTICES.txt).
 
 The original Spanish Seeder documentation and its credits are preserved below.

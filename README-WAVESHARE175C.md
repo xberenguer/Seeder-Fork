@@ -1,6 +1,6 @@
 # Seeder on Waveshare AMOLED 1.75C
 
-This manual covers **ESP32-S3-Touch-AMOLED-1.75C**, running Seeder `2.2.0-ws175c.8`. It adapts [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab) to the circular display, retaining their seed calculations, graphics language, MIT license and credits.
+This manual covers **ESP32-S3-Touch-AMOLED-1.75C**, with current source version `2.2.0-ws175c.9`. It adapts [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab) to the circular display, retaining their seed calculations, graphics language, MIT license and credits.
 
 [Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 
@@ -96,7 +96,7 @@ Export permits recovery/spending: scan it only with a compatible offline signing
 
 ## Clear the seed and return to the menu
 
-At **Write It Down / Exit**, hold the big PWR button. After about **1.2 seconds**, the reset line starts filling and the release-to-cancel message appears. Keep holding until **three seconds** to clear application-owned fields and return to the main menu.
+At **Write It Down / Exit**, the original outlined **HOLD OK** control is shown. Hold the big PWR button. After about **1.2 seconds**, the screen changes to **START OVER**, a filling bar and **RELEASE TO CANCEL**, reusing the coin/dice reset-warning design. Keep holding until **three seconds** to clear application-owned fields and return to the main menu.
 
 Release during the countdown to preserve the seed. To continue reviewing, tap BOOT for Watch Only or tap PWR to wrap to the first word page. Do not confuse a normal tap with the continuous clear hold.
 
@@ -108,7 +108,7 @@ Exit overwrites application-owned seed, entropy, key/address and capture fields.
 
 *Software renders of production code using public deterministic fixtures. These are separate from the photograph above and from physical camera-scan testing.*
 
-The round layout keeps the original green palette, glyphs and design language while enlarging and repositioning content for the circle. It adds clearer Export/Watch Only captions and counters, a larger first-address QR, two-module QR margins and the cancellable Exit progress line. The First Address page retains complete address text at its intended size; five-character groups aid visual comparison. Version .8 corrects the splash spelling to “SOVEREIGN.”
+The round layout keeps the original green palette, glyphs and design language while enlarging and repositioning content for the circle. It adds clearer Export/Watch Only captions and counters, a larger first-address QR, two-module QR margins and a cancellable Exit warning. Version `.9` restores the original HOLD OK control and reuses the input-warning design during the reset hold. The approved button mapping is unchanged. The First Address page retains complete address text at its intended size; five-character groups aid visual comparison. Version .8 corrects the splash spelling to “SOVEREIGN.”
 
 [All 25 rendered screens and 21 original comparisons](docs/screenshots.md) · [Complete adaptation differences](docs/fork-differences.md)
 
@@ -136,6 +136,8 @@ python3 -m venv .venv
 ```
 
 The application is `.pio/build/waveshare175c/firmware.bin`, with a 6MB maximum factory app slot. Build dependencies pin Espressif32 6.12.0 / Arduino-ESP32 2.0.17 and Arduino_GFX 1.5.9; the original vendored TFT_eSPI version is 2.5.43. Use the guarded installer even after a local build. [Full instructions](docs/flashing.md#waveshare-175c-guarded-application-install).
+
+Current `.9` builds and passes native layout/QR checks and production-workflow tests; its input/Exit warning frames are pixel-identical. `.9` has not yet been flashed. The [device comparison](docs/device-parity.md) lists every current feature and the remaining implementation differences.
 
 Version .7 was flashed, readback-verified and physically accepted. Version .8 retains that layout, changes splash spelling/version and was also flashed/readback-verified. Host checks cover 25 frames, seven QR cases including text-export length variants, every Bech32 character in every address position, debounced generation/navigation/reset workflows, and 78 independent deterministic calculation vectors. All four source targets compile.
 
