@@ -8,9 +8,10 @@ Enter physical coin flips or dice rolls, inspect the resulting BIP39 words and
 first BIP84 receiving address, then export the seed or a watch-only account key.
 Wi-Fi and Bluetooth are not initialized.
 
-![Waveshare Seeder interface](Images/Waveshare-overview.png)
+![Seeder on the Waveshare round AMOLED: menu, generation and seed words](Images/Waveshare-device-hero.png)
 
-*Round-screen production renders with public test data.*
+*Product visualization based on the CNC enclosure and current UI.
+Exact production-code screenshots are in the gallery; pictured seeds are public test data.*
 
 [Browse all 25 screens and 21 original-vs-round comparisons](docs/screenshots.md).
 

@@ -108,7 +108,7 @@ Run the UI checks after building:
 ```
 
 Version .7 was flashed, readback-verified and approved on the device. Version .8
-retains that layout and corrects the splash spelling and version label; its build
-and rendered UI checks pass. Physical camera scanning, battery operation, complete RAM
+retains that layout and corrects the splash spelling and version label; it was
+also flashed and readback-verified. Its build and rendered UI checks pass. Physical camera scanning, battery operation, complete RAM
 scrubbing and security auditing are separate from host tests. Read
 [SECURITY.md](SECURITY.md) and [third-party notices](THIRD-PARTY-NOTICES.txt).
