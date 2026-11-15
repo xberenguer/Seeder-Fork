@@ -37,7 +37,7 @@ Seeder does not initialize Wi-Fi/Bluetooth and does not use touch or audio. The 
 3. Run the project's **guarded Waveshare installer**. It checks identity and the factory map, verifies a private backup, then writes and verifies only the app at **`0x200000`**.
 4. Let it reset and test the complete workflow with public test inputs.
 
-Follow the [complete terminal instructions](docs/flashing.md#waveshare-175c-guarded-application-install). They work independently of the planned [browser installer](https://xn--sg8hhb.ws/flasher/). Use the terminal path until the browser page is live and supports this exact model and factory map.
+Use the **[browser flasher](https://xn--sg8hhb.ws/flasher/)** in desktop Chrome/Edge: select **Waveshare AMOLED 1.75C → Seeder**, follow the flashing-mode instructions, prepare and save the recovery file, then install. The installer requires the exact factory partition map and writes only the application. The [complete terminal instructions](docs/flashing.md#waveshare-175c-guarded-application-install) remain available for independent builds and verification.
 
 The exact previously tested .8 app is `seeder-waveshare175c-2.2.0-ws175c.8.bin`, identified by its checksum in the full guide. A current Actions artifact or source rebuild has its own checksum and is not automatically byte-identical to that installed file.
 

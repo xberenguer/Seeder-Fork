@@ -87,9 +87,9 @@ CompactSeedQR is **not** part of the Waveshare page sequence.
 These changes remain in the shared rectangular renderer used by StickS3 and
 the LilyGO targets; adding Waveshare does not remove them.
 
-- Blue `0x3C9A` accent, recolored startup/menu artwork and original-style layout.
+- Original green `0x86F3` accent and exact upstream startup/menu artwork, restored in StickS3 `2.2.0-sticks3.1`. Earlier fork builds used blue; the current build matches the original and Waveshare palette.
 - Receiving-address QR beside the complete address, encoded as equivalent
-  uppercase Bech32. Address text uses white/grey groups of up to five characters,
+  uppercase Bech32. Address text uses white/green groups of up to five characters,
   reversing the starting color on each row.
 - Full-height white seed/zpub/Compact QR panels and revised pixel-aligned sizing.
 - An additional CompactSeedQR page after the mnemonic-text export, before Watch

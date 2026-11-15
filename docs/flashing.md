@@ -17,7 +17,9 @@ Flashing replaces existing firmware. Install before entering private entropy. Ke
 
 ## Optional browser path
 
-A [browser installer](https://xn--sg8hhb.ws/flasher/) is planned for both supported Seeder devices. Until it is live and lists the exact board/image, use the terminal steps below. Once available, follow that page's supported-browser, USB selection and verification instructions; the Waveshare choice must preserve the same factory map and app-only offset.
+The **[browser flasher](https://xn--sg8hhb.ws/flasher/)** offers both supported Seeder devices. Use desktop Chrome/Edge or another Web Serial browser, select the exact model and Seeder, follow its flashing-mode instructions, connect, prepare and save a local recovery file, then install. The installer checks download SHA-256, backs up affected sectors, verifies written bytes and resets only after verification. Waveshare requires the complete factory map and remains app-only. StickS3 splits the merged image into explicit ranges and skips NVS.
+
+An Ed25519 signature authenticates the release catalog before its firmware hashes are used. See [release signatures](release-signatures.md) for the pinned public-key fingerprint and independent verification. This does not provision Secure Boot. The terminal route below remains available for independently built firmware and mask-ROM verification. The new browser path has software/browser QA but still needs physical end-to-end qualification on both boards.
 
 The terminal methods below are independent of that website. A generic browser flasher that defaults to chip erase or `0x10000` is not a substitute for the Waveshare guarded procedure.
 
@@ -85,7 +87,7 @@ The build generates:
 
 The merge script validates the ESP32-S3 image headers/digests, exact 8MB partition map, bootloader/app sizes, and segment/gap contents. It includes the framework's matching `boot_app0.bin`. Do not manually replace those components with files from a different build.
 
-If using the tested prebuilt `seeder-sticks3-38de080-merged.bin`, verify its checksum and substitute that filename for `dist/seeder-sticks3-merged.bin` in both commands below. A locally rebuilt app/image has its own hash and is not automatically the exact previously tested artifact.
+If using the tested prebuilt `seeder-sticks3-2.2.0-sticks3.1-merged.bin`, verify its checksum and substitute that filename for `dist/seeder-sticks3-merged.bin` in both commands below. A locally rebuilt app/image has its own hash and is not automatically the exact previously tested artifact.
 
 ### 3. Write, verify before boot, then reset
 
@@ -185,7 +187,7 @@ For the current Actions packages, restore `dist/` and use the artifact-specific 
 
 | Exact tested artifact | Bytes | SHA-256 |
 | --- | ---: | --- |
-| `seeder-sticks3-38de080-merged.bin` | 812384 | `2f7d503aaf4e5067b847b9edda02f97ccb19c1af2b6b83aa641f017557bdd80a` |
+| `seeder-sticks3-2.2.0-sticks3.1-merged.bin` | 812448 | `4aacbe515abb924d2c88eb1f33845e32453d431a9ed7571f592467a9055f68c2` |
 | `seeder-waveshare175c-2.2.0-ws175c.8.bin` | 706400 | `6c2e071401b6bca2b39d6dacb3a3f0bd2d5e8befd1e7ae37cf0f108422c2d622` |
 
 These identify the exact locally tested artifacts. A source rebuild, other commit, different version/footer or dependency change can produce a different file. Its digest must be tied to its own source/build and verification; do not alter the binary to force a known checksum or claim its tests apply to a different file.

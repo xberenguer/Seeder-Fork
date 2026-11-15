@@ -8,7 +8,7 @@ photographed screen content were preserved; this is an edited photo layout.
 Original photographs are available as `Images/StickS3-device.jpg` and
 `Images/Waveshare-device.jpg`, converted to JPEG with metadata removed. The
 StickS3 photograph shows an earlier green interface; the current rectangular
-firmware uses the blue theme shown in its exact screen captures. The Waveshare
+firmware now uses the original green theme shown in its exact screen captures. The Waveshare
 photo shows the public 50-dice-rolls-of-1 test seed documented in
 [Using Seeder](using-seeder.md#repeatable-demonstration).
 
