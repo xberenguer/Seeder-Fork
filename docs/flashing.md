@@ -198,7 +198,7 @@ Checksums detect file changes. They are not an independent security audit or pro
 
 1. Confirm the expected Seeder splash and menu on the correct display.
 2. Use **public test inputs** to check both input modes and the intended 12/24-word option; the menu defaults to 12 when newly selected.
-3. Review the words, first address, entropy, Export and Watch Only. StickS3 additionally has Compact QR.
+3. Review the words, first address, entropy, Export and Watch Only. Current source versions StickS3 `.2` and Waveshare `.9` have no Compact QR. Earlier tested StickS3 `.1` still includes it.
 4. Check generated-page direction and Exit using the correct [StickS3](../README-STICKS3.md#buttons) or [Waveshare](../README-WAVESHARE175C.md#orientation-and-buttons) manual.
 5. Independently verify the public test output and test the intended offline scanner before any private use.
 
@@ -217,3 +217,7 @@ The recorded flash verification establishes written bytes, not every physical bu
 | Waveshare factory map missing/different | Stop this install path and investigate the board's existing firmware/map using the official resources; preserve backups rather than blindly erasing |
 
 For both boards, do not import private seed material until recovery, display, controls and intended exports have been checked with public data.
+
+## Current source and previous device-tested builds
+
+The current source is **StickS3 `2.2.0-sticks3.2` / Waveshare `2.2.0-ws175c.9`**. These feature-alignment updates are build/host-tested and have not yet been flashed. The `.1`/`.8` hashes above describe the previous physically checked files, not current rebuilds. Check the version offered by the browser catalog before installation; it may still offer that previous validated baseline. [Current controls and feature changes](device-parity.md).

@@ -1,5 +1,5 @@
 {
-  "firmware": "2.2.0-ws175c.8",
+  "firmware": "2.2.0-ws175c.9",
   "reference_commit": "ba6e9ebe226222cbb04415a635a934eeae372dab",
   "type": "production-code renders using public deterministic fixtures; not device photographs",
   "round_renderer": "tests/round/build.py and tests/round/verify.py",
@@ -8,7 +8,7 @@
     {
       "screen": "01-splash-brand",
       "render": "Images/waveshare/01-splash-brand.png",
-      "render_sha256": "6358d667274c1a8ad82936913410d7ed0d55d15ba35bf11fae7f83be0d0dd3f8",
+      "render_sha256": "c74c60e72ea8491949310c0c4adc5833e5be1348a9d883f60bce51a63b748de5",
       "comparison": "Images/waveshare/01-splash-brand-comparison.png",
       "original_sha256": "cb18e2e5d0b4bd1f37dbdbb92dd28a8b47e4920c93e13e9692002e1fddd9e93b"
     },
@@ -141,7 +141,7 @@
     {
       "screen": "20-exit",
       "render": "Images/waveshare/20-exit.png",
-      "render_sha256": "9e60624927fb3f6492640180744fbdd86688e7a905d380866dbd6a0835cc7d21",
+      "render_sha256": "5bca7bd4e85f14e569e456b043f985a2afde8a7bcd3150c9bd7a1efd012f19d2",
       "comparison": "Images/waveshare/20-exit-comparison.png",
       "original_sha256": "7c455a50fb6939b8e5178a256f46f501b4522ee14871a967cefb5958f3b7bd31"
     },
@@ -169,14 +169,14 @@
     {
       "screen": "24-exit-hold-half",
       "render": "Images/waveshare/24-exit-hold-half.png",
-      "render_sha256": "a26342193138614d4f199e34de54802978bc185eaa7e0e03642f46c8761475c6",
+      "render_sha256": "dc532aa23c7f6bc8aeb461daf4796a5f2190d65346cd58025983a588bab785cb",
       "comparison": null,
       "original_sha256": null
     },
     {
       "screen": "25-exit-hold-full",
       "render": "Images/waveshare/25-exit-hold-full.png",
-      "render_sha256": "4c86f41ab50e5132979c040e8122930ea4eb63aeffdd1746d09c1caa8283a814",
+      "render_sha256": "7151fed7016223ff6d79b9f5c10327a6bef92be1fcd00c50cb81ce8d84caa129",
       "comparison": null,
       "original_sha256": null
     }

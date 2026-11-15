@@ -22,10 +22,10 @@ Check the [security model](../SECURITY.md) and [device-specific validation](#wha
 | Coin Tails / 0 | Front A | Big PWR |
 | Change displayed die face | Side B | Small BOOT |
 | Record displayed die face | Front A | Big PWR |
-| Next generated page | Side B | Big PWR |
-| Previous generated page | Front A | Small BOOT |
+| Next generated page | Front A | Big PWR |
+| Previous generated page | Side B | Small BOOT |
 | Discard unfinished input | Hold A three seconds | Hold PWR three seconds |
-| Clear at Exit | Hold A about 1.2 seconds | Hold PWR three seconds, cancellable countdown |
+| Clear at Exit | Hold A three seconds, cancellable warning | Hold PWR three seconds, cancellable warning |
 
 Normal taps are registered on release. The separate StickS3 power key is not the front A button. Waveshare touch is disabled.
 
@@ -79,7 +79,6 @@ After generation, the first mnemonic page opens automatically. The sequence is:
 | Next | First Address | First Address |
 | Next | Entropy (hex) | Entropy (hex) |
 | Next | Export | Export |
-| Next | Compact QR | — |
 | Next | Watch Only | Watch Only |
 | Last | Exit / Write It Down | Exit / Write It Down |
 
@@ -105,11 +104,9 @@ Both targets encode the full mnemonic as **space-separated word text**. This is 
 
 Use a compatible offline signing device that accepts this exact text format. If the intended importer expects a different SeedQR representation, use the supported format or copy the words manually.
 
-### Compact QR: StickS3 only
+### Compact QR in earlier builds
 
-The rectangular target adds [SeedSigner's CompactSeedQR](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md#compactseedqr-specification): **16 or 32 raw entropy bytes in QR binary mode**. The BIP39 checksum bits are not included in those bytes. This QR carries the same seed as the words and Export page in a different encoding.
-
-The 12-word payload uses a 21×21-module QR; the 24-word payload uses 25×25. A compatible binary decoder is required; treating it as ordinary text can corrupt or hide its contents. The Waveshare target deliberately retains the original page set and has no Compact QR.
+Earlier StickS3 builds included CompactSeedQR. It is removed from the current `.2` review sequence to match Waveshare `.9`. Neither current port offers numeric SeedQR or CompactSeedQR; **Export remains space-separated mnemonic text**. Retained binary-encoder utilities/tests do not add a reachable Compact QR screen.
 
 ### Watch Only
 
@@ -121,8 +118,10 @@ The **master fingerprint** is shown beside/below the QR as text. It is not embed
 
 This page reminds you to secure a backup because Seeder does not intentionally store the seed. It stays accessible until you deliberately clear or power/reset the device.
 
-- **StickS3:** tap A to return to Watch Only, B to wrap to words; hold A about **1.2 seconds** to clear and leave.
-- **Waveshare:** tap BOOT to return to Watch Only, PWR to wrap to words; hold PWR **three seconds** to clear. Its warning/progress starts after about 1.2 seconds; release during the countdown to cancel.
+- **StickS3:** tap B to return to Watch Only, A to wrap to words; hold A **three seconds** to clear and leave.
+- **Waveshare:** tap BOOT to return to Watch Only, PWR to wrap to words; hold PWR **three seconds** to clear.
+
+Both ports show the original outlined **HOLD OK** control while idle. After about 1.2 seconds of holding OK, **START OVER**, the filling bar and **RELEASE TO CANCEL** replace the page. Release during the warning to cancel.
 
 The clear operation overwrites application-owned mnemonic, entropy, account key/fingerprint/address and captured inputs. Complete removal of every library/stack/display-buffer copy is unverified. Hardware power-off behavior and cold-start behavior are separate validation subjects; a normal application reset is not a permanent seed backup.
 
@@ -133,7 +132,7 @@ The clear operation overwrites application-owned mnemonic, entropy, account key/
 | Word count or words differ | Same 12/24 selection, physical entry sequence, Heads=1/Tails=0, no extra die digits/spaces/newline, correct dice digest truncation |
 | Address differs | Complete words in order; empty BIP39 passphrase; Bitcoin mainnet; BIP84 account0; receive chain0/address0 |
 | QR importer rejects Export | Export is mnemonic text, not numeric or binary SeedQR; use an importer that supports it |
-| Compact QR seems unreadable | StickS3 only; binary CompactSeedQR needs compatible support |
+| Compact QR is missing | Intentional in StickS3 `.2` and Waveshare `.9`; both use the same page set |
 | Watch-only wallet cannot sign | Expected: it has a public account key. Signing requires the seed/private keys in a suitable offline signing device. |
 | Imported fingerprint is blank or zero | The bare zpub QR does not carry origin metadata; compare/enter the master fingerprint shown on the device where the wallet supports it |
 | Reboot lost the displayed seed | Expected application behavior; it is not intentionally stored. Restore from your own verified backup, not device memory. |
@@ -142,7 +141,7 @@ If an independent calculation still disagrees after these checks, do not use the
 
 ## What has and has not been validated
 
-Host checks exercise the production calculation code against 78 independent public vectors, QR decoding/module matrices, rendered text/layout and simulated input workflows. StickS3's tested clean image was flashed and ROM-verified. Waveshare .7 was physically accepted and .8 was flashed/readback-verified with its limited splash/version change.
+Current source versions are StickS3 `.2` and Waveshare `.9`; they have not yet been flashed. Host checks exercise the production calculation code against 78 independent public vectors, QR decoding/module matrices, rendered text/layout and the real button detector/workflows for both board pin mappings. Both ports have matching seed-page order, counters, controls and reset behavior. See [device parity](device-parity.md). StickS3's tested clean image was flashed and ROM-verified. Waveshare .7 was physically accepted and .8 was flashed/readback-verified with its limited splash/version change.
 
 These observations do not establish every physical button sequence, camera model, battery condition or security property. Physical camera QR scanning, complete battery/power qualification, exhaustive RAM scrubbing and independent security auditing remain incomplete. See the individual manuals and [Security](../SECURITY.md) for each device's exact scope.
 

@@ -1,18 +1,12 @@
 # Screen gallery and original comparison
 
-**Waveshare firmware: `2.2.0-ws175c.8`.** The .7 layout was approved on the physical device; .8 corrects only the splash spelling and version label.
+**Waveshare firmware: `2.2.0-ws175c.9`.** Current source is build/host-tested and has not yet been flashed. The previous .7 layout was physically approved and .8 was readback-verified. In .9, the HOLD OK control returns and holding reuses the input reset warning; button directions are unchanged.
 
-Apart from the single device photograph identified below, these are **software renders of production UI code**, not photographs. All seed words, keys and addresses are public deterministic test fixtures. Never use them for funds. The reference is [BitMaker v2.2.0 at ba6e9eb](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab).
+These are **software renders of production UI code**, not photographs. All seed words, keys and addresses are public deterministic test fixtures. Never use them for funds. The reference is [BitMaker v2.2.0 at ba6e9eb](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab).
 
 Comparison images show the original 240x135 frame at 2x nearest-neighbor scale on the left and the current native 466x466 frame on the right. This makes the pixel structure visible; it does not imply equal physical display size, calibrated colors or camera-scan performance. Original QR pages have no added counter. The original splash intentionally retains its spelling error in the left panel.
 
 [All differences](fork-differences.md) · [Controls and installation](../README-WAVESHARE175C.md)
-
-## Device photograph
-
-<img src="../Images/Waveshare-device.jpg" alt="Actual Waveshare device displaying mnemonic words" width="600">
-
-Test seed: 50 dice rolls of 1. The photo is converted to JPEG with metadata removed; the device and display are not generated or retouched. The other images below are exact production-code screen captures. [Image provenance](artwork.md).
 
 ## Overview
 
@@ -174,7 +168,7 @@ New public-key explanation and counter; same account zpub and fingerprint.
 
 ### 20. Write It Down
 
-New cancellable three-second reset line replaces the original hold box.
+Original-style outlined HOLD OK control restored; holding opens the shared reset warning.
 
 ![Write It Down](../Images/waveshare/20-exit-comparison.png)
 

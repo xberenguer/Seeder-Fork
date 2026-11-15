@@ -1,0 +1,44 @@
+{
+  "firmware": "2.2.0-sticks3.2",
+  "type": "production ui.cpp rendered through native M5GFX LGFXSprite; public fixtures; not photographs or physical scan evidence",
+  "native_size": [
+    240,
+    135
+  ],
+  "source_files": [
+    "src/ui/ui.cpp",
+    "src/ui/ui.h",
+    "src/ui/theme.h",
+    "src/Lib/images.h"
+  ],
+  "screens": [
+    {
+      "render": "Images/StickS3-menu.png",
+      "sha256": "07c4aa60e59d5df014b4443d37e290dba98cbd6ea3dbda0466d6b9c0fedd1744"
+    },
+    {
+      "render": "Images/StickS3-address.png",
+      "sha256": "c5584d674375ecefb487c8ab7de0aa45d334605085c6908443a5b2feec17e69f"
+    },
+    {
+      "render": "Images/StickS3-export.png",
+      "sha256": "e3e6e832d714327d261aba10484c821a64cbfe11e3cfe76a401d231044baf51a"
+    },
+    {
+      "render": "Images/StickS3-watch-only.png",
+      "sha256": "263eb03edc2387998db827c692fcfd0a32d80b540d6c42ed5873429325831d7a"
+    },
+    {
+      "render": "Images/StickS3-exit.png",
+      "sha256": "717b16514d12411507a81d023e5a94500ad87a624c893807337dcc7ec776c191"
+    },
+    {
+      "render": "Images/StickS3-reset.png",
+      "sha256": "1b056049d7993dbec25cca7c167838d6f2efc8e684d3986b45f21337f8ec98b4"
+    },
+    {
+      "render": "Images/StickS3-splash.png",
+      "sha256": "fbbde676133c0faef99a04166cda014fe2c7cc2e308ee7c1f5d15ca66b64f1fa"
+    }
+  ]
+}
