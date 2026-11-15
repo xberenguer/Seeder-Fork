@@ -1,0 +1,9 @@
+# Factory ESP32-S3-Touch-AMOLED-1.75C 32 MB map. Flash application at 0x200000.
+# Name, Type, SubType, Offset, Size, Flags
+nvsfactory, data, nvs, 0x9000, 0x32000,
+nvs, data, nvs, 0x3b000, 0xd2000,
+otadata, data, ota, 0x10d000, 0x2000,
+phy_init, data, phy, 0x10f000, 0x1000,
+model, data, spiffs, 0x110000, 0xf0000,
+factory, app, factory, 0x200000, 0x600000,
+storage, data, spiffs, 0x800000, 0x800000,
