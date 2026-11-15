@@ -1,5 +1,17 @@
 # Modelo de seguridad de la SEEDER
 
+> **Waveshare 1.75C port:** see [the device guide](README-WAVESHARE175C.md)
+> and [all fork differences](docs/fork-differences.md). The .8 firmware uses the
+> original seed calculations and encoder, adapted display composition, explicit
+> export captions, a larger receiving-address QR and two-module white margins.
+> Address glyphs retain their size; Exit now has a cancellable three-second reset
+> line. The new caption sprite and display buffers add in-memory pixel copies.
+> Touch/audio are disabled and unused sensors stopped; radios are not initialized.
+> Application-only installation preserves the verified factory partition map,
+> bootloader, NVS and storage. Local host tests, application readback, physical
+> camera scanning and a security audit are separate evidence. Complete erasure
+> of every RAM copy remains unverified.
+
 > **M5StickS3 port note:** see [README-STICKS3.md](README-STICKS3.md) for
 > validation status and port-specific limits. This experimental port has been
 > flashed and ROM-verified on a StickS3; functional hardware testing remains
