@@ -1,6 +1,6 @@
 # Screen gallery and original comparison
 
-**Waveshare firmware: `2.2.0-ws175c.9`.** Current source is build/host-tested and has not yet been flashed. The previous .7 layout was physically approved and .8 was readback-verified. In .9, the HOLD OK control returns and holding reuses the input reset warning; button directions are unchanged.
+**Waveshare firmware: `2.2.0-ws175c.9`.** Current source is build/host-tested, flashed with backup/readback and independently ROM-verified. Acceptance of the revised reset visuals remains pending. The previous .7 layout was physically approved and .8 was readback-verified. In .9, the HOLD OK control returns and holding reuses the input reset warning; button directions are unchanged.
 
 These are **software renders of production UI code**, not photographs. All seed words, keys and addresses are public deterministic test fixtures. Never use them for funds. The reference is [BitMaker v2.2.0 at ba6e9eb](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab).
 

@@ -28,7 +28,7 @@ has not been established.
 
 ## Waveshare 1.75C: visible and behavioral changes
 
-Current source version: **2.2.0-ws175c.9**. It has not yet been flashed; `.8` is the previous readback-verified build. See [the full device comparison](device-parity.md) for both ports and every remaining difference.
+Current source version: **2.2.0-ws175c.9**. It was flashed with a verified backup and independently ROM-verified; acceptance of the revised reset visuals remains pending. `.8` is the previous device-tested baseline. See [the full device comparison](device-parity.md) for both ports and every remaining difference.
 
 | Area | Difference from the original |
 |---|---|

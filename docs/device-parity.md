@@ -1,8 +1,10 @@
 # StickS3 and Waveshare feature comparison
 
 This compares the **current source**: `2.2.0-sticks3.2` and `2.2.0-ws175c.9`.
-Both compile and pass host checks. These exact builds have **not yet been flashed**;
-the previous physically checked builds were StickS3 `.1` and Waveshare `.8`.
+Both compile and pass host checks. Waveshare `.9` was flashed with backup and
+readback, then independently ROM-verified; its revised reset visuals still need
+physical acceptance. StickS3 `.2` has not been flashed; `.1` remains its last
+physically checked build. Waveshare `.8` is the previous device-tested baseline.
 Installing an older binary does not provide the changes described here.
 
 [Project hub](../readme.md) · [StickS3 manual](../README-STICKS3.md) · [Waveshare manual](../README-WAVESHARE175C.md) · [Differences from BitMaker](fork-differences.md)
@@ -131,6 +133,16 @@ must be checked separately from the current source or screenshots.
 Retained CompactSeedQR helper/encoder code and test fixtures do not expose that
 screen in either current workflow. Legacy LilyGO targets retain their earlier
 rectangular fork behavior and are outside this two-device parity comparison.
+
+## Reset screens
+
+Native production-code renders using public test data; not device photographs.
+Each port reuses its own input-warning geometry at Exit.
+
+| StickS3 | Waveshare 1.75C |
+| --- | --- |
+| <img src="../Images/StickS3-exit.png" alt="StickS3 outlined HOLD OK control" width="300"> | <img src="../Images/Waveshare-exit.png" alt="Waveshare outlined HOLD OK control" width="320"> |
+| <img src="../Images/StickS3-reset.png" alt="StickS3 START OVER warning and cancellation bar" width="300"> | <img src="../Images/Waveshare-reset.png" alt="Waveshare START OVER warning and cancellation bar" width="320"> |
 
 ## Verification and limits
 
