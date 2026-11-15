@@ -12,6 +12,7 @@
 ## Shared reference
 
 - [Using Seeder](using-seeder.md): input calculations, complete workflow, every page and QR payload, verification and a repeatable demonstration.
+- [Device parity](device-parity.md): every current feature on both boards, remaining hardware/layout differences, and changes from the previous builds.
 - [Build, download, flash and verify](flashing.md): correct files/offsets, terminal commands, backups, recovery and exact tested artifact hashes.
 - [Changes from the original](fork-differences.md): visible, behavioral, export and hardware adaptations.
 - [Screen gallery](screenshots.md): all 25 round-screen captures and 21 original comparisons.

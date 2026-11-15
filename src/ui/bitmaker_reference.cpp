@@ -28,6 +28,7 @@ bool begin() {
   captionCanvas.fillSprite(0);
   return true;
 }
+void prepareHold(){bitmakerCanvas.drawFastVLine(183,0,135,0x2945);}
 uint16_t pixel(int x, int y) { return bitmakerCanvas.readPixel(x, y); }
 void renderCaption(const char *text, uint16_t color) {
   captionCanvas.fillSprite(0);

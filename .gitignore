@@ -4,3 +4,5 @@ dist/
 *.bin
 .venv/
 __pycache__/
+
+tests/workflow/build/

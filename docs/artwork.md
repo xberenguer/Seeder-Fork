@@ -25,3 +25,5 @@ dark-slate background. Keep both devices fully visible, with no overlap, balance
 visual scale and subtle shadows. Preserve the photographed device silhouettes,
 screen text, colors, textures, blue button and all words; add no text, logos or
 new device parts.
+
+Current StickS3 screenshots show Export rather than the removed CompactSeedQR page. All fixture seeds are public test data. QR appearance is not an entropy test. The native StickS3 splash now corrects SOVEREIGN using only the original N/G letter pixels; `scripts/gen_sticks3_splash.py` reproduces that change from the pinned upstream image.

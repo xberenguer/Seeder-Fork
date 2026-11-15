@@ -28,7 +28,7 @@ has not been established.
 
 ## Waveshare 1.75C: visible and behavioral changes
 
-Current device version: **2.2.0-ws175c.8** (.7 layout plus the splash spelling correction).
+Current source version: **2.2.0-ws175c.9**. It was flashed with a verified backup and independently ROM-verified; acceptance of the revised reset visuals remains pending. `.8` is the previous device-tested baseline. See [the full device comparison](device-parity.md) for both ports and every remaining difference.
 
 | Area | Difference from the original |
 |---|---|
@@ -47,7 +47,7 @@ Current device version: **2.2.0-ws175c.8** (.7 layout plus the splash spelling c
 | White QR margins | Uses two white modules on each side, reduced from the port's previous four. Address margin: 20 pixels; export margins depend on module pitch. Original seed/zpub module pitch is retained, and all panels fit inside the circle. Physical camera scanning remains a separate check. |
 | Export wording | Replaces the original fragments with the sentences reproduced below. The original font and green/white palette are used. |
 | Watch-only wording | Uses an explicit public-key description and complete sentences, with the fingerprint label/value retained. |
-| Exit / Write It Down | Replaces the outlined HOLD OK box and its separate wipe legend with an unboxed hold instruction and filling line. After about 1.2 seconds it shows RELEASE TO CANCEL. A continuous three-second hold clears application seed fields and returns to the menu; releasing during the countdown cancels. Upstream exited at about 1.2 seconds without a progress line. |
+| Exit / Write It Down | Restores the original outlined HOLD OK control and wipe legend while idle. After about 1.2 seconds of holding, it reuses the input START OVER / RELEASE TO CANCEL warning and bar. A continuous three-second hold clears application fields; release cancels. Upstream exited at about 1.2 seconds without this confirmation screen. |
 | Exit pointer | Rotated/repositioned toward the big top-left OK button. |
 | Orientation | Both buttons are held at the top; the framebuffer compensates with a rigid 90-degree rotation. |
 | Navigation | Big left PWR = OK/select; small right BOOT = MOVE. On generated pages, big advances and small goes back, reversing upstream's logical page-navigation directions. Short OK on Exit still wraps to the first page. |
@@ -82,25 +82,34 @@ for intentionally removed/replaced elements. Regenerated artwork adds edge shade
 The original credits remain; the splash spelling is corrected as documented above.
 CompactSeedQR is **not** part of the Waveshare page sequence.
 
-## Rectangular targets: earlier fork changes
+## StickS3: current fork changes
 
-These changes remain in the shared rectangular renderer used by StickS3 and
-the LilyGO targets; adding Waveshare does not remove them.
+Current source version: **2.2.0-sticks3.2**, build/host-tested and not yet flashed.
+The previous `.1` restored the original green palette and was physically checked.
 
-- Original green `0x86F3` accent and exact upstream startup/menu artwork, restored in StickS3 `2.2.0-sticks3.1`. Earlier fork builds used blue; the current build matches the original and Waveshare palette.
-- Receiving-address QR beside the complete address, encoded as equivalent
-  uppercase Bech32. Address text uses white/green groups of up to five characters,
-  reversing the starting color on each row.
-- Full-height white seed/zpub/Compact QR panels and revised pixel-aligned sizing.
-- An additional CompactSeedQR page after the mnemonic-text export, before Watch
-  Only. It contains the original 16/32 entropy bytes in QR byte mode; checksums
-  are reconstructed by compatible decoders. This changes the page count.
-- QR encoder adds explicit binary encoding, including preservation of NUL,
-  newline and high-byte data. The Waveshare build selects the frozen upstream
-  encoder instead.
-- StickS3 uses M5GFX's font selection and physical A/B mapping. Generated pages
-  retain MOVE-forward / OK-back navigation and upstream's approximately
-  1.2-second Exit action; the new Exit progress line is Waveshare-only.
+- Original native artwork and green `0x86F3` palette; `.2` corrects the splash
+  spelling using only the original N/G letter pixels. Earlier blue fork builds
+  are historical, not the current design.
+- Adds the receiving-address QR beside complete lowercase address text, with
+  alternating green/white five-character groups. Removes the displayed path;
+  the BIP84 derivation is unchanged. The new panel is 116×116 at 240×135.
+- Full-height integer-module seed/zpub QR panels with reduced white margins.
+- Uses the same revised Export and Watch Only wording, counters and page order
+  as Waveshare. Removes the earlier extra CompactSeedQR page.
+- Big front A goes forward through generated pages; small side B goes backward,
+  matching Waveshare. Menus and input keep their existing button roles.
+- Exit retains the outlined HOLD OK control but now reuses the input START OVER /
+  RELEASE TO CANCEL screen, bar and three-second timing. Releasing cancels.
+- M5GFX-compatible font selection and A/B screen hints differ from the original
+  TFT_eSPI backend and generic MOVE/OK hints.
+
+The binary QR encoder utility and tests are retained, but neither supported
+port exposes a Compact QR page. The Waveshare renderer uses the frozen upstream
+encoder. Legacy LilyGO targets retain the earlier rectangular fork's page set,
+wrapping/captions and navigation; the current StickS3/Waveshare feature alignment
+does not claim to change those legacy targets.
+
+[Every shared feature and remaining difference between the two supported devices](device-parity.md).
 
 ## Hardware adaptations, separately
 

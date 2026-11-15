@@ -45,8 +45,8 @@ enum { coinEntropy, diceEntropy };
 #define SHOW_DATA1        3
 #define SHOW_ENTROPY      4
 #define SHOW_EXPORTQR     5
-#if defined(SEEDER_BOARD_WAVESHARE175C)
-// Strict upstream page set for the circular port.
+#if defined(SEEDER_BOARD_WAVESHARE175C) || defined(SEEDER_BOARD_STICKS3)
+// Both supported ports share the original review-page set (no CompactSeedQR).
 #define SHOW_EXPORTZPUB   6
 #define SHOW_EXIT         7
 #else

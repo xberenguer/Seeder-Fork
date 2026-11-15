@@ -41,7 +41,7 @@ captures and original photos remain available in the manuals/gallery.
 | M5Unified and M5GFX | M5Stack; StickS3 display, board and power integration |
 | Arduino_GFX | moononournation and contributors; Waveshare CO5300 QSPI display/canvas |
 | Arduino-ESP32 / ESP-IDF | Espressif and contributors; ESP32 runtime and toolchain |
-| SeedSigner CompactSeedQR | [SeedSigner specification](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md); rectangular-target compact export compatibility |
+| SeedSigner CompactSeedQR | [SeedSigner specification](https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md); earlier StickS3 compact export and retained encoder compatibility tests |
 | embit / zxing-cpp / Pillow | Independent test calculations, QR decoding and render verification |
 
 The original [LICENSE](../LICENSE) and

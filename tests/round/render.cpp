@@ -288,7 +288,7 @@ int main() {
   save("22-export-24-v7");
   ui::seedQr("abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract abstract banner",24,5,6);
   save("23-export-24-v9");
-  ui::seedExit();ui::seedExitHold(.5f);save("24-exit-hold-half");
-  ui::seedExitHold(1.0f);save("25-exit-hold-full");
+  ui::seedExit();ui::holdEnter();ui::holdUpdate(.5f);save("24-exit-hold-half");
+  ui::holdUpdate(1.0f);save("25-exit-hold-full");
   workflowChecks();
 }

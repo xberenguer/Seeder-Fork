@@ -189,6 +189,7 @@ For the current Actions packages, restore `dist/` and use the artifact-specific 
 | --- | ---: | --- |
 | `seeder-sticks3-2.2.0-sticks3.1-merged.bin` | 812448 | `4aacbe515abb924d2c88eb1f33845e32453d431a9ed7571f592467a9055f68c2` |
 | `seeder-waveshare175c-2.2.0-ws175c.8.bin` | 706400 | `6c2e071401b6bca2b39d6dacb3a3f0bd2d5e8befd1e7ae37cf0f108422c2d622` |
+| `seeder-waveshare175c-2.2.0-ws175c.9.bin` | 706272 | `a6f43313ecd21f7b09432205a0405ba0f5b0dec655ba74335c3d78bb4731a0b7` |
 
 These identify the exact locally tested artifacts. A source rebuild, other commit, different version/footer or dependency change can produce a different file. Its digest must be tied to its own source/build and verification; do not alter the binary to force a known checksum or claim its tests apply to a different file.
 
@@ -198,7 +199,7 @@ Checksums detect file changes. They are not an independent security audit or pro
 
 1. Confirm the expected Seeder splash and menu on the correct display.
 2. Use **public test inputs** to check both input modes and the intended 12/24-word option; the menu defaults to 12 when newly selected.
-3. Review the words, first address, entropy, Export and Watch Only. StickS3 additionally has Compact QR.
+3. Review the words, first address, entropy, Export and Watch Only. Current source versions StickS3 `.2` and Waveshare `.9` have no Compact QR. Earlier tested StickS3 `.1` still includes it.
 4. Check generated-page direction and Exit using the correct [StickS3](../README-STICKS3.md#buttons) or [Waveshare](../README-WAVESHARE175C.md#orientation-and-buttons) manual.
 5. Independently verify the public test output and test the intended offline scanner before any private use.
 
@@ -217,3 +218,7 @@ The recorded flash verification establishes written bytes, not every physical bu
 | Waveshare factory map missing/different | Stop this install path and investigate the board's existing firmware/map using the official resources; preserve backups rather than blindly erasing |
 
 For both boards, do not import private seed material until recovery, display, controls and intended exports have been checked with public data.
+
+## Current source and previous device-tested builds
+
+The current source is **StickS3 `2.2.0-sticks3.2` / Waveshare `2.2.0-ws175c.9`**. These feature-alignment updates are build/host-tested. Waveshare `.9` was flashed app-only with a verified sector backup and independently ROM-verified; its revised reset visuals await physical acceptance. StickS3 `.2` has not yet been flashed. The `.1`/`.8` hashes above describe the previous physically checked files, not current rebuilds. Check the version offered by the browser catalog before installation; it may still offer that previous validated baseline. [Current controls and feature changes](device-parity.md).

@@ -428,6 +428,7 @@ void holdEnter(void){
 #if !defined(SEEDER_BOARD_STICKS3)
   caret(UI_RAIL_CX, SY(124), SX(9), SY(-6), UI_DIM);   //senala el boton fisico
 #endif
+  tft.drawFastVLine(UI_RAIL_X, 0, UI_H, UI_TRACK);
   holdFilled = 0;
 }
 
@@ -504,6 +505,23 @@ static void drawQrPanel(QRCode &qr, int left, int top, int side, int border){
 
 void seedAddress(const String &addr, uint8_t step, uint8_t total){
   head("FIRST ADDRESS", step, total);
+#if defined(SEEDER_BOARD_STICKS3)
+  String encoded=addr;encoded.toUpperCase();
+  QRCode qr;uint8_t buffer[(25*25+7)/8];
+  if(qrcode_initText(&qr,buffer,2,ECC_LOW,encoded.c_str())>=0) {
+    // Same two-module margin and whole-pixel cells as the round port.
+    const int pitch=4,side=29*pitch,left=UI_W-side,top=UI_H-side;
+    drawQrPanel(qr,left,top,side,2*pitch);
+  }
+  // Full-size glyph ink, a one-pixel inter-letter gap, and distinct five-
+  // character groups. No group is split between rows.
+  for(int i=0;i<(int)addr.length();++i) {
+    const int col=i%10,row=i/10;
+    tiny(addr.substring(i,i+1),SX(6)+col*11+(col/5)*4,SY(31)+row*SY(19),
+         (i/5)%2?UI_ADDR_WHITE:UI_ACCENT,'L',0,UI_BIG_BODY);
+  }
+  return;
+#else
   bodyLine("m/84'/0'/0'/0/0", SY(30), UI_ACCENT);
 
   const int groupChars = 5;
@@ -540,6 +558,7 @@ void seedAddress(const String &addr, uint8_t step, uint8_t total){
            'L', 0, UI_BIG_BODY);
     }
   }
+#endif
 }
 
 
@@ -605,6 +624,25 @@ static void qrPage(const char *tag, const char *l1, const char *l2,
    solo lectura: que hay dentro, que permite y la consecuencia.
    Dos llamadas con literales en vez de un ternario para que la auditoria
    pueda medir los dos rotulos. */
+#if defined(SEEDER_BOARD_STICKS3)
+void seedQr(const String &data,uint8_t nWords,uint8_t step,uint8_t total){
+  qrPage("EXPORT","","","","","",data);
+  const int left=UI_W-UI_H;
+  tft.fillRect(0,0,left,UI_H,UI_BG);
+  tiny("EXPORT",UI_M,SY(10),UI_ACCENT,'L',1);
+  char count[8];snprintf(count,sizeof(count),"%u/%u",step,total);
+  tiny(count,left-SX(6),SY(10),UI_DIM,'R',0);
+  tiny(nWords==12?"12 SEED WORDS":"24 SEED WORDS",UI_M,SY(28),UI_TEXT,'L',0);
+  tiny("KEEP THIS QR",UI_M,SY(45),UI_ACCENT,'L',0);
+  tiny("PRIVATE.",UI_M,SY(55),UI_ACCENT,'L',0);
+  tiny("SCAN ONLY WITH",UI_M,SY(72),UI_TEXT,'L',0);
+  tiny("AN",UI_M,SY(82),UI_TEXT,'L',0);
+  tiny("OFFLINE",UI_M+18,SY(82),UI_ACCENT,'L',0);
+  tiny("SIGNING DEVICE.",UI_M,SY(92),UI_ACCENT,'L',0);
+  tiny("NEVER",UI_M,SY(111),UI_ACCENT,'L',0);
+  tiny("PHOTOGRAPH IT.",UI_M,SY(121),UI_ACCENT,'L',0);
+}
+#else
 void seedQr(const String &data, uint8_t nWords){
   if(nWords == 12)
     qrPage("EXPORT", "12 SEED WORDS", "CAN SPEND", "NEVER A PHONE",
@@ -613,6 +651,8 @@ void seedQr(const String &data, uint8_t nWords){
     qrPage("EXPORT", "24 SEED WORDS", "CAN SPEND", "NEVER A PHONE",
            "SCAN WITH AN", "OFFLINE WALLET", data);
 }
+
+#endif
 
 // CompactSeedQR is the original BIP39 entropy, without its checksum bits.
 // Keep the explicit byte count: entropy can include NUL, CR/LF and high bytes.
@@ -628,10 +668,31 @@ void seedCompactQr(const uint8_t *entropy, uint8_t nWords){
 
 /* Solo la clave publica de cuenta. Sirve para mirar el saldo y nada mas, y
    por eso es la unica pagina que se puede escanear con el ordenador delante. */
+#if defined(SEEDER_BOARD_STICKS3)
+void seedZpubQr(const String &data,const String &fingerprint,uint8_t step,uint8_t total){
+  qrPage("WATCH ONLY","","","","","",data);
+  const int left=UI_W-UI_H;
+  tft.fillRect(0,0,left,UI_H,UI_BG);
+  tiny("WATCH ONLY",UI_M,SY(10),UI_ACCENT,'L',0);
+  char count[8];snprintf(count,sizeof(count),"%u/%u",step,total);
+  tiny(count,left-SX(6),SY(10),UI_DIM,'R',0);
+  tiny("ACCOUNT",UI_M,SY(27),UI_TEXT,'L',0);
+  tiny("PUBLIC KEY",UI_M,SY(37),UI_TEXT,'L',0);
+  tiny("USE THIS KEY",UI_M,SY(54),UI_ACCENT,'L',0);
+  tiny("TO VIEW WALLET",UI_M,SY(64),UI_ACCENT,'L',0);
+  tiny("ACTIVITY.",UI_M,SY(74),UI_ACCENT,'L',0);
+  tiny("IT CANNOT SPEND",UI_M,SY(91),UI_ACCENT,'L',0);
+  tiny("BITCOIN.",UI_M,SY(101),UI_ACCENT,'L',0);
+  tiny("FINGERPRINT",UI_M,SY(116),UI_TEXT,'L',0);
+  tiny(fingerprint,UI_M,SY(126),UI_ACCENT,'L',0);
+}
+#else
 void seedZpubQr(const String &data, const String &fingerprint){
   qrPage("WATCH ONLY", "ACCOUNT ZPUB", "SEES BALANCE", "CANNOT SPEND",
          "FINGERPRINT", fingerprint, data);
 }
+
+#endif
 
 void seedExit(void){
   tft.fillScreen(UI_BG);
@@ -656,11 +717,7 @@ void seedExit(void){
   const int bx = SX(126), by = SY(100), bw = SX(106), bh = SY(30);
   tft.drawRoundRect(bx,   by,   bw,   bh,   6, UI_ACCENT);
   tft.drawRoundRect(bx+1, by+1, bw-2, bh-2, 5, UI_ACCENT);
-#if defined(SEEDER_BOARD_STICKS3)
-  tiny("HOLD A", bx + bw/2, by + (bh-8*UI_BIG_BODY)/2, UI_ACCENT, 'C', 1, UI_BIG_BODY);
-#else
   tiny("HOLD OK", bx + bw/2, by + (bh-8*UI_BIG_BODY)/2, UI_ACCENT, 'C', 1, UI_BIG_BODY);
-#endif
   /* la punta señala al botón OK físico, en el borde derecho */
 #if !defined(SEEDER_BOARD_STICKS3)
   tft.fillTriangle(UI_W-SX(6), by+SY(9), UI_W-SX(6), by+SY(21), UI_W-SX(1), by+SY(15), UI_ACCENT);
