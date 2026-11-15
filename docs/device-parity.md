@@ -1,9 +1,9 @@
 # StickS3 and Waveshare feature comparison
 
-This compares the **current source**: `2.2.0-sticks3.2` and `2.2.0-ws175c.9`.
+This compares the **current source**: `2.2.0-sticks3.3` and `2.2.0-ws175c.9`.
 Both compile and pass host checks. Waveshare `.9` was flashed with backup and
 readback, then independently ROM-verified; its revised reset visuals still need
-physical acceptance. StickS3 `.2` has not been flashed; `.1` remains its last
+physical acceptance. StickS3 `.3` has not been flashed; `.1` remains its last
 physically checked build. Waveshare `.8` is the previous device-tested baseline.
 Installing an older binary does not provide the changes described here.
 
@@ -53,7 +53,7 @@ The following features and limitations apply to **both**:
 | Generation | Automatically begins after the required final input; original generating message |
 | Seed calculations | Original BIP39 list/checksum; coin bits directly; SHA-256 of ASCII dice digits, first 16 bytes for 12 words or all 32 for 24 |
 | Mnemonic pages | Numbered words 1–12; extra page 13–24 only for 24 words |
-| First Address | Complete lowercase BIP84 receiving address, five-character green/white groups, equivalent uppercase Bech32 QR, inline title/counter; no displayed derivation path |
+| First Address | Complete lowercase BIP84 receiving address, five-character green/white checkerboard groups, reversing the starting color on each row, equivalent uppercase Bech32 QR, inline title/counter; no displayed derivation path |
 | Address derivation | Bitcoin mainnet, empty BIP39 passphrase, `m/84'/0'/0'/0/0`; the hidden path is unchanged |
 | Entropy page | Original 16/32 entropy bytes in hexadecimal; original byte-color alternation |
 | Export | QR of the complete space-separated mnemonic text; same revised caption and page counter |
@@ -117,7 +117,7 @@ seed-generation or export features.
 | Storage/install | 8MB flash; complete device-specific image, app at `0x10000`; browser path skips mutable NVS | 32MB flash; guarded app-only install at `0x200000` in the existing seven-partition factory map; other factory partitions preserved |
 | Memory copies | Display/library/stack buffers specific to M5 backend | Additional full-frame and upstream-reference sprite buffers; complete RAM scrubbing unverified on both |
 | Hardware power | M5's separate power/reset key and built-in battery | Waveshare PWR/AXP2101 behavior and battery option; neither port has a Seeder battery gauge or qualified runtime estimate |
-| Version | `2.2.0-sticks3.2` | `2.2.0-ws175c.9` |
+| Version | `2.2.0-sticks3.3` | `2.2.0-ws175c.9` |
 
 Physical brightness, refresh latency, button/power timing, camera scanning and
 battery behavior are not claimed to be identical. The exact programmed image
@@ -127,7 +127,7 @@ must be checked separately from the current source or screenshots.
 
 | Previous build | Changes in current source |
 | --- | --- |
-| StickS3 `.1` → `.2` | Removes Compact QR; changes generated-page directions to big A forward/small B backward; adds Export/Watch Only counters and matching captions; removes displayed address path, enlarges/repositions address QR and keeps five-character green/white address groups; changes Exit from the old ~1.2-second immediate action to the shared cancellable three-second warning; retains outlined HOLD OK while idle; corrects splash spelling |
+| StickS3 `.1` → `.3` | Removes Compact QR; changes generated-page directions to big A forward/small B backward; adds Export/Watch Only counters and matching captions; removes displayed address path, enlarges/repositions address QR and keeps five-character green/white address groups; changes Exit from the old ~1.2-second immediate action to the shared cancellable three-second warning; retains outlined HOLD OK while idle; corrects splash spelling; alternates address-group starting colors by row |
 | Waveshare `.8` → `.9` | Restores the original-style outlined HOLD OK idle control and wipe legend; replaces the inline reset line with the same START OVER / RELEASE TO CANCEL screen used during input. **Menu, capture and seed-page button directions are unchanged** |
 
 Retained CompactSeedQR helper/encoder code and test fixtures do not expose that

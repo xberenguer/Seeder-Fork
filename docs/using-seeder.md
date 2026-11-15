@@ -106,7 +106,7 @@ Use a compatible offline signing device that accepts this exact text format. If 
 
 ### Compact QR in earlier builds
 
-Earlier StickS3 builds included CompactSeedQR. It is removed from the current `.2` review sequence to match Waveshare `.9`. Neither current port offers numeric SeedQR or CompactSeedQR; **Export remains space-separated mnemonic text**. Retained binary-encoder utilities/tests do not add a reachable Compact QR screen.
+Earlier StickS3 builds included CompactSeedQR. It is removed from the current `.3` review sequence to match Waveshare `.9`. Neither current port offers numeric SeedQR or CompactSeedQR; **Export remains space-separated mnemonic text**. Retained binary-encoder utilities/tests do not add a reachable Compact QR screen.
 
 ### Watch Only
 
@@ -132,7 +132,7 @@ The clear operation overwrites application-owned mnemonic, entropy, account key/
 | Word count or words differ | Same 12/24 selection, physical entry sequence, Heads=1/Tails=0, no extra die digits/spaces/newline, correct dice digest truncation |
 | Address differs | Complete words in order; empty BIP39 passphrase; Bitcoin mainnet; BIP84 account0; receive chain0/address0 |
 | QR importer rejects Export | Export is mnemonic text, not numeric or binary SeedQR; use an importer that supports it |
-| Compact QR is missing | Intentional in StickS3 `.2` and Waveshare `.9`; both use the same page set |
+| Compact QR is missing | Intentional in StickS3 `.3` and Waveshare `.9`; both use the same page set |
 | Watch-only wallet cannot sign | Expected: it has a public account key. Signing requires the seed/private keys in a suitable offline signing device. |
 | Imported fingerprint is blank or zero | The bare zpub QR does not carry origin metadata; compare/enter the master fingerprint shown on the device where the wallet supports it |
 | Reboot lost the displayed seed | Expected application behavior; it is not intentionally stored. Restore from your own verified backup, not device memory. |
@@ -141,7 +141,7 @@ If an independent calculation still disagrees after these checks, do not use the
 
 ## What has and has not been validated
 
-Current source versions are StickS3 `.2` and Waveshare `.9`. Waveshare `.9` was flashed with a verified backup and independently ROM-verified; its revised reset visuals still need physical acceptance. StickS3 `.2` has not been flashed. Host checks exercise the production calculation code against 78 independent public vectors, QR decoding/module matrices, rendered text/layout and the real button detector/workflows for both board pin mappings. Both ports have matching seed-page order, counters, controls and reset behavior. See [device parity](device-parity.md). StickS3's tested clean image was flashed and ROM-verified. Waveshare .7 was physically accepted and .8 was flashed/readback-verified with its limited splash/version change.
+Current source versions are StickS3 `.3` and Waveshare `.9`. Waveshare `.9` was flashed with a verified backup and independently ROM-verified; its revised reset visuals still need physical acceptance. StickS3 `.3` has not been flashed. Host checks exercise the production calculation code against 78 independent public vectors, QR decoding/module matrices, rendered text/layout and the real button detector/workflows for both board pin mappings. Both ports have matching seed-page order, counters, controls and reset behavior. See [device parity](device-parity.md). StickS3's tested clean image was flashed and ROM-verified. Waveshare .7 was physically accepted and .8 was flashed/readback-verified with its limited splash/version change.
 
 These observations do not establish every physical button sequence, camera model, battery condition or security property. Physical camera QR scanning, complete battery/power qualification, exhaustive RAM scrubbing and independent security auditing remain incomplete. See the individual manuals and [Security](../SECURITY.md) for each device's exact scope.
 

@@ -84,14 +84,14 @@ CompactSeedQR is **not** part of the Waveshare page sequence.
 
 ## StickS3: current fork changes
 
-Current source version: **2.2.0-sticks3.2**, build/host-tested and not yet flashed.
+Current source version: **2.2.0-sticks3.3**, build/host-tested and not yet flashed.
 The previous `.1` restored the original green palette and was physically checked.
 
-- Original native artwork and green `0x86F3` palette; `.2` corrects the splash
+- Original native artwork and green `0x86F3` palette; this fork corrects the splash
   spelling using only the original N/G letter pixels. Earlier blue fork builds
   are historical, not the current design.
 - Adds the receiving-address QR beside complete lowercase address text, with
-  alternating green/white five-character groups. Removes the displayed path;
+  green/white five-character groups in a checkerboard, reversing the starting color on each row. Removes the displayed path;
   the BIP84 derivation is unchanged. The new panel is 116×116 at 240×135.
 - Full-height integer-module seed/zpub QR panels with reduced white margins.
 - Uses the same revised Export and Watch Only wording, counters and page order
