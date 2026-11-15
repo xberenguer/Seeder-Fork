@@ -1,0 +1,65 @@
+{
+  "repository": "https://github.com/BitMaker-hub/Seeder",
+  "commit": "ba6e9ebe226222cbb04415a635a934eeae372dab",
+  "reference_board": "tdisplay (240x135)",
+  "files": {
+    "src/ui/ui.cpp": {
+      "file": "src/ui/ui.cpp.inc",
+      "sha256": "b4e5f7cb4cca5a046bfbbefc3509caa4a138f72fcc064ad3ceb53654747de12c"
+    },
+    "src/ui/ui.h": {
+      "file": "src/ui/ui.h",
+      "sha256": "13d53e8fc6f0d2e16ef5d57345b395d23d59d591ef73bca842ebe8275c886a38"
+    },
+    "src/ui/theme.h": {
+      "file": "src/ui/theme.h",
+      "sha256": "abb6289512b1c57e080031261481fb804069d7cb38d0001e106f1b99fbc7c93c"
+    },
+    "src/ui/brand.h": {
+      "file": "src/ui/brand.h",
+      "sha256": "fecd3ff1f4b38d186a145a7e0b9046cce0a669ce737044dcbbb05480e9234586"
+    },
+    "src/Lib/images.h": {
+      "file": "src/Lib/images.h",
+      "sha256": "a1d6258a56b6bdc904151b6af6f30fce537903afb513d8772e51b14cba66da4b"
+    },
+    "src/Lib/images_splash85.h": {
+      "file": "src/Lib/images_splash85.h",
+      "sha256": "b7d5a532260210afb367c471b92fdec9ada75f3f15764dd2a55cd7ff979e1461"
+    },
+    "src/Lib/Free_Fonts.h": {
+      "file": "src/Lib/Free_Fonts.h",
+      "sha256": "e04ebf5d669d5444161b0925b7e5a1400637532cfb95f7ce4668babfe134e26f"
+    },
+    "src/boards/board.h": {
+      "file": "src/boards/board.h",
+      "sha256": "b622749a852678f6045423616374318a3ca459826735bf331fedebcac92c306c"
+    },
+    "src/boards/tdisplay.h": {
+      "file": "src/boards/tdisplay.h",
+      "sha256": "59ce761611f6ab90f44c628409d3068b710811c51c1041ee4b9421dd530f99c3"
+    },
+    "src/boards/tdisplay_s3.h": {
+      "file": "src/boards/tdisplay_s3.h",
+      "sha256": "6c8c281a4c96cce20a3e13174e1ac6c184b61e7d1cb3b294dd7767fb0695a712"
+    },
+    "src/qrcoded.c": {
+      "file": "src/qrcoded.c.inc",
+      "sha256": "e675f7f7384e0df9d79626ce7ee069278968d0be7754285dbc6edcd23303b211"
+    },
+    "src/qrcoded.h": {
+      "file": "src/qrcoded.h",
+      "sha256": "6147ec5f1b7cfd67160288d5c4c2e5c048ab76ee3c90a32f656bac7f7d3a7f44"
+    }
+  },
+  "renderer_files": {
+    "lib/TFT_eSPI/TFT_eSPI.h": "b1b2789ace7ac8fd4a4c414054757d91e6e62649a23d74226ea28ceb8d6f4462",
+    "lib/TFT_eSPI/TFT_eSPI.cpp": "01ed6edb0530d38b94ddeac079ba81633aa21d77d049b12da21a37f4bec69ee1",
+    "lib/TFT_eSPI/Extensions/Sprite.h": "ca5a993ead724d8ee255bf6ccea1894cca48d42efadfa5c7922150a276cc8e8f",
+    "lib/TFT_eSPI/Extensions/Sprite.cpp": "19eedd4fd3ff9f367898ad9a3f730d079018dd31af4991f283f67417a3f83a65",
+    "lib/TFT_eSPI/Fonts/glcdfont.c": "bde369bf045a11a092f06d6073d44039c72515d8bc83353a87b8b8032e450d7c",
+    "lib/TFT_eSPI/Fonts/GFXFF/FreeMonoBold18pt7b.h": "23e469ff72b1249f911ef68755f476b49a31d288bf37c12697b7d5fb3e39a31f",
+    "lib/TFT_eSPI/Fonts/GFXFF/FreeMonoBold24pt7b.h": "12259b9479856b8e54183f436d36d6e139d1e564dd0d76ff1fda1ab479f0582f",
+    "lib/TFT_eSPI/Fonts/GFXFF/FreeMono9pt7b.h": "a99faea6fc28743e6274865eb9ddda06729d0e1d61e049efcf066802dcfc4f19"
+  }
+}
