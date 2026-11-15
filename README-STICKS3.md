@@ -1,6 +1,6 @@
 # Seeder on M5Stack StickS3
 
-This manual covers the **M5Stack StickS3, SKU K150**, running this fork's rectangular Seeder interface. The reference is [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab); the original MIT license and credits are retained. Current source identifies itself as `2.2.0-sticks3.2`. It aligns the user-facing features with Waveshare `.9`; see the [complete device comparison](docs/device-parity.md). The last physically checked clean build was `.1`; `.2` has not yet been flashed.
+This manual covers the **M5Stack StickS3, SKU K150**, running this fork's rectangular Seeder interface. The reference is [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab); the original MIT license and credits are retained. Current source identifies itself as `2.2.0-sticks3.3`. It aligns the user-facing features with Waveshare `.9`; see the [complete device comparison](docs/device-parity.md). The last physically checked clean build was `.1`; `.3` has not yet been flashed.
 
 [Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 
@@ -80,6 +80,8 @@ The manufacturer documents one power-key click as power on/reset and two clicks 
 
 The selected die face returns to **1** after every recorded roll; the screen shows the three most recent recorded rolls. Tapping B to choose a face does not record it. The physical randomness comes from your coin or die, not an internal device RNG. [The shared guide](docs/using-seeder.md#how-the-input-becomes-a-seed) explains the exact calculation.
 
+The `.3` address screen uses five-character groups in a checkerboard: green/white on the first row, white/green on the next, and so on. Address size, spacing and QR geometry are unchanged.
+
 ## Review every page
 
 Tap **front A** to follow this order; tap **side B** to retrace it. The page cycle wraps, so neither tap alone clears the seed.
@@ -96,7 +98,7 @@ Tap **front A** to follow this order; tap **side B** to retrace it. The page cyc
 
 The receiving address is only the first address of one account, not a complete watch-only wallet. Watch Only can expose this account's wallet activity but cannot sign a spend. The zpub QR is a bare account key, not a complete output descriptor; the shown fingerprint is **not** embedded in that QR. [Payload details and wallet compatibility](docs/using-seeder.md#pages-and-qr-payloads) explain these distinctions.
 
-**Export** allows recovery/spending. Scan it only with a compatible **offline signing device** that accepts space-separated mnemonic text; keep it away from online phones, screenshots and cloud backups. There is no CompactSeedQR page in `.2`. Physical signing-device camera scanning of this exact screen still needs validation.
+**Export** allows recovery/spending. Scan it only with a compatible **offline signing device** that accepts space-separated mnemonic text; keep it away from online phones, screenshots and cloud backups. There is no CompactSeedQR page in `.3`. Physical signing-device camera scanning of this exact screen still needs validation.
 
 ## Leave or restart
 
@@ -130,7 +132,7 @@ python3 -m venv .venv
 
 Output: `dist/seeder-sticks3-merged.bin` for `0x0`; `.pio/build/sticks3/firmware.bin` for `0x10000`. A source rebuild is a new artifact; the tested clean prebuilt checksum does not automatically apply to it. See [full build/flash instructions](docs/flashing.md).
 
-The current `.2` source builds and passes production-workflow tests for both button mappings, including page order/counters, cancel/confirm reset behavior and application-field clearing. Native M5GFX renders verify the address, QR payloads and reset overlay. The two reset warnings are pixel-identical at the native screen size. `.2` has not yet been flashed.
+The current `.3` source builds and passes production-workflow tests for both button mappings, including page order/counters, cancel/confirm reset behavior and application-field clearing. Native M5GFX renders verify the address, QR payloads and reset overlay. The two reset warnings are pixel-identical at the native screen size. `.3` has not yet been flashed.
 
 The previous clean green `2.2.0-sticks3.1` image was flashed, verified in its entirety through the ROM loader before startup, and restarted. The green menu and both buttons were physically confirmed; the receiving-address screen also has physical photographic evidence. Independent host checks cover 78 calculation vectors, 19 CompactSeedQR encoder round trips, native QR/module geometry and production-backend address/text rendering. These are separate from physical button-flow, camera, battery and signing-device checks, which remain incomplete. Complete RAM erasure and an independent security audit are not established.
 
