@@ -45,9 +45,15 @@ enum { coinEntropy, diceEntropy };
 #define SHOW_DATA1        3
 #define SHOW_ENTROPY      4
 #define SHOW_EXPORTQR     5
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+// Strict upstream page set for the circular port.
+#define SHOW_EXPORTZPUB   6
+#define SHOW_EXIT         7
+#else
 #define SHOW_COMPACTQR    6
 #define SHOW_EXPORTZPUB   7
 #define SHOW_EXIT         8
+#endif
 /********** 🍃 DICE ************************/
 // Same scheme as Coldcard: the ASCII digits of the rolls are hashed with
 // SHA-256. A d6 carries log2(6) = 2.585 bits, so 50 rolls = 129.2 bits and

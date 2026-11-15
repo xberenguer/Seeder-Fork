@@ -15,6 +15,9 @@ uint8_t entropy[32];               //Entropía cruda que aporta el usuario
 char diceRolls[DICE_MAX_ROLLS+1];  //Dígitos ASCII de las tiradas
 uint8_t diceValue = 1;             //Valor que se está marcando ahora
 uint8_t rollHist[3] = {0,0,0};     //Tres últimas tiradas, la más reciente al final
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+static bool exitHoldArmed=false;
+#endif
 
 /**************🍃 HELPERS *****************/
 uint8_t entropyBytes(void){ return myWallet.nWords * 4 / 3; }
@@ -34,6 +37,9 @@ static void wipeString(String &s){
 //Todo lo que permitiría reconstruir la semilla. uBitcoin ya hace memzero de
 //la clave privada y del chain code al destruirlas.
 void wipeSeed(void){
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+  exitHoldArmed=false;
+#endif
   wipeString(myWallet.mnemonic);
   wipeString(myWallet.entropyHex);
   wipeString(myWallet.xpub);
@@ -70,9 +76,14 @@ static void drawSeedPage(void){
     case SHOW_SEED2:    ui::mnemonic(myWallet.mnemonic, myWallet.nWords, 12, st, tot); break;
     case SHOW_DATA1:    ui::seedAddress(myWallet.firstAddress, st, tot); break;
     case SHOW_ENTROPY:  ui::seedEntropy(myWallet.entropyHex, st, tot); break;
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+    case SHOW_EXPORTQR: ui::seedQr(myWallet.mnemonic, myWallet.nWords, st, tot); break;
+    case SHOW_EXPORTZPUB: ui::seedZpubQr(watchOnlyExport(), myWallet.fingerprint, st, tot); break;
+#else
     case SHOW_EXPORTQR: ui::seedQr(myWallet.mnemonic, myWallet.nWords); break;
     case SHOW_COMPACTQR: ui::seedCompactQr(entropy, myWallet.nWords); break;
     case SHOW_EXPORTZPUB: ui::seedZpubQr(watchOnlyExport(), myWallet.fingerprint); break;
+#endif
     case SHOW_EXIT:     ui::seedExit(); break;
   }
 }
@@ -228,6 +239,9 @@ void doDiceSeed(void){
 //desde la última página y sólo manteniendo pulsado, para que nadie se salga
 //de la semilla por accidente antes de haberla apuntado.
 static void seedPageStep(int dir){
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+  exitHoldArmed=false;
+#endif
   do{
     menuSeed += dir;
     if(menuSeed > SHOW_EXIT)  menuSeed = SHOW_SEED1;
@@ -237,6 +251,26 @@ static void seedPageStep(int dir){
 }
 
 void doShowSeed(void){
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+  const int sel=btnSelect.click();
+  if(menuSeed==SHOW_EXIT) {
+    if(sel==HoldClick && exitHoldArmed) {
+      ui::seedExitHold(1.0f);
+      wipeSeed();myWallet.State=STATE_INITMENU;drawInitMenu();return;
+    }
+    if(sel==LongClick)exitHoldArmed=true;
+    if(exitHoldArmed) {
+      const unsigned long held=btnSelect.heldMs();
+      if(!held) {exitHoldArmed=false;ui::seedExit();return;}
+      ui::seedExitHold(held>BTN_LONG_MS
+        ? float(held-BTN_LONG_MS)/(BTN_HOLD_MS-BTN_LONG_MS):0.0f);
+      return;
+    }
+  }
+  // The big OK button advances through the generated seed; small MOVE goes back.
+  if(btnMove.click() == SingleClick) seedPageStep(-1);
+  if(sel==SingleClick)seedPageStep(+1);
+#else
   if(btnMove.click() == SingleClick) seedPageStep(+1);
 
   const int sel = btnSelect.click();
@@ -245,5 +279,8 @@ void doShowSeed(void){
     myWallet.State = STATE_INITMENU;
     drawInitMenu();
   }
-  else if(sel == SingleClick) seedPageStep(-1);
+  else if(sel == SingleClick) {
+    seedPageStep(-1);
+  }
+#endif
 }
