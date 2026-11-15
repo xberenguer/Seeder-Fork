@@ -12,7 +12,7 @@ Comparison images show the original 240x135 frame at 2x nearest-neighbor scale o
 
 <img src="../Images/Waveshare-device.jpg" alt="Actual Waveshare device displaying mnemonic words" width="600">
 
-The owner supplied this photograph (`IMG_3524.HEIC`). It is converted to JPEG with metadata removed; the device and display are not generated or retouched. The photographed seed is public and must never be used for funds. The other images below are exact production-code screen captures, not additional hardware photographs. [Image provenance](artwork.md).
+Test seed: 50 dice rolls of 1. The photo is converted to JPEG with metadata removed; the device and display are not generated or retouched. The other images below are exact production-code screen captures. [Image provenance](artwork.md).
 
 ## Overview
 
