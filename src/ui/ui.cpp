@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include "../boards/board.h"
+#if !defined(SEEDER_BOARD_WAVESHARE175C)
 #include "../display.h"
 #include "theme.h"
 #include "ui.h"
@@ -666,3 +668,4 @@ void seedExit(void){
 }
 
 }  // namespace ui
+#endif // Rectangular board layouts; the circular board uses round_ui.cpp.

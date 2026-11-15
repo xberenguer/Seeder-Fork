@@ -1,0 +1,171 @@
+{
+  "format_version": 1,
+  "repository": "https://github.com/BitMaker-hub/Seeder",
+  "source_revision": "ba6e9ebe226222cbb04415a635a934eeae372dab",
+  "generator": "scripts/gen_round_brand.py",
+  "menu_palette_rgb565": 34547,
+  "description": "Higher-resolution derivatives of original authored artwork; no AI, new typography or redesigned logo.",
+  "sources": {
+    "Logo/BLACK_small.jpg": {
+      "sha256": "29ffac3ce69c8b297d4a936230567d69353183668b2e004d5a0b50f7895c7a9e",
+      "width": 1460,
+      "height": 640,
+      "upstream_git_blob": "6382eb8150f6926fd8d1195fb5f8853fc4059876"
+    },
+    "Logo/LOGO SEEDER.jpg": {
+      "sha256": "4e833d4aaf321fd0035a56bf4561f0cfb5a753bfb854a1c3d7f4512994660144",
+      "width": 1920,
+      "height": 1040,
+      "upstream_git_blob": "ad2a3c828bea798acbaadf3c2b889bf533d51955"
+    },
+    "Logo/uBitcoinLogo.jpg": {
+      "sha256": "98ba342dcae2ac99f329921ffecbc8c03a2ffa594f976b103d2c9d70a92250f0",
+      "width": 842,
+      "height": 468,
+      "upstream_git_blob": "21826153a17244ef6089486f1bae1494b352ea2f"
+    },
+    "Logo/powered.jpg": {
+      "sha256": "6fbb0dfbc52a00a4827f275801842da11954422bd39a4ef4aa802f9494d0009f",
+      "width": 686,
+      "height": 98,
+      "upstream_git_blob": "696b8e027e474c1e8bbb3b071ef2c9ea7821248e"
+    }
+  },
+  "assets": [
+    {
+      "id": 0,
+      "name": "Splash",
+      "array": "SplashPixels",
+      "width": 320,
+      "height": 141,
+      "pixel_sha256": "636afa413b0700398d06ed81943ea981b48b9fcf9d88419546f63227cfa8937f",
+      "pixel_hash_encoding": "little-endian uint16 RGB565",
+      "sourcepath": "Logo/BLACK_small.jpg",
+      "source_sha256": "29ffac3ce69c8b297d4a936230567d69353183668b2e004d5a0b50f7895c7a9e",
+      "crop": [
+        0,
+        0,
+        1460,
+        640
+      ],
+      "original_rect": [
+        20,
+        15,
+        200,
+        88
+      ],
+      "resampling": "Lanczos downsampling from original high-resolution source",
+      "background_rgb565": 0,
+      "preview_name": "Splash.png",
+      "provenance": "Original green-on-black splash; final N/G glyphs exchanged at source resolution to correct SOVEREING to SOVEREIGN, then downsampled from 1460x640."
+    },
+    {
+      "id": 1,
+      "name": "CreditsLogo",
+      "array": "CreditsLogoPixels",
+      "width": 163,
+      "height": 91,
+      "pixel_sha256": "5aeff0a8dca4aad6349ba2d4b3efa8b9d1726d62e5c4ece7ca7c84003dd9bed9",
+      "pixel_hash_encoding": "little-endian uint16 RGB565",
+      "sourcepath": "Logo/uBitcoinLogo.jpg",
+      "source_sha256": "98ba342dcae2ac99f329921ffecbc8c03a2ffa594f976b103d2c9d70a92250f0",
+      "crop": [
+        0,
+        0,
+        842,
+        468
+      ],
+      "original_rect": [
+        69,
+        13,
+        102,
+        57
+      ],
+      "resampling": "Lanczos downsampling from original high-resolution source",
+      "background_rgb565": 0,
+      "preview_name": "CreditsLogo.png",
+      "provenance": "Original BitMaker/uBitcoin credit image, downsampled from 842x468."
+    },
+    {
+      "id": 2,
+      "name": "CreditsPowered",
+      "array": "CreditsPoweredPixels",
+      "width": 190,
+      "height": 27,
+      "pixel_sha256": "5de51ff8ade578d2849d0731f8deb511ced675a8aefc244636219402c1a0dd49",
+      "pixel_hash_encoding": "little-endian uint16 RGB565",
+      "sourcepath": "Logo/powered.jpg",
+      "source_sha256": "6fbb0dfbc52a00a4827f275801842da11954422bd39a4ef4aa802f9494d0009f",
+      "crop": [
+        0,
+        0,
+        686,
+        98
+      ],
+      "original_rect": [
+        60,
+        76,
+        119,
+        17
+      ],
+      "resampling": "Lanczos downsampling from original high-resolution source",
+      "background_rgb565": 0,
+      "preview_name": "CreditsPowered.png",
+      "provenance": "Original Powered by uBitcoin lettering, downsampled from 686x98."
+    },
+    {
+      "id": 3,
+      "name": "MenuWordmark",
+      "array": "MenuWordmarkPixels",
+      "width": 201,
+      "height": 39,
+      "pixel_sha256": "90003bd1cdac74a3b6e32bce4dde3a7ee5885423f64beef725f13eaa319d3510",
+      "pixel_hash_encoding": "little-endian uint16 RGB565",
+      "sourcepath": "Logo/LOGO SEEDER.jpg",
+      "source_sha256": "4e833d4aaf321fd0035a56bf4561f0cfb5a753bfb854a1c3d7f4512994660144",
+      "crop": [
+        585,
+        289,
+        1559,
+        478
+      ],
+      "original_rect": [
+        10,
+        5,
+        134,
+        26
+      ],
+      "resampling": "Lanczos downsampling from original high-resolution source",
+      "background_rgb565": 34547,
+      "preview_name": "MenuWordmark.png",
+      "provenance": "Original SEEDER letter shapes; source ink bbox586,290..1557,474 with crop padding matching the original menu aspect ratio."
+    },
+    {
+      "id": 4,
+      "name": "MenuLeaf",
+      "array": "MenuLeafPixels",
+      "width": 41,
+      "height": 50,
+      "pixel_sha256": "e86199df8f6ca49a7f3a126ec317d111a7beb30480121a414ba4c602b681d026",
+      "pixel_hash_encoding": "little-endian uint16 RGB565",
+      "sourcepath": "Logo/LOGO SEEDER.jpg",
+      "source_sha256": "4e833d4aaf321fd0035a56bf4561f0cfb5a753bfb854a1c3d7f4512994660144",
+      "crop": [
+        224,
+        230,
+        434,
+        487
+      ],
+      "original_rect": [
+        203,
+        1,
+        27,
+        33
+      ],
+      "resampling": "Lanczos downsampling from original high-resolution source",
+      "background_rgb565": 34547,
+      "preview_name": "MenuLeaf.png",
+      "provenance": "Original top three leaves and stem only; excludes seedpod/roots. Crop aligned to the 27x33 original menu silhouette."
+    }
+  ]
+}
