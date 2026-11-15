@@ -4,7 +4,7 @@
 
 <img src="Images/Seeder-devices.png" alt="Seeder running on M5Stack StickS3 at left and Waveshare AMOLED 1.75C at right" width="850">
 
-*Two supported devices: StickS3 on the left; Waveshare 1.75C on the right. Both ports use the original green Seeder palette.*
+*Two supported devices: StickS3 on the left; Waveshare 1.75C on the right.*
 
 Seeder was created by **[BitMaker](https://github.com/BitMaker-hub/Seeder)** from an idea by **Lunaticoin**. This community fork builds on their Seeder v2.2.0, retains the original credits and [MIT license](LICENSE), and adds hardware ports and interface adaptations. It does not generate random entropy for you: the physical coin or die supplies the input.
 
