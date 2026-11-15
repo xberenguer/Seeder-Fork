@@ -10,7 +10,7 @@ Wi-Fi and Bluetooth are not initialized.
 
 <img src="Images/Waveshare-device.jpg" alt="Seeder mnemonic words on the Waveshare CNC enclosure" width="600">
 
-*Actual device photograph supplied by the owner. The seed shown is public and must never be used for funds.*
+*Test seed: 50 dice rolls of 1.*
 
 ![Current round-screen interface](Images/Waveshare-overview.png)
 
