@@ -24,7 +24,6 @@ namespace {
 constexpr int C=233;
 constexpr int QR_QUIET=2;
 int splashFrame=0;
-int exitFilled=-1;
 void startFrame() {
   tft.fillScreen(0);
 #if defined(SEEDER_UI_VERIFY)
@@ -207,17 +206,13 @@ void qrPlacement(const String &payload,uint8_t step,uint8_t total,
 void holdPlacement() {
   startFrame();copy(0,0,183,135,50,118,366,270);captureControls();finish();
 }
-void exitPlacement(int filled,bool holding) {
+void exitPlacement() {
   startFrame();
   copy(0,0,240,35,53,101,360,53);
   centerInk(0,35,240,27,C,158,2);
   centerInk(0,62,240,36,C,215,2);
-  caption(holding?"RELEASE TO CANCEL":"HOLD OK TO RESET",322,0x86f3);
-  tft.fillRect(125,350,216,4,0x2945);
-  if(filled)tft.fillRect(125,350,filled,4,0x86f3);
-#if defined(SEEDER_UI_VERIFY)
-  roundVerifyExitProgress(filled,holding);
-#endif
+  centerInk(0,110,126,14,C,303,3,2);
+  copy(126,100,106,30,127,327,212,60);
   exitPointer();finish();
 }
 } // namespace
@@ -230,7 +225,7 @@ void coinEnter(uint16_t total){bitmakerUi::coinEnter(total);}
 void coinUpdate(uint16_t done,uint16_t total,const uint8_t *entropy){bitmakerUi::coinUpdate(done,total,entropy);coinPlacement();}
 void diceEnter(uint8_t total){bitmakerUi::diceEnter(total);}
 void diceUpdate(uint8_t done,uint8_t total,uint8_t value,const uint8_t *history){bitmakerUi::diceUpdate(done,total,value,history);dicePlacement();}
-void holdEnter(){bitmakerUi::holdEnter();holdPlacement();}
+void holdEnter(){bitmaker::prepareHold();bitmakerUi::holdEnter();holdPlacement();}
 void holdUpdate(float frac){bitmakerUi::holdUpdate(frac);holdPlacement();}
 void generating(){
   bitmakerUi::generating();startFrame();centerInk(0,59,240,18,C,211,5,2);finish();
@@ -286,15 +281,7 @@ void seedEntropy(const String &hex,uint8_t step,uint8_t total){
 }
 void seedQr(const String &data,uint8_t count,uint8_t step,uint8_t total){bitmakerUi::seedQr(data,count);qrPlacement(data,step,total,false,"",count);}
 void seedZpubQr(const String &data,const String &fingerprint,uint8_t step,uint8_t total){bitmakerUi::seedZpubQr(data,fingerprint);qrPlacement(data,step,total,true,fingerprint.c_str(),0);}
-void seedExit(){
-  bitmakerUi::seedExit();exitFilled=-1;exitPlacement(0,false);
-}
-void seedExitHold(float fraction){
-  if(fraction<0)fraction=0;
-  if(fraction>1)fraction=1;
-  const int filled=int(216*fraction+0.5f);
-  if(filled==exitFilled)return;
-  exitFilled=filled;bitmakerUi::seedExit();exitPlacement(filled,true);
-}
+void seedExit(){bitmakerUi::seedExit();exitPlacement();}
+
 } // namespace ui
 #endif
