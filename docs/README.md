@@ -15,6 +15,7 @@
 - [Build, download, flash and verify](flashing.md): correct files/offsets, terminal commands, backups, recovery and exact tested artifact hashes.
 - [Changes from the original](fork-differences.md): visible, behavioral, export and hardware adaptations.
 - [Screen gallery](screenshots.md): all 25 round-screen captures and 21 original comparisons.
+- [Signed browser releases](release-signatures.md): release signatures, public-key fingerprint and independent verification.
 - [Credits](credits.md): BitMaker, Lunaticoin, the fork and dependencies.
 - [Photos and screenshots](artwork.md): original photographs, edited header and software captures.
 - [Security](../SECURITY.md): trust assumptions and validation limits.
