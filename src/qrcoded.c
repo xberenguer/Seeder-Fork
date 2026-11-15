@@ -1,3 +1,6 @@
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+#include "ui/bitmaker/src/qrcoded.c.inc"
+#else
 /**
  * The MIT License (MIT)
  *
@@ -1067,3 +1070,5 @@ void qrcode_getHex(QRCode *qrcoded, char *result) {
     
 }
 */
+
+#endif // Waveshare uses the exact upstream encoder.

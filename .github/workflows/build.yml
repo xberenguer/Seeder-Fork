@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, main ]
     tags: [ 'v*' ]
   pull_request:
   workflow_dispatch:
@@ -50,6 +50,9 @@ jobs:
             chip: esp32s3
             boot_offset: "0x0"
             flash_size: "8MB"
+          - env: waveshare175c
+            chip: esp32s3
+            flash_size: "32MB"
     steps:
       - uses: actions/checkout@v4
 
@@ -66,7 +69,7 @@ jobs:
           key: pio-${{ runner.os }}-${{ matrix.env }}-${{ hashFiles('platformio.ini') }}
 
       - name: Install toolchain
-        run: pip install --upgrade platformio esptool==4.8.1
+        run: pip install platformio==6.2.0 esptool==4.9.0
 
       - name: Build
         run: pio run -e ${{ matrix.env }}
@@ -74,6 +77,7 @@ jobs:
       # esptool-js quiere un solo fichero al offset 0. Fundir aquí las cuatro
       # imágenes deja el tutorial de flasheo en un arrastrar y soltar.
       - name: Merge into a single flashable image
+        if: matrix.env != 'waveshare175c'
         run: |
           set -eu
           OUT=.pio/build/${{ matrix.env }}
@@ -90,6 +94,23 @@ jobs:
           cp "$OUT/firmware.bin"   dist/$NAME-firmware.bin
           cp "$OUT/bootloader.bin" dist/$NAME-bootloader.bin
           cp "$OUT/partitions.bin" dist/$NAME-partitions.bin
+          sha256sum dist/* | tee dist/SHA256SUMS-${{ matrix.env }}
+
+      - name: Verify exact BitMaker pixels, round placement and button workflow
+        if: matrix.env == 'waveshare175c'
+        run: |
+          python -m pip install -r tests/round/requirements.txt
+          python tests/round/build.py
+          python tests/round/verify.py
+
+      # The 1.75C retains its factory bootloader/partitions and installs ONLY
+      # the application at 0x200000 through the guarded, identity-checked tool.
+      - name: Package Waveshare application only
+        if: matrix.env == 'waveshare175c'
+        run: |
+          mkdir -p dist
+          cp .pio/build/waveshare175c/firmware.bin dist/seeder-waveshare175c-firmware.bin
+          cp scripts/flash_waveshare175c.py README-WAVESHARE175C.md dist/
           sha256sum dist/* | tee dist/SHA256SUMS-${{ matrix.env }}
 
       # Un generador de semillas vale lo que valga el rastro de su binario.

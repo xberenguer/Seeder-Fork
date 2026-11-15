@@ -20,6 +20,7 @@ class sButton
    {  private:
          byte antState;           //Button previous pin state
          byte pin;                //Button physical pin number
+         bool activeHigh;         //Normalize inverted physical button inputs
          bool longFired;          //LongClick already reported for this press
          bool holdFired;          //HoldClick already reported for this press
          unsigned long msecLst;   //When the current press started
@@ -27,7 +28,7 @@ class sButton
  
       public:
          uint8_t clickState;      //Button click [None, SingleClick, LongClick, HoldClick]
-         sButton(byte bPin);      // Constructor
+         sButton(byte bPin, bool activeHigh=false); // Constructor
          void init(void);         // Init button pin
          void check(void) ;        // Declaracion de funcion externa
          int click(void) ;         // Declaracion de funcion externa

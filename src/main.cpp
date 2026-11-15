@@ -5,8 +5,16 @@
 #include "GlobalVARS.h"
 
 sWallet myWallet;
+#if defined(MOVE_ACTIVE_HIGH)
+sButton btnMove(PIN_MOVE, true);
+#else
 sButton btnMove(PIN_MOVE);
+#endif
+#if defined(SELECT_ACTIVE_HIGH)
+sButton btnSelect(PIN_SELECT, true);
+#else
 sButton btnSelect(PIN_SELECT);
+#endif
   
 void setup() {
 

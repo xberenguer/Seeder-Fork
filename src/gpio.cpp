@@ -7,6 +7,8 @@
 /**********************🍃 GLOBAL Vars *******************************/
 #if defined(SEEDER_BOARD_STICKS3)
 SeederDisplay &tft = M5.Display;
+#elif defined(SEEDER_BOARD_WAVESHARE175C)
+// The canvas and panel live together in boards/waveshare175c.cpp.
 #else
 SeederDisplay tft;  // LilyGO pins remain defined in TFT_eSPI/User_Setup.h.
 #endif
@@ -18,7 +20,12 @@ extern sButton btnSelect;
 
 void Init_TFT(void){
 
-#if defined(SEEDER_BOARD_STICKS3)
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+  if(!roundBoard::begin()) {
+    // Fail closed: never enter entropy capture with an unusable display.
+    while(true) delay(100);
+  }
+#elif defined(SEEDER_BOARD_STICKS3)
   // Never initialize serial, radios, audio, sensors, or external accessories.
   // Silence library diagnostics before initialization; seeds never enter logs.
   esp_log_level_set("*", ESP_LOG_NONE);
@@ -53,8 +60,12 @@ void Init_TFT(void){
 
   tft.init();
 #endif
+#if !defined(SEEDER_BOARD_WAVESHARE175C)
   tft.setRotation(1);
   tft.setSwapBytes(true);   // orden de bytes al volcar imágenes
+#endif
+  btnMove.init();
+  btnSelect.init();
 
   ui::splash();
 
@@ -70,12 +81,19 @@ void Update_Board(void){
 
 /*****************🍃 BUTTON DETECTION *********************/
 
-sButton::sButton(byte bPin){        //Constructor
+sButton::sButton(byte bPin, bool high){        //Constructor
     pin = bPin; pinMode(pin, INPUT);
+    activeHigh = high;
     antState = HIGH; longFired = holdFired = false;
     msecLst = msecEdge = 0; clickState = None;
 }
-void sButton::init(void){  pinMode(pin, INPUT); }     // Init pushbutton pin
+void sButton::init(void){
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+    pinMode(pin, pin == 0 ? INPUT_PULLUP : INPUT);
+#else
+    pinMode(pin, INPUT);
+#endif
+}     // Init pushbutton pin
 int sButton::click(void){  return clickState; }
 void sButton::forceClick(void){ clickState = ForcedClick;} //Generates one click loop
 
@@ -95,7 +113,8 @@ void sButton::check(void)
     if(clickState == ForcedClick){ clickState = SingleClick; return; }
     clickState = None;
 
-    byte but = digitalRead(pin);
+    // Normalize the Waveshare PWR input; the shared detector uses LOW=pressed.
+    byte but = activeHigh ? !digitalRead(pin) : digitalRead(pin);
 
     if(but != antState){
         if(msec - msecEdge < ButDebounce) return;   // bounce, ignore the edge

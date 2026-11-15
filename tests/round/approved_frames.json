@@ -1,0 +1,20 @@
+{
+  "reference_version": "2.2.0-ws175c.5",
+  "description": "User-approved unchanged screens; SHA256 of 466x466 RGB pixels with circular mask",
+  "frames": {
+    "02-splash-credits": "70c5ab81eda3f7541ab85bc13a45205335a79878e08fbe8d43fc767389df5ca1",
+    "03-menu-coin": "c7dfb00bfbfbe3320d9a67c01d54480dea249ba17601e1eb30f52aed0a228525",
+    "04-menu-dice": "2625dfe235738756fa505f63cdc1df9a8aaa16c7a6a7e9e72fda588b150171a3",
+    "05-words-12": "a6a197c47be8c83af8ab8f29f1e7a6899f2d22aa3d70e072c1a182cbb14cf707",
+    "06-words-24": "4443801252ce6e1de9a4a2bc0837e69761df0a94d73f394c9c3bf35303643dbe",
+    "07-coin-start": "3c586097498d3e75a0141ba817f00a567b561b374c53c0d16e8f10b8dd195b61",
+    "08-coin-progress": "d1e57cb0e628821bd68a7ec68a1691a65607052cae8e48403648869d915cf59b",
+    "09-dice-progress": "41ca1183b0dc09bfe6cadac7be7bc27f2752a0cb7cbde806f836c7133439a5f7",
+    "10-hold": "4134800d41ac0ef2b387ad75df652a14875a5f3de88e9258f8854001b1a0fa5e",
+    "11-generating": "7d343df6263aca3fba39576d34afef9b027c54a423590fc45747ff515ea62819",
+    "12-mnemonic-wide": "e41d9a99d7671b8ccee96ea9e850a4448c562ba3f517637dd31c85db543d11f7",
+    "13-mnemonic-24": "659caaf5905c97c5d13600f8c264a6d2e9db995303338291164005b85f949a04",
+    "15-entropy-16": "898ec938185c9c3e8115f892400b94ea1b7a88421b50c75c1382fd124e56a39b",
+    "16-entropy-32": "f310868380c82b57f49f62b5285c696a5023c0e72ccc45e34a70872e159db94c"
+  }
+}

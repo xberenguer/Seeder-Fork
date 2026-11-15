@@ -38,9 +38,17 @@ void generating(void);
 void mnemonic(const String &mn, uint8_t nWords, uint8_t from, uint8_t step, uint8_t total);
 void seedAddress(const String &addr, uint8_t step, uint8_t total);
 void seedEntropy(const String &hex, uint8_t step, uint8_t total);
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+void seedQr(const String &data, uint8_t nWords, uint8_t step, uint8_t total);
+void seedZpubQr(const String &data, const String &fingerprint, uint8_t step, uint8_t total);
+#else
 void seedQr(const String &data, uint8_t nWords);
-void seedCompactQr(const uint8_t *entropy, uint8_t nWords);
 void seedZpubQr(const String &data, const String &fingerprint);
+#endif
+void seedCompactQr(const uint8_t *entropy, uint8_t nWords);
 void seedExit(void);
+#if defined(SEEDER_BOARD_WAVESHARE175C)
+void seedExitHold(float fraction);
+#endif
 
 }  // namespace ui

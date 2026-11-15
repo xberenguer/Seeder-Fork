@@ -1,8 +1,8 @@
-Third-party notices for the M5StickS3 firmware
+Third-party notices for Seeder Fork firmware
 
 The original Seeder license remains in LICENSE. Vendored libraries retain
 their own notices under lib/. The following additional dependencies are
-linked into the StickS3 firmware.
+linked into the corresponding device firmware.
 
 M5Unified 0.3.0 (commit 96576a14247ddc935149145aa6b51943464120f1)
 =================================================================
@@ -53,3 +53,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Arduino_GFX 1.5.9 (Waveshare target)
+==================================
+
+Project: https://github.com/moononournation/Arduino_GFX
+Author/maintainer: Moon On Our Nation
+The dependency is pinned through PlatformIO and is not copied into this source
+repository. Its source identifies contributions derived from Adafruit GFX and
+LovyanGFX; retain the applicable source/component notices when redistributing.
+Vendored TFT_eSPI, uBitcoin and fonts retain their notices under lib/.
