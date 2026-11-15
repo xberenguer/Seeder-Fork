@@ -137,7 +137,7 @@ python3 -m venv .venv
 
 The application is `.pio/build/waveshare175c/firmware.bin`, with a 6MB maximum factory app slot. Build dependencies pin Espressif32 6.12.0 / Arduino-ESP32 2.0.17 and Arduino_GFX 1.5.9; the original vendored TFT_eSPI version is 2.5.43. Use the guarded installer even after a local build. [Full instructions](docs/flashing.md#waveshare-175c-guarded-application-install).
 
-Current `.9` builds and passes native layout/QR checks and production-workflow tests; its input/Exit warning frames are pixel-identical. `.9` has not yet been flashed. The [device comparison](docs/device-parity.md) lists every current feature and the remaining implementation differences.
+Current `.9` builds and passes native layout/QR checks and production-workflow tests; its input/Exit warning frames are pixel-identical. It was flashed app-only with a verified sector backup, then independently verified through the ROM loader. Physical acceptance of the revised reset visuals remains pending. The [device comparison](docs/device-parity.md) lists every current feature and the remaining implementation differences.
 
 Version .7 was flashed, readback-verified and physically accepted. Version .8 retains that layout, changes splash spelling/version and was also flashed/readback-verified. Host checks cover 25 frames, seven QR cases including text-export length variants, every Bech32 character in every address position, debounced generation/navigation/reset workflows, and 78 independent deterministic calculation vectors. All four source targets compile.
 
