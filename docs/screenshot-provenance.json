@@ -1,0 +1,184 @@
+{
+  "firmware": "2.2.0-ws175c.8",
+  "reference_commit": "ba6e9ebe226222cbb04415a635a934eeae372dab",
+  "type": "production-code renders using public deterministic fixtures; not device photographs",
+  "round_renderer": "tests/round/build.py and tests/round/verify.py",
+  "original_renderer": "frozen BitMaker source without round-page counter additions",
+  "screens": [
+    {
+      "screen": "01-splash-brand",
+      "render": "Images/waveshare/01-splash-brand.png",
+      "render_sha256": "6358d667274c1a8ad82936913410d7ed0d55d15ba35bf11fae7f83be0d0dd3f8",
+      "comparison": "Images/waveshare/01-splash-brand-comparison.png",
+      "original_sha256": "cb18e2e5d0b4bd1f37dbdbb92dd28a8b47e4920c93e13e9692002e1fddd9e93b"
+    },
+    {
+      "screen": "02-splash-credits",
+      "render": "Images/waveshare/02-splash-credits.png",
+      "render_sha256": "3fece87e491f66e07f4000f83b528ce6965734829247e00aef767c3dbad013dd",
+      "comparison": "Images/waveshare/02-splash-credits-comparison.png",
+      "original_sha256": "6ca315b5e74cafbc96d4070061d81f3c9f976d725bfac73dc7e06d37237ec25a"
+    },
+    {
+      "screen": "03-menu-coin",
+      "render": "Images/waveshare/03-menu-coin.png",
+      "render_sha256": "f94d5f814340045431a3433b2cde84514e608cd757c3d8e830962f56208d1796",
+      "comparison": "Images/waveshare/03-menu-coin-comparison.png",
+      "original_sha256": "1e99d704d83834900386bb63c86c485a7c7a74baa37739a047da0afb5023914c"
+    },
+    {
+      "screen": "04-menu-dice",
+      "render": "Images/waveshare/04-menu-dice.png",
+      "render_sha256": "40a9231205bbb56a05d873a9b19975f3460e64b5b197507a8695eccafe48cd50",
+      "comparison": "Images/waveshare/04-menu-dice-comparison.png",
+      "original_sha256": "d946ad58ff290cdad14f748010f51173ca3da54aee44e95adf83b369bc829e2c"
+    },
+    {
+      "screen": "05-words-12",
+      "render": "Images/waveshare/05-words-12.png",
+      "render_sha256": "43e1a13532304b38085e422d6d2712386eb3d0a846f23087eb56757b5bed5e15",
+      "comparison": "Images/waveshare/05-words-12-comparison.png",
+      "original_sha256": "d42a4086483603921b163872e1ac405588d7712a18cc6087191baf0bd54b5f33"
+    },
+    {
+      "screen": "06-words-24",
+      "render": "Images/waveshare/06-words-24.png",
+      "render_sha256": "3330f5e0dc4d4c979e60305b53a20798779d9ddab5c51a065f7a8097cabd4e71",
+      "comparison": "Images/waveshare/06-words-24-comparison.png",
+      "original_sha256": "3075db13078001036703806d06272eb44586d5b6b0870d260018f7e8a1c5cf7d"
+    },
+    {
+      "screen": "07-coin-start",
+      "render": "Images/waveshare/07-coin-start.png",
+      "render_sha256": "a3b3f53bea94d2fe1c615bead273c46a9af91d8b9301071e86b4f00ee4b47b05",
+      "comparison": "Images/waveshare/07-coin-start-comparison.png",
+      "original_sha256": "6879c1d45fdfc5d2968dd08aa2f5f2a43a4f174a6d4a00050fe70ed25ae1eda3"
+    },
+    {
+      "screen": "08-coin-progress",
+      "render": "Images/waveshare/08-coin-progress.png",
+      "render_sha256": "eb29996c1a58db0b8f2fa8d57697ad36717b70840907ac186d9361ef2ff9b43f",
+      "comparison": "Images/waveshare/08-coin-progress-comparison.png",
+      "original_sha256": "b842923a5f186973cef72b51c9f75fbdb1dde4da981350f050ccf0c021f6f202"
+    },
+    {
+      "screen": "09-dice-progress",
+      "render": "Images/waveshare/09-dice-progress.png",
+      "render_sha256": "d9c691cd94b95d809ab6d58cbac5b24a111e33dd2312f7e0bfa2d826786e8b32",
+      "comparison": "Images/waveshare/09-dice-progress-comparison.png",
+      "original_sha256": "88f2bec116b50e23e54cfcbb3016f14be88d78dd28cf59275169355bb4cca963"
+    },
+    {
+      "screen": "10-hold",
+      "render": "Images/waveshare/10-hold.png",
+      "render_sha256": "dc532aa23c7f6bc8aeb461daf4796a5f2190d65346cd58025983a588bab785cb",
+      "comparison": "Images/waveshare/10-hold-comparison.png",
+      "original_sha256": "ab3d66bbc9e241e1f58744e0a78ce62247954edef6a0a9dffcdb60e46e6130d7"
+    },
+    {
+      "screen": "11-generating",
+      "render": "Images/waveshare/11-generating.png",
+      "render_sha256": "3cc72ef613d295c594104f6409e190af84b38fa5975d9c40ab471f7096b0ca8e",
+      "comparison": "Images/waveshare/11-generating-comparison.png",
+      "original_sha256": "3c25b26607524dbaa88ba44a2a577d799962b6b2156f40fcb32bf8e7d75fd95e"
+    },
+    {
+      "screen": "12-mnemonic-wide",
+      "render": "Images/waveshare/12-mnemonic-wide.png",
+      "render_sha256": "f06e667b85ae822f5aedccd3f5610163cd1e1f5854702ed646a00ba2b56d4565",
+      "comparison": "Images/waveshare/12-mnemonic-wide-comparison.png",
+      "original_sha256": "76dd0e791aebb6a655660f02e695babe856fba8d6bfc4d0e118e15dd6f7cb804"
+    },
+    {
+      "screen": "13-mnemonic-24",
+      "render": "Images/waveshare/13-mnemonic-24.png",
+      "render_sha256": "91bcbb7225912d5a647e6d1106de2e73a6a9bebba4094e75b8223ff49a1886d5",
+      "comparison": "Images/waveshare/13-mnemonic-24-comparison.png",
+      "original_sha256": "bdfcaa43f12bc15ebfb473fd22d481a63d7bf1628662a5574caeb52848dc64d7"
+    },
+    {
+      "screen": "14-address",
+      "render": "Images/waveshare/14-address.png",
+      "render_sha256": "32df3dbd291a7667de0564a1838ca3415500742145da85b168513ba667238804",
+      "comparison": "Images/waveshare/14-address-comparison.png",
+      "original_sha256": "0d5b5fc26f020a7682048175be2328473273ee91c9a6d20036c3d2df62506d3f"
+    },
+    {
+      "screen": "15-entropy-16",
+      "render": "Images/waveshare/15-entropy-16.png",
+      "render_sha256": "7136d321ea5d1f18786d1308b110da6f76554f2c707c0191e7417f2097452ee4",
+      "comparison": "Images/waveshare/15-entropy-16-comparison.png",
+      "original_sha256": "04e911f31ab7250c8e0af8682b0f071f8b056c78c98b32c71d1eb18f2c67a88a"
+    },
+    {
+      "screen": "16-entropy-32",
+      "render": "Images/waveshare/16-entropy-32.png",
+      "render_sha256": "511cdf30100b442377f82f79a6623e5fbb811e5317a315e45e64c5c3ab6ba22e",
+      "comparison": "Images/waveshare/16-entropy-32-comparison.png",
+      "original_sha256": "a1a96ab0435f3aaa51bffd2ae85d62ce5461ee4d4817c516533aff1d271f6640"
+    },
+    {
+      "screen": "17-export-12",
+      "render": "Images/waveshare/17-export-12.png",
+      "render_sha256": "44e1afa53880601f361e60282326357eaaf6f6aa26f36940a609208604fbedc1",
+      "comparison": "Images/waveshare/17-export-12-comparison.png",
+      "original_sha256": "4625b52dac811b22e88e01851c4d36f66ec634352b0a42f74ebce9383a1f3455"
+    },
+    {
+      "screen": "18-export-24",
+      "render": "Images/waveshare/18-export-24.png",
+      "render_sha256": "ff63bf342cffc225e64156f25f424eadea39ebc37f8f61d8f2a94732905521d2",
+      "comparison": "Images/waveshare/18-export-24-comparison.png",
+      "original_sha256": "27a61ab87b286d7d534c01af406073b4d64188fff011ed583a72f053c5d241fb"
+    },
+    {
+      "screen": "19-watch-only",
+      "render": "Images/waveshare/19-watch-only.png",
+      "render_sha256": "1ad56d9bfb83b966cf14383a5d622bc206a4eb9d722a217e61518bd1124001df",
+      "comparison": "Images/waveshare/19-watch-only-comparison.png",
+      "original_sha256": "0fead26b0b19ce3819c034897399bcbc5b0c0da7808c52b07d22a3831178e5a1"
+    },
+    {
+      "screen": "20-exit",
+      "render": "Images/waveshare/20-exit.png",
+      "render_sha256": "9e60624927fb3f6492640180744fbdd86688e7a905d380866dbd6a0835cc7d21",
+      "comparison": "Images/waveshare/20-exit-comparison.png",
+      "original_sha256": "7c455a50fb6939b8e5178a256f46f501b4522ee14871a967cefb5958f3b7bd31"
+    },
+    {
+      "screen": "21-watch-only-24",
+      "render": "Images/waveshare/21-watch-only-24.png",
+      "render_sha256": "86e8d97fd74d7e9f464fafe4968319f3bd03dd6194e7f71d5f02444098cfc602",
+      "comparison": "Images/waveshare/21-watch-only-24-comparison.png",
+      "original_sha256": "0fead26b0b19ce3819c034897399bcbc5b0c0da7808c52b07d22a3831178e5a1"
+    },
+    {
+      "screen": "22-export-24-v7",
+      "render": "Images/waveshare/22-export-24-v7.png",
+      "render_sha256": "a620e3e6baa15a035fd5f96456d57fa90a044e52520156ea58da5c18d15b659c",
+      "comparison": null,
+      "original_sha256": null
+    },
+    {
+      "screen": "23-export-24-v9",
+      "render": "Images/waveshare/23-export-24-v9.png",
+      "render_sha256": "9659306800d433ab44a9c488a51f821059081635037a99e2f6a4031e3112bce1",
+      "comparison": null,
+      "original_sha256": null
+    },
+    {
+      "screen": "24-exit-hold-half",
+      "render": "Images/waveshare/24-exit-hold-half.png",
+      "render_sha256": "a26342193138614d4f199e34de54802978bc185eaa7e0e03642f46c8761475c6",
+      "comparison": null,
+      "original_sha256": null
+    },
+    {
+      "screen": "25-exit-hold-full",
+      "render": "Images/waveshare/25-exit-hold-full.png",
+      "render_sha256": "4c86f41ab50e5132979c040e8122930ea4eb63aeffdd1746d09c1caa8283a814",
+      "comparison": null,
+      "original_sha256": null
+    }
+  ]
+}
