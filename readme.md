@@ -4,7 +4,7 @@
 
 <img src="Images/Seeder-devices.png" alt="Seeder running on M5Stack StickS3 at left and Waveshare AMOLED 1.75C at right" width="850">
 
-*Two supported devices: StickS3 on the left; Waveshare 1.75C on the right. The StickS3 photograph shows an earlier green interface; the current rectangular fork uses blue accents, shown in the screenshots below.*
+*Two supported devices: StickS3 on the left; Waveshare 1.75C on the right. Both ports use the original green Seeder palette.*
 
 Seeder was created by **[BitMaker](https://github.com/BitMaker-hub/Seeder)** from an idea by **Lunaticoin**. This community fork builds on their Seeder v2.2.0, retains the original credits and [MIT license](LICENSE), and adds hardware ports and interface adaptations. It does not generate random entropy for you: the physical coin or die supplies the input.
 
@@ -25,7 +25,7 @@ Buy the exact models from the [M5Stack official StickS3 shop](https://shop.m5sta
 2. Follow the [flashing guide](docs/flashing.md). StickS3 uses its own complete image; Waveshare preserves its factory map and installs only the app at `0x200000`.
 3. Try the complete workflow with public test data first, then read [Using Seeder](docs/using-seeder.md) and [Security](SECURITY.md) before entering private entropy.
 
-The planned [browser installer](https://xn--sg8hhb.ws/flasher/) will offer an optional short installation path. Until it is live and lists both correct Seeder targets, use the independently usable terminal instructions in the [flashing guide](docs/flashing.md).
+**[Flash from your browser](https://xn--sg8hhb.ws/flasher/)**: select your exact board and Seeder, review the version, then follow the USB connection, recovery-backup and installation steps. Desktop Chrome/Edge or another Web Serial browser is required. The [terminal flashing guide](docs/flashing.md) remains available for independent builds and ROM verification.
 
 ## What it does
 
@@ -40,11 +40,11 @@ The firmware does not initialize Wi-Fi or Bluetooth and does not intentionally s
 
 ## Current interface
 
-| StickS3: blue rectangular interface | Waveshare: green round interface |
+| StickS3: green rectangular interface | Waveshare: green round interface |
 | --- | --- |
-| ![StickS3 menu](Images/StickS3-menu.png) | ![Waveshare menu](Images/Waveshare-menu.png) |
-| ![StickS3 first address](Images/StickS3-address.png) | ![Waveshare first address](Images/Waveshare-address.png) |
-| ![StickS3 CompactSeedQR](Images/StickS3-compact.png) | ![Waveshare seed export](Images/Waveshare-export.png) |
+| <img src="Images/StickS3-menu.png" alt="StickS3 green menu" width="300"> | <img src="Images/Waveshare-menu.png" alt="Waveshare green menu" width="320"> |
+| <img src="Images/StickS3-address.png" alt="StickS3 first address" width="300"> | <img src="Images/Waveshare-address.png" alt="Waveshare first address" width="320"> |
+| <img src="Images/StickS3-compact.png" alt="StickS3 CompactSeedQR" width="300"> | <img src="Images/Waveshare-export.png" alt="Waveshare seed export" width="320"> |
 
 *These screenshots are software renders of production UI code using public test fixtures, not device photographs or camera-scan evidence. Never use pictured test seeds for funds.*
 
@@ -52,7 +52,7 @@ The firmware does not initialize Wi-Fi or Bluetooth and does not intentionally s
 
 ## Validation and development
 
-The tested StickS3 build is `2.2.0-sticks3-dev` from clean commit `38de080`; its complete image was flashed and ROM-verified. Waveshare `2.2.0-ws175c.8` was flashed and readback-verified; it retains the physically accepted .7 layout with a splash-spelling and version-label correction. Full physical input-flow, camera scanning, battery/power qualification and independent security auditing remain separate work.
+The tested StickS3 build is `2.2.0-sticks3.1` (original green palette restored); its complete image was flashed and ROM-verified, and the green menu/both buttons were physically confirmed. Waveshare `2.2.0-ws175c.8` was flashed and readback-verified; it retains the physically accepted .7 layout with a splash-spelling and version-label correction. Full physical input-flow, camera scanning, battery/power qualification and independent security auditing remain separate work.
 
 All four build targets compile: `sticks3`, `waveshare175c`, and the retained upstream LilyGO `tdisplay` / `tdisplay-s3` targets. Compiling a target does not establish physical validation for that board. The firmware remains native C/C++; the port does not change the original coin/dice seed calculations. Independent host checks cover 78 public deterministic calculation vectors, QR payloads and the device-specific interfaces. See each manual for the actual evidence and limits.
 

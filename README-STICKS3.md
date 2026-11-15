@@ -1,6 +1,6 @@
 # Seeder on M5Stack StickS3
 
-This manual covers the **M5Stack StickS3, SKU K150**, running this fork's rectangular Seeder interface. The reference is [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab); the original MIT license and credits are retained. The tested clean firmware identifies itself as `2.2.0-sticks3-dev`, commit `38de080`.
+This manual covers the **M5Stack StickS3, SKU K150**, running this fork's rectangular Seeder interface. The reference is [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab); the original MIT license and credits are retained. The tested clean firmware identifies itself as `2.2.0-sticks3.1`, restoring the original green palette.
 
 [Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 
@@ -28,11 +28,11 @@ The hardware has radios, audio and sensors, but this application does not initia
 
 <img src="Images/StickS3-device.jpg" alt="Seeder on the physical M5Stack StickS3" width="500">
 
-*The device photograph shows an earlier green interface. The current rectangular build uses blue accents, matching the blue button; the software screenshots below show that appearance.*
+*The device photograph and current software screenshots use the original green Seeder palette.*
 
 | Menu | First receiving address | CompactSeedQR |
 | --- | --- | --- |
-| ![Blue StickS3 menu](Images/StickS3-menu.png) | ![StickS3 address page](Images/StickS3-address.png) | ![StickS3 Compact QR](Images/StickS3-compact.png) |
+| ![Green StickS3 menu](Images/StickS3-menu.png) | ![StickS3 address page](Images/StickS3-address.png) | ![StickS3 Compact QR](Images/StickS3-compact.png) |
 
 *Production-code software renders using public test data. They establish the intended pixel layout, not physical camera-scanning performance.*
 
@@ -43,9 +43,9 @@ The hardware has radios, audio and sensors, but this application does not initia
 3. Write the **merged image at `0x0`**, verify it before application startup, then reset. Follow the commands in [the full flashing guide](docs/flashing.md#sticks3-complete-image).
 4. Test the menu, input and export flow with a public test seed.
 
-The optional [browser installer](https://xn--sg8hhb.ws/flasher/) is planned; use the terminal procedure until it is live and offers the exact StickS3 target. The independent build and esptool instructions do not depend on that site.
+Use the **[browser flasher](https://xn--sg8hhb.ws/flasher/)** in desktop Chrome/Edge: select **M5Stack StickS3 → Seeder**, check the version, connect in flashing mode, prepare and save the recovery file, then install. It verifies the signed release catalog, download SHA-256 and device flash digests. See [release signatures](docs/release-signatures.md); it does not enable Secure Boot. The independent build/esptool instructions below remain available.
 
-The exact previously tested clean file is `seeder-sticks3-38de080-merged.bin`; its checksum is in the full guide. Current CI artifacts and local rebuilds are identified separately and must not be described as that exact installed binary merely because they share a firmware version.
+The exact previously tested clean file is `seeder-sticks3-2.2.0-sticks3.1-merged.bin`; its checksum is in the full guide. Current CI artifacts and local rebuilds are identified separately and must not be described as that exact installed binary merely because they share a firmware version.
 
 Flashing replaces the installed application and its flash layout. An application-only `firmware.bin` belongs at `0x10000`; it is **not** the complete image and must not be written at `0x0`.
 
@@ -131,6 +131,6 @@ python3 -m venv .venv
 
 Output: `dist/seeder-sticks3-merged.bin` for `0x0`; `.pio/build/sticks3/firmware.bin` for `0x10000`. A source rebuild is a new artifact; the tested clean prebuilt checksum does not automatically apply to it. See [full build/flash instructions](docs/flashing.md).
 
-The clean `38de080` image was flashed, verified in its entirety through the ROM loader before startup, and restarted. The receiving-address screen has physical photographic evidence. Independent host checks cover 78 calculation vectors, 19 CompactSeedQR encoder round trips, native QR/module geometry and production-backend address/text rendering. These are separate from physical button-flow, camera, battery and signing-device checks, which remain incomplete. Complete RAM erasure and an independent security audit are not established.
+The clean green `2.2.0-sticks3.1` image was flashed, verified in its entirety through the ROM loader before startup, and restarted. The green menu and both buttons were physically confirmed; the receiving-address screen also has physical photographic evidence. Independent host checks cover 78 calculation vectors, 19 CompactSeedQR encoder round trips, native QR/module geometry and production-backend address/text rendering. These are separate from physical button-flow, camera, battery and signing-device checks, which remain incomplete. Complete RAM erasure and an independent security audit are not established.
 
 [Original MIT license](LICENSE) · [Dependency notices](THIRD-PARTY-NOTICES.txt) · [Fork differences](docs/fork-differences.md) · [Official M5Stack hardware guide](https://docs.m5stack.com/en/core/StickS3)
