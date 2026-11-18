@@ -73,17 +73,26 @@ class PublishTest(unittest.TestCase):
             self.assertFalse(any(c.args[:2] == ('release', 'edit') for c in call.call_args_list))
 
     def test_existing_tag_must_match_source(self):
-        result = subprocess.CompletedProcess([], 0, 'HTTP/2.0 200 OK\n\n' + json.dumps(dict(sha='a' * 40)), '')
-        with patch.dict('os.environ', GH_REPO='xberenguer/Seeder-Fork'), patch.object(publisher.subprocess, 'run', return_value=result):
+        result = subprocess.CompletedProcess([], 0, 'HTTP/2.0 200 OK\n\n' + json.dumps(dict(object=dict(type='tag', sha='b' * 40))), '')
+        with patch.dict('os.environ', GH_REPO='xberenguer/Seeder-Fork'), patch.object(publisher.subprocess, 'run', return_value=result) as lookup, patch.object(publisher, 'gh', return_value=json.dumps(dict(sha='a' * 40))) as resolve:
             with self.assertRaisesRegex(ValueError, 'different source'):
                 publisher.check_existing_tag('v2.2.0-ports.1', COMMIT)
+            self.assertEqual(lookup.call_args.args[0][-1], 'repos/xberenguer/Seeder-Fork/git/ref/tags/v2.2.0-ports.1')
+            resolve.assert_called_once_with('api', 'repos/xberenguer/Seeder-Fork/commits/v2.2.0-ports.1')
+
+    def test_annotated_tag_uses_resolved_commit(self):
+        result = subprocess.CompletedProcess([], 0, 'HTTP/2.0 200 OK\n\n' + json.dumps(dict(object=dict(type='tag', sha='b' * 40))), '')
+        with patch.dict('os.environ', GH_REPO='xberenguer/Seeder-Fork'), patch.object(publisher.subprocess, 'run', return_value=result), patch.object(publisher, 'gh', return_value=json.dumps(dict(sha=COMMIT))):
+            publisher.check_existing_tag('v2.2.0-ports.1', COMMIT)
 
     def test_only_404_allows_new_tag(self):
-        for status, allowed in [(404, True), (401, False), (500, False)]:
+        for status, allowed in [(404, True), (401, False), (403, False), (422, False), (500, False)]:
             result = subprocess.CompletedProcess([], 1, f'HTTP/2.0 {status} Error\n\n{{}}', '')
-            with self.subTest(status=status), patch.dict('os.environ', GH_REPO='xberenguer/Seeder-Fork'), patch.object(publisher.subprocess, 'run', return_value=result):
+            with self.subTest(status=status), patch.dict('os.environ', GH_REPO='xberenguer/Seeder-Fork'), patch.object(publisher.subprocess, 'run', return_value=result) as lookup, patch.object(publisher, 'gh') as resolve:
                 if allowed:
                     publisher.check_existing_tag('v2.2.0-ports.1', COMMIT)
                 else:
                     with self.assertRaisesRegex(ValueError, 'could not verify'):
                         publisher.check_existing_tag('v2.2.0-ports.1', COMMIT)
+                self.assertEqual(lookup.call_args.args[0][-1], 'repos/xberenguer/Seeder-Fork/git/ref/tags/v2.2.0-ports.1')
+                resolve.assert_not_called()

@@ -58,14 +58,19 @@ def check_existing_tag(tag, commit):
     repo = os.environ.get('GH_REPO', os.environ.get('GITHUB_REPOSITORY', ''))
     if repo != 'xberenguer/Seeder-Fork':
         raise ValueError('release publication is restricted to xberenguer/Seeder-Fork')
-    result = subprocess.run(['gh', 'api', '--include', f'repos/{repo}/commits/{tag}'],
+    # The commits endpoint responds 422 for an unknown name. The Git refs
+    # endpoint has an unambiguous 404 for an absent tag; only that means we may
+    # create a new tag. Resolve existing refs separately to support annotated
+    # tags without confusing their tag-object SHA with the source commit SHA.
+    result = subprocess.run(['gh', 'api', '--include', f'repos/{repo}/git/ref/tags/{tag}'],
                             text=True, capture_output=True)
-    headers, _, body = result.stdout.replace('\r\n', '\n').partition('\n\n')
+    headers, _, _ = result.stdout.replace('\r\n', '\n').partition('\n\n')
     if result.returncode:
         if re.search(r'^HTTP/\S+ 404\b', headers):
             return  # Creating a new release tag at --target is permitted.
         raise ValueError('could not verify release tag; refusing publication')
-    if json.loads(body)['sha'] != commit:
+    resolved = json.loads(gh('api', f'repos/{repo}/commits/{tag}'))
+    if resolved['sha'] != commit:
         raise ValueError('existing release tag points to different source')
 
 
