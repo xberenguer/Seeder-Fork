@@ -29,11 +29,11 @@ def image(payload, flash_code):
     return bytes(data) + hashlib.sha256(data).digest()
 
 
-def table(rows):
+def table(rows, length=3072):
     data = b''.join(struct.pack('<HBBII16sI', 0x50AA, kind, sub, offset, size,
                                 label.encode(), flags) for kind, sub, offset, size, label, flags in rows)
     data += b'\xeb\xeb' + b'\xff' * 14 + hashlib.md5(data).digest()
-    return data + b'\xff' * (4096 - len(data))
+    return data + b'\xff' * (length - len(data))
 
 
 class PackageTest(unittest.TestCase):
@@ -69,6 +69,7 @@ class PackageTest(unittest.TestCase):
                                kwargs.get('tag', 'v2.2.0-ports.1'), kwargs.get('commit', COMMIT))
 
     def test_complete_deterministic_contract(self):
+        self.assertEqual((self.stick / 'seeder-sticks3-partitions.bin').stat().st_size, 3072)
         manifest = self.package()
         a, b = manifest['releases']
         self.assertEqual(a['version'], '2.2.0-sticks3.3')
@@ -90,6 +91,26 @@ class PackageTest(unittest.TestCase):
         shutil.rmtree(self.output)
         self.package()
         self.assertEqual(first, {p.name: p.read_bytes() for p in self.output.iterdir()})
+
+    def test_accepts_full_padded_partition_sector(self):
+        path = self.stick / 'seeder-sticks3-partitions.bin'
+        path.write_bytes(table(release.STICK_PARTITIONS, 4096))
+        manifest = self.package()
+        self.assertEqual(manifest['releases'][0]['parts'][1]['length'], 4096)
+
+    def test_rejects_unexpected_partition_length(self):
+        path = self.stick / 'seeder-sticks3-partitions.bin'
+        path.write_bytes(path.read_bytes()[:-32])
+        with self.assertRaisesRegex(ValueError, '3072 or 4096'):
+            self.package()
+
+    def test_rejects_non_erased_partition_sector_padding(self):
+        path = self.stick / 'seeder-sticks3-merged.bin'
+        data = bytearray(path.read_bytes())
+        data[0x8C00] = 0
+        path.write_bytes(data)
+        with self.assertRaisesRegex(ValueError, 'gaps'):
+            self.package()
 
     def test_reject_bad_image_digest(self):
         path = self.wave / 'seeder-waveshare175c-firmware.bin'

@@ -58,8 +58,12 @@ def image(data, flash_bytes, name):
 
 
 def check_table(data):
-    if len(data) != 4096:
-        raise ValueError('StickS3 partition table must be 4096 bytes')
+    # PlatformIO's generator writes a 0xc00-byte table; the merged image
+    # reserves its complete 0x1000-byte sector, filling the remainder with FF.
+    # Accept either representation while validating the same complete sector.
+    if len(data) not in (3072, 4096):
+        raise ValueError('StickS3 partition table must be 3072 or 4096 bytes')
+    data = data.ljust(4096, b'\xff')
     actual = []
     for offset in range(0, len(data), 32):
         row = data[offset:offset + 32]
@@ -171,7 +175,7 @@ def package(root, artifacts, output, tag, commit):
                           'This exact CI artifact has not been physically qualified; hardware checks are separate.',
             files=[dict(id=name, url=name, bytes=len(data), sha256=hashlib.sha256(data).hexdigest())],
             parts=[dict(file=name, sourceOffset=offset if device == 'sticks3' else 0,
-                        length=0x8000 if kind == 'bootloader' else len(chunk),
+                        length=0x8000 if kind == 'bootloader' else 0x1000 if kind == 'partitions' else len(chunk),
                         address=offset, kind=kind) for offset, chunk, kind in segments],
             partitions=partition_objects(rows)))
     manifest_data = (json.dumps(manifest, indent=2) + '\n').encode()
