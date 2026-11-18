@@ -1,6 +1,6 @@
 # Seeder on Waveshare AMOLED 1.75C
 
-This manual covers **ESP32-S3-Touch-AMOLED-1.75C**, with current source version `2.2.0-ws175c.9`. It adapts [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab) to the circular display, retaining their seed calculations, graphics language, MIT license and credits.
+This manual covers **ESP32-S3-Touch-AMOLED-1.75C**, with current source version `2.2.0-ws175c.10`. It adapts [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab) to the circular display, retaining their seed calculations, graphics language, MIT license and credits.
 
 [Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 

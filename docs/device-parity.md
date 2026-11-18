@@ -1,6 +1,7 @@
 # StickS3 and Waveshare feature comparison
 
-This compares the **current source**: `2.2.0-sticks3.3` and `2.2.0-ws175c.9`.
+This compares the **current source**: `2.2.0-sticks3.3` and `2.2.0-ws175c.10`.
+The Waveshare `.10` increment changes release provenance/version only; its interface and controls match `.9`.
 Both compile and pass host checks. Waveshare `.9` was flashed with backup and
 readback, then independently ROM-verified; its revised reset visuals still need
 physical acceptance. StickS3 `.3` has not been flashed; `.1` remains its last
@@ -117,7 +118,7 @@ seed-generation or export features.
 | Storage/install | 8MB flash; complete device-specific image, app at `0x10000`; browser path skips mutable NVS | 32MB flash; guarded app-only install at `0x200000` in the existing seven-partition factory map; other factory partitions preserved |
 | Memory copies | Display/library/stack buffers specific to M5 backend | Additional full-frame and upstream-reference sprite buffers; complete RAM scrubbing unverified on both |
 | Hardware power | M5's separate power/reset key and built-in battery | Waveshare PWR/AXP2101 behavior and battery option; neither port has a Seeder battery gauge or qualified runtime estimate |
-| Version | `2.2.0-sticks3.3` | `2.2.0-ws175c.9` |
+| Version | `2.2.0-sticks3.3` | `2.2.0-ws175c.10` |
 
 Physical brightness, refresh latency, button/power timing, camera scanning and
 battery behavior are not claimed to be identical. The exact programmed image

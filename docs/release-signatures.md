@@ -1,5 +1,9 @@
 # Browser release verification
 
+The flasher imports published GitHub Releases through the
+[release pipeline](publishing-releases.md). Device versions, source commits,
+checksums and flash layouts are generated from the checked build artifacts.
+
 The optional [browser flasher](https://xn--sg8hhb.ws/flasher/) verifies an **Ed25519-signed release catalog**, then checks each firmware download against the signed SHA-256, and verifies written flash bytes using device-side MD5. Installation is blocked if signature or hash checks fail.
 
 The release public-key fingerprint is SHA-256 of its raw 32-byte Ed25519 encoding:

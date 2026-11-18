@@ -199,7 +199,7 @@ Checksums detect file changes. They are not an independent security audit or pro
 
 1. Confirm the expected Seeder splash and menu on the correct display.
 2. Use **public test inputs** to check both input modes and the intended 12/24-word option; the menu defaults to 12 when newly selected.
-3. Review the words, first address, entropy, Export and Watch Only. Current source versions StickS3 `.3` and Waveshare `.9` have no Compact QR. Earlier tested StickS3 `.1` still includes it.
+3. Review the words, first address, entropy, Export and Watch Only. Current source versions StickS3 `.3` and Waveshare `.10` have no Compact QR. Earlier tested StickS3 `.1` still includes it.
 4. Check generated-page direction and Exit using the correct [StickS3](../README-STICKS3.md#buttons) or [Waveshare](../README-WAVESHARE175C.md#orientation-and-buttons) manual.
 5. Independently verify the public test output and test the intended offline scanner before any private use.
 
@@ -221,4 +221,4 @@ For both boards, do not import private seed material until recovery, display, co
 
 ## Current source and previous device-tested builds
 
-The current source is **StickS3 `2.2.0-sticks3.3` / Waveshare `2.2.0-ws175c.9`**. These feature-alignment updates are build/host-tested. Waveshare `.9` was flashed app-only with a verified sector backup and independently ROM-verified; its revised reset visuals await physical acceptance. StickS3 `.3` has not yet been flashed. The `.1`/`.8` hashes above describe the previous physically checked files, not current rebuilds. Check the version offered by the browser catalog before installation; it may still offer that previous validated baseline. [Current controls and feature changes](device-parity.md).
+The current source is **StickS3 `2.2.0-sticks3.3` / Waveshare `2.2.0-ws175c.10`**. Waveshare `.10` preserves the `.9` UI and changes CI release provenance/version only; the new binary has its own checksums and qualification. These feature-alignment updates are build/host-tested. Waveshare `.9` was flashed app-only with a verified sector backup and independently ROM-verified; its revised reset visuals await physical acceptance. StickS3 `.3` has not yet been flashed. The `.1`/`.8` hashes above describe the previous physically checked files, not current rebuilds. Check the version offered by the browser catalog before installation; it may still offer that previous validated baseline. [Current controls and feature changes](device-parity.md).

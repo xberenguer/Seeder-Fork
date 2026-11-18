@@ -3,9 +3,22 @@ name: build
 on:
   push:
     branches: [ master, main ]
-    tags: [ 'v*' ]
+    tags: [ 'v*-ports.*' ]
   pull_request:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Publish checked board builds as vX.Y.Z-ports.N; leave empty for checks only'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seeder-${{ github.workflow }}-${{ github.ref }}-${{ inputs.release_tag || '' }}
+  cancel-in-progress: false
 
 jobs:
   audit:
@@ -19,6 +32,8 @@ jobs:
       # fuentes no escalan. Esto verifica que nada se sale en ninguna placa.
       - name: Auditar la interfaz en las tres placas
         run: python scripts/audit_ui.py
+      - name: Test release packaging and board contracts
+        run: python -m unittest discover -s tests/release -v
       - name: Compare production seed calculations against an independent reference
         run: |
           python -m pip install -r tests/crypto/requirements.txt
@@ -78,8 +93,8 @@ jobs:
 
       # esptool-js quiere un solo fichero al offset 0. Fundir aquí las cuatro
       # imágenes deja el tutorial de flasheo en un arrastrar y soltar.
-      - name: Merge into a single flashable image
-        if: matrix.env != 'waveshare175c'
+      - name: Merge original T-Display targets
+        if: matrix.env == 'tdisplay' || matrix.env == 'tdisplay-s3'
         run: |
           set -eu
           OUT=.pio/build/${{ matrix.env }}
@@ -97,6 +112,20 @@ jobs:
           cp "$OUT/bootloader.bin" dist/$NAME-bootloader.bin
           cp "$OUT/partitions.bin" dist/$NAME-partitions.bin
           sha256sum dist/* | tee dist/SHA256SUMS-${{ matrix.env }}
+
+      # The PlatformIO post-action validates the image hashes, fixed layout,
+      # exact input bytes and erased gaps. Do not overwrite its guarded merge.
+      - name: Package guarded StickS3 image
+        if: matrix.env == 'sticks3'
+        run: |
+          set -eu
+          OUT=.pio/build/sticks3
+          test -f dist/seeder-sticks3-merged.bin
+          cp "$OUT/firmware.bin" dist/seeder-sticks3-firmware.bin
+          cp "$OUT/bootloader.bin" dist/seeder-sticks3-bootloader.bin
+          cp "$OUT/partitions.bin" dist/seeder-sticks3-partitions.bin
+          cp "$HOME/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin" dist/seeder-sticks3-boot_app0.bin
+          sha256sum dist/* | tee dist/SHA256SUMS-sticks3
 
       - name: Verify exact BitMaker pixels, round placement and button workflow
         if: matrix.env == 'waveshare175c'
@@ -124,8 +153,31 @@ jobs:
           name: seeder-${{ matrix.env }}
           path: dist/
 
-      - name: Attach to release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
+  release:
+    name: Publish complete fork release
+    needs: [audit, firmware]
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          files: dist/*
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: seeder-*
+          path: release-input
+      - name: Validate and package both supported fork boards
+        run: |
+          python scripts/package_release.py --artifacts release-input --output release \
+            --tag "$RELEASE_TAG" --commit "$GITHUB_SHA"
+          cd release
+          sha256sum -c SHA256SUMS
+      - name: Draft, verify complete assets and publish
+        run: python scripts/publish_release.py --directory release --tag "$RELEASE_TAG" --commit "$GITHUB_SHA"
