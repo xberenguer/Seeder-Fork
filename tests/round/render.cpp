@@ -33,7 +33,7 @@ struct QrPlacement {int version, modules, scale, x, y, quiet;};
 static QrPlacement qrPlacement;
 static bool hasQr = false;
 static const char *qrKind = "seed";
-struct HeaderBand {int y, h; uint16_t color;};
+struct HeaderBand {int x, y, w, h; uint16_t color;};
 static HeaderBand headerBand;
 static bool hasHeaderBand = false;
 struct AssetPlacement {int id, x, y;};
@@ -71,9 +71,10 @@ void roundVerifyQr(int version, int modules, int scale, int x, int y, int quiet)
 void roundVerifyAddressQr(int version, int modules, int scale, int x, int y, int quiet) {
   roundVerifyQr(version,modules,scale,x,y,quiet); qrKind = "address";
 }
-void roundVerifyHeaderBand(int y, int h, uint16_t color) {
+void roundVerifyHeaderBand(int x, int y, int w, int h, uint16_t color) {
+  assert(x >= 0 && w > 0 && x + w <= 466);
   assert(y >= 0 && h > 0 && y + h <= 466 && color == 0x86f3);
-  headerBand = {y,h,color}; hasHeaderBand = true;
+  headerBand = {x,y,w,h,color}; hasHeaderBand = true;
 }
 void roundVerifyAsset(int id, int x, int y) {
   assert(id >= 0 && id < 5 && x >= 0 && y >= 0 && x < 466 && y < 466);
@@ -124,7 +125,7 @@ static void save(const std::string &name) {
     map << "["<<q.version<<","<<q.modules<<","<<q.scale<<","<<q.x<<","<<q.y<<","<<q.quiet<<"]";
   } else map << "null";
   map << ",\"qr_kind\":\"" << qrKind << "\",\"header_band\":";
-  if(hasHeaderBand) map << "[" << headerBand.y << "," << headerBand.h << "," << headerBand.color << "]";
+  if(hasHeaderBand) map << "[" << headerBand.x << "," << headerBand.y << "," << headerBand.w << "," << headerBand.h << "," << headerBand.color << "]";
   else map << "null";
   map << ",\"assets\":[";
   for(size_t i=0;i<assets.size();++i) {

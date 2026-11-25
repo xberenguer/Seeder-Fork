@@ -3,8 +3,8 @@
   "description": "User-approved unchanged screens; SHA256 of 466x466 RGB pixels with circular mask",
   "frames": {
     "02-splash-credits": "70c5ab81eda3f7541ab85bc13a45205335a79878e08fbe8d43fc767389df5ca1",
-    "03-menu-coin": "c7dfb00bfbfbe3320d9a67c01d54480dea249ba17601e1eb30f52aed0a228525",
-    "04-menu-dice": "2625dfe235738756fa505f63cdc1df9a8aaa16c7a6a7e9e72fda588b150171a3",
+    "03-menu-coin": "32eb87dd409e46b9cfea8c2e17edb6a50aa58eb6b77c2777a3933d30df6466e1",
+    "04-menu-dice": "6c8419eaca6937b9ee5f5338f1dc9131df87a92f495afa0064c49194bc32b5d4",
     "05-words-12": "a6a197c47be8c83af8ab8f29f1e7a6899f2d22aa3d70e072c1a182cbb14cf707",
     "06-words-24": "4443801252ce6e1de9a4a2bc0837e69761df0a94d73f394c9c3bf35303643dbe",
     "07-coin-start": "3c586097498d3e75a0141ba817f00a567b561b374c53c0d16e8f10b8dd195b61",

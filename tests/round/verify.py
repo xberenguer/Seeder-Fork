@@ -38,7 +38,8 @@ TRACK = rgb565(0x2945)
 ADDRESS_WHITE = rgb565(0xffff)
 DIM = rgb565(0x4a49)
 PUBLIC_ADDRESS = 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu'
-MENU_FRAMES = {'03-menu-coin', '04-menu-dice', '05-words-12', '06-words-24'}
+HOME_FRAMES = {'03-menu-coin', '04-menu-dice'}
+MENU_FRAMES = HOME_FRAMES | {'05-words-12', '06-words-24'}
 CAPTURE_FRAMES = {'07-coin-start', '08-coin-progress', '09-dice-progress', '10-hold', '24-exit-hold-half', '25-exit-hold-full'}
 EXPORT_FRAMES = {'17-export-12', '18-export-24', '19-watch-only', '21-watch-only-24', '22-export-24-v7', '23-export-24-v9'}
 EXIT_FRAMES = {'20-exit'}
@@ -182,15 +183,23 @@ for path in paths:
     covered = Image.new('1', (240, 135)); cover = ImageDraw.Draw(covered)
     allowed_colors = set(original.getdata()) | {(0, 0, 0)}
     if name in MENU_FRAMES:
-        assert band == [94, 54, 0x86f3], 'Menu header must bleed fully to the physical circular edges'
-        ImageDraw.Draw(projected).rectangle((0, band[0], 465, band[0] + band[1] - 1), fill=GREEN)
+        expected = [48, 94, 370, 54, 0x86f3] if name in HOME_FRAMES else [0, 94, 466, 54, 0x86f3]
+        assert band == expected, name + ': incorrect banner geometry'
+        x, y, w, h, _ = band
+        draw = ImageDraw.Draw(projected)
+        draw.rectangle((x, y, x + w - 1, y + h - 1), fill=GREEN)
+        if name in HOME_FRAMES:
+            for row, inset in enumerate((5, 2, 2, 2, 2)):
+                for edge_y in (y + row, y + h - 1 - row):
+                    draw.line((x, edge_y, x + inset - 1, edge_y), fill='black')
+                    draw.line((x + w - inset, edge_y, x + w - 1, edge_y), fill='black')
         cover.rectangle((0, 0, 239, 35), fill=1)
         # Remove only the old thin right-hand decorative line, not icons/text.
         assert all(original.getpixel((214, y)) in ((0, 0, 0), TRACK) for y in range(36, 135))
         cover.line((214, 36, 214, 134), fill=1)
         assert {item[0] for item in assets} == {3, 4}, 'Menu must use the original master wordmark and leaf'
     else:
-        assert band is None, 'Full-bleed green band belongs only to menu and word choice'
+        assert band is None, 'Green banner belongs only to menu and word choice'
     if name in CAPTURE_FRAMES:
         assert all(original.getpixel((183, y)) in ((0, 0, 0), TRACK) for y in range(135))
         cover.line((183, 0, 183, 134), fill=1)
@@ -330,7 +339,7 @@ for path in paths:
         for x in range(466):
             color = view.getpixel((x, y))
             if color != (0, 0, 0) and math.hypot(x - 232.5, y - 232.5) > 228:
-                if band is not None and band[0] <= y < band[0] + band[1] and color == GREEN:
+                if band is not None and band[1] <= y < band[1] + band[3] and color == GREEN:
                     bleed_pixels += 1  # Intentional background; round physical glass clips it.
                 else:
                     outside.append((x, y))
@@ -344,8 +353,8 @@ for path in paths:
         assert nonblack[2] - nonblack[0] >= 330, name + ': word grid does not use screen width'
     mask = Image.new('L', (466, 466)); ImageDraw.Draw(mask).ellipse((0, 0, 465, 465), fill=255)
     rounded = Image.new('RGB', (466, 466), '#161b19'); rounded.paste(view, (0, 0), mask)
-    if band is not None:
-        for y in range(band[0], band[0] + band[1]):
+    if band is not None and name not in HOME_FRAMES:
+        for y in range(band[1], band[1] + band[3]):
             inside = [x for x in range(466) if mask.getpixel((x, y))]
             assert view.getpixel((inside[0], y)) == GREEN and view.getpixel((inside[-1], y)) == GREEN, 'Header has a black sliver at round edge'
 
@@ -446,5 +455,5 @@ compare.paste(Image.open(frames / '03-menu-coin-original.ppm'), (20, 170)); comp
 draw.text((20, 145), 'ORIGINAL 240 x 135', fill='white'); draw.text((280, 4), 'ROUND: ORIGINAL ART, ADAPTED', fill='white')
 compare.save(a.output / 'original-vs-round.png')
 (a.output / 'validation.json').write_text(json.dumps(report, indent=2) + '\n')
-print(f'PASS: {len(paths)} frames: original masters/fonts, full-bleed round header, scaled glyphs and top-button orientation; {len(checks)} QR payloads/quiet zones verified.')
+print(f'PASS: {len(paths)} frames: original masters/fonts, round banner geometry, scaled glyphs and top-button orientation; {len(checks)} QR payloads/quiet zones verified.')
 print(a.output / 'round-preview.png')

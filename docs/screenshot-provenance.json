@@ -1,5 +1,5 @@
 {
-  "firmware": "2.2.0-ws175c.9",
+  "firmware": "2.2.0-ws175c.11",
   "reference_commit": "ba6e9ebe226222cbb04415a635a934eeae372dab",
   "type": "production-code renders using public deterministic fixtures; not device photographs",
   "round_renderer": "tests/round/build.py and tests/round/verify.py",
@@ -22,14 +22,14 @@
     {
       "screen": "03-menu-coin",
       "render": "Images/waveshare/03-menu-coin.png",
-      "render_sha256": "f94d5f814340045431a3433b2cde84514e608cd757c3d8e830962f56208d1796",
+      "render_sha256": "79481bd71bbb0c868c2a6b07d0eefb8e8cd197d5da5997438fcb07aa71ed3833",
       "comparison": "Images/waveshare/03-menu-coin-comparison.png",
       "original_sha256": "1e99d704d83834900386bb63c86c485a7c7a74baa37739a047da0afb5023914c"
     },
     {
       "screen": "04-menu-dice",
       "render": "Images/waveshare/04-menu-dice.png",
-      "render_sha256": "40a9231205bbb56a05d873a9b19975f3460e64b5b197507a8695eccafe48cd50",
+      "render_sha256": "a8d6b0ce4b736dbd3d9593c6079a1cb1c3aa751f2d433b0a3c8e197e69d99f95",
       "comparison": "Images/waveshare/04-menu-dice-comparison.png",
       "original_sha256": "d946ad58ff290cdad14f748010f51173ca3da54aee44e95adf83b369bc829e2c"
     },

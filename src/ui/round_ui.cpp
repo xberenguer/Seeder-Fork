@@ -14,7 +14,7 @@ void roundVerifyCopy(int,int,int,int,int,int,int,int);
 void roundVerifyRotatedCopy(int,int,int,int,int,int,int,int,int);
 void roundVerifyQr(int,int,int,int,int,int);
 void roundVerifyAddressQr(int,int,int,int,int,int);
-void roundVerifyHeaderBand(int,int,uint16_t);
+void roundVerifyHeaderBand(int,int,int,int,uint16_t);
 void roundVerifyAsset(int,int,int);
 void roundVerifyAddressGlyph(int,int,int,int,int,uint16_t);
 void roundVerifyCaption(const char*,int,int,int,int,uint16_t);
@@ -95,13 +95,25 @@ void header() {
   copy(190,0,50,20,323,66,100,40);
   copy(0,20,240,2,33,109,400,3);
 }
-void menuPlacement() {
+void menuPlacement(bool insetBanner) {
   startFrame();
-  // Full-bleed color band: the circular panel clips it exactly at its edge.
+  constexpr int bandY=94;
+  constexpr int bandHeight=54;
+  constexpr uint16_t bandColor=0x86f3;
+  // Use the Dice Seed icon's stepped corner on both edges.
+  constexpr int cornerInsets[]={5,2,2,2,2};
+  const int bandWidth=insetBanner?370:466;
+  const int bandX=C-bandWidth/2;
+  const int cornerRows=insetBanner?sizeof(cornerInsets)/sizeof(cornerInsets[0]):0;
 #if defined(SEEDER_UI_VERIFY)
-  roundVerifyHeaderBand(94,54,0x86f3);
+  roundVerifyHeaderBand(bandX,bandY,bandWidth,bandHeight,bandColor);
 #endif
-  tft.fillRect(0,94,466,54,0x86f3);
+  tft.fillRect(bandX,bandY+cornerRows,bandWidth,bandHeight-2*cornerRows,bandColor);
+  for(int row=0;row<cornerRows;++row) {
+    const int inset=cornerInsets[row];
+    tft.fillRect(bandX+inset,bandY+row,bandWidth-2*inset,1,bandColor);
+    tft.fillRect(bandX+inset,bandY+bandHeight-1-row,bandWidth-2*inset,1,bandColor);
+  }
   asset(roundBrand::MenuWordmark,68,101);
   asset(roundBrand::MenuLeaf,358,96);
   copy(0,36,214,52,53,172,360,87);
@@ -219,8 +231,8 @@ void exitPlacement() {
 namespace bitmaker {void showSplashFrame(){splashPlacement();}}
 namespace ui {
 void splash(){if(!bitmaker::begin())while(true)delay(100);splashFrame=0;bitmakerUi::splash();}
-void menu(bool selected){bitmakerUi::menu(selected);menuPlacement();}
-void words(uint8_t count){bitmakerUi::words(count);menuPlacement();}
+void menu(bool selected){bitmakerUi::menu(selected);menuPlacement(true);}
+void words(uint8_t count){bitmakerUi::words(count);menuPlacement(false);}
 void coinEnter(uint16_t total){bitmakerUi::coinEnter(total);}
 void coinUpdate(uint16_t done,uint16_t total,const uint8_t *entropy){bitmakerUi::coinUpdate(done,total,entropy);coinPlacement();}
 void diceEnter(uint8_t total){bitmakerUi::diceEnter(total);}

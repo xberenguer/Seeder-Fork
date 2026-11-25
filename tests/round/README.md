@@ -15,8 +15,9 @@ Only public deterministic data are used. Generated frames live in ignored
 - Frozen upstream source, font and renderer hashes; original JPG hashes and the
   five generated branding assets with their pixel hashes.
 - 25 frames, exact scaled glyph reconstruction, overlap, circular bounds and
-  rigid final orientation. The full-bleed menu background is the sole edge-bleed
-  exception. Only the Exit pointer rotates independently.
+  rigid final orientation. The main menu banner has 48-pixel side margins and
+  stepped corners matching the Dice Seed icon.
+  The word-count banner runs to the round edge. Only the Exit pointer rotates independently.
 - Explicit approved wording, positions and original-font masks for captions,
   rendered in a separate sprite that cannot overwrite the QR source.
 - Counters 4/5, 5/5, 5/6 and 6/6, including real workflow navigation snapshots.

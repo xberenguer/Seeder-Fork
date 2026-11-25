@@ -28,7 +28,7 @@ has not been established.
 
 ## Waveshare 1.75C: visible and behavioral changes
 
-Current source version: **2.2.0-ws175c.10**. This release increment preserves the `.9` interface and changes CI release provenance/version only. The previous `.9` artifact was flashed with a verified backup and independently ROM-verified; acceptance of the revised reset visuals remains pending. `.8` is the previous device-tested baseline. See [the full device comparison](device-parity.md) for both ports and every remaining difference.
+Current source version: **2.2.0-ws175c.11**. The green home banner has 48-pixel side margins and stepped corners matching the Dice Seed icon. The previous `.9` artifact was flashed with a verified backup and independently ROM-verified; acceptance of the revised reset visuals remains pending. `.8` is the previous device-tested baseline. See [the full device comparison](device-parity.md) for both ports and every remaining difference.
 
 | Area | Difference from the original |
 |---|---|
@@ -36,7 +36,7 @@ Current source version: **2.2.0-ws175c.10**. This release increment preserves th
 | Startup artwork | Five images are regenerated from the original high-resolution JPG masters, with cropping, downsampling, near-black cleanup and menu silhouette processing. These are different pixel images from the native firmware bitmaps. Source hashes/crops are recorded in `src/ui/round_brand.json`. |
 | Splash spelling | Corrects upstream's `SOVEREING` to `SOVEREIGN` by exchanging its existing final N/G letter pixels before downsampling. Original JPG and frozen reference pixels remain unchanged. |
 | Artwork sizes | Splash 200x88 -> 320x141; credit logo 102x57 -> 163x91; Powered image 119x17 -> 190x27; menu wordmark 134x26 -> 201x39; leaf 27x33 -> 41x50. |
-| Menus | Enlarged option rows, numerals, icons and selection bars. The green band reaches the curved edges. The old right-side grey divider is removed. Indicators are placed beneath the top buttons. |
+| Menus | Enlarged option rows, numerals, icons and selection bars. The green band is inset on the home screen and reaches the curved edges on the word-count screen. The old right-side grey divider is removed. Indicators are placed beneath the top buttons. |
 | Coin and dice entry | Counters, legends, history, die, entropy preview and progress bars are enlarged/repositioned. Their values and capture behavior remain original. |
 | Input restart warning | Original warning and progress are enlarged/repositioned. |
 | Mnemonic pages | Original numbered two-column/six-row structure, enlarged and repositioned. |
@@ -84,7 +84,7 @@ CompactSeedQR is **not** part of the Waveshare page sequence.
 
 ## StickS3: current fork changes
 
-Current source version: **2.2.0-sticks3.3**, build/host-tested and not yet flashed.
+Current source version: **2.2.0-sticks3.4**, build/host-tested and not yet flashed.
 The previous `.1` restored the original green palette and was physically checked.
 
 - Original native artwork and green `0x86F3` palette; this fork corrects the splash

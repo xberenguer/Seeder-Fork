@@ -3,12 +3,14 @@
 GitHub Releases are the firmware source for the [browser flasher](https://xn--sg8hhb.ws/flasher/).
 An ordinary commit or pull request runs checks but does not publish firmware.
 The flasher follows published stable releases, not moving source branches or
-temporary Actions artifacts. Previous releases remain available for rollback.
+temporary Actions artifacts. The website checks on a 15-minute schedule and can also be synced on demand. Previous releases remain available for rollback.
 
 ## Publish a complete release
 
 1. Commit the intended firmware and documentation. Board versions live in
    `platformio.ini`: StickS3 and Waveshare have independent version numbers.
+   Advance both when publishing a new bundle. Both images embed the new source
+   commit and need new versioned filenames.
 2. In GitHub Actions, open **build → Run workflow**, select the intended branch,
    and enter an unused bundle tag such as `v2.2.0-ports.1` in `release_tag`.
    Leaving it empty runs checks only. Alternatively, pushing a matching tag runs

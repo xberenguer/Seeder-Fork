@@ -1,6 +1,6 @@
 # Screen gallery and original comparison
 
-**Waveshare firmware: `2.2.0-ws175c.9`.** Current source is build/host-tested, flashed with backup/readback and independently ROM-verified. Acceptance of the revised reset visuals remains pending. The previous .7 layout was physically approved and .8 was readback-verified. In .9, the HOLD OK control returns and holding reuses the input reset warning; button directions are unchanged.
+**Waveshare firmware: `2.2.0-ws175c.11`.** The home banner has 48-pixel side margins and stepped corners matching the Dice Seed icon. The gallery carries forward the other screens from `.9`, which was flashed and independently ROM-verified. The `.11` update was verified in the production-code renderer.
 
 These are **software renders of production UI code**, not photographs. All seed words, keys and addresses are public deterministic test fixtures. Never use them for funds. The reference is [BitMaker v2.2.0 at ba6e9eb](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab).
 
@@ -32,7 +32,7 @@ Original credits retained, downsampled from their high-resolution masters.
 
 ### 3. Coin menu
 
-Full-width green band, larger original artwork and top-button indicators.
+Inset green banner with Dice Seed-style corners, original artwork and top-button indicators.
 
 ![Coin menu](../Images/waveshare/03-menu-coin-comparison.png)
 
@@ -40,7 +40,7 @@ Full-width green band, larger original artwork and top-button indicators.
 
 ### 4. Dice menu
 
-Same capture choices and values; larger layout for the round panel.
+The same inset banner with Dice Seed selected.
 
 ![Dice menu](../Images/waveshare/04-menu-dice-comparison.png)
 

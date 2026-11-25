@@ -1,10 +1,10 @@
 # StickS3 and Waveshare feature comparison
 
-This compares the **current source**: `2.2.0-sticks3.3` and `2.2.0-ws175c.10`.
-The Waveshare `.10` increment changes release provenance/version only; its interface and controls match `.9`.
+This compares the **current source**: `2.2.0-sticks3.4` and `2.2.0-ws175c.11`.
+Waveshare `.11` insets the home banner and adds Dice Seed-style corners. StickS3 `.4` carries forward the `.3` interface and controls with updated build identification.
 Both compile and pass host checks. Waveshare `.9` was flashed with backup and
 readback, then independently ROM-verified; its revised reset visuals still need
-physical acceptance. StickS3 `.3` has not been flashed; `.1` remains its last
+physical acceptance. StickS3 `.4` has not been flashed; `.1` remains its last
 physically checked build. Waveshare `.8` is the previous device-tested baseline.
 Installing an older binary does not provide the changes described here.
 
@@ -118,7 +118,7 @@ seed-generation or export features.
 | Storage/install | 8MB flash; complete device-specific image, app at `0x10000`; browser path skips mutable NVS | 32MB flash; guarded app-only install at `0x200000` in the existing seven-partition factory map; other factory partitions preserved |
 | Memory copies | Display/library/stack buffers specific to M5 backend | Additional full-frame and upstream-reference sprite buffers; complete RAM scrubbing unverified on both |
 | Hardware power | M5's separate power/reset key and built-in battery | Waveshare PWR/AXP2101 behavior and battery option; neither port has a Seeder battery gauge or qualified runtime estimate |
-| Version | `2.2.0-sticks3.3` | `2.2.0-ws175c.10` |
+| Version | `2.2.0-sticks3.4` | `2.2.0-ws175c.11` |
 
 Physical brightness, refresh latency, button/power timing, camera scanning and
 battery behavior are not claimed to be identical. The exact programmed image
@@ -129,6 +129,7 @@ must be checked separately from the current source or screenshots.
 | Previous build | Changes in current source |
 | --- | --- |
 | StickS3 `.1` → `.3` | Removes Compact QR; changes generated-page directions to big A forward/small B backward; adds Export/Watch Only counters and matching captions; removes displayed address path, enlarges/repositions address QR and keeps five-character green/white address groups; changes Exit from the old ~1.2-second immediate action to the shared cancellable three-second warning; retains outlined HOLD OK while idle; corrects splash spelling; alternates address-group starting colors by row |
+| Waveshare `.10` → `.11` | Adds 48-pixel side margins and small stepped corners to the green home banner. |
 | Waveshare `.8` → `.9` | Restores the original-style outlined HOLD OK idle control and wipe legend; replaces the inline reset line with the same START OVER / RELEASE TO CANCEL screen used during input. **Menu, capture and seed-page button directions are unchanged** |
 
 Retained CompactSeedQR helper/encoder code and test fixtures do not expose that

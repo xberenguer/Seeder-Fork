@@ -1,6 +1,6 @@
 # Seeder on M5Stack StickS3
 
-This manual covers the **M5Stack StickS3, SKU K150**, running this fork's rectangular Seeder interface. The reference is [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab); the original MIT license and credits are retained. Current source identifies itself as `2.2.0-sticks3.3`. It aligns the user-facing features with Waveshare `.9`; see the [complete device comparison](docs/device-parity.md). The last physically checked clean build was `.1`; `.3` has not yet been flashed.
+This manual covers the **M5Stack StickS3, SKU K150**, running this fork's rectangular Seeder interface. The reference is [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab); the original MIT license and credits are retained. Current source identifies itself as `2.2.0-sticks3.4`. The `.4` build refreshes the embedded version and source information for the release bundle and carries forward the controls and screens from `.3`. The last physically checked clean build was `.1`. See the [complete device comparison](docs/device-parity.md).
 
 [Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 
@@ -132,7 +132,7 @@ python3 -m venv .venv
 
 Output: `dist/seeder-sticks3-merged.bin` for `0x0`; `.pio/build/sticks3/firmware.bin` for `0x10000`. A source rebuild is a new artifact; the tested clean prebuilt checksum does not automatically apply to it. See [full build/flash instructions](docs/flashing.md).
 
-The current `.3` source builds and passes production-workflow tests for both button mappings, including page order/counters, cancel/confirm reset behavior and application-field clearing. Native M5GFX renders verify the address, QR payloads and reset overlay. The two reset warnings are pixel-identical at the native screen size. `.3` has not yet been flashed.
+The current `.4` source builds and passes production-workflow tests for both button mappings, including page order/counters, cancel/confirm reset behavior and application-field clearing. Native M5GFX renders verify the address, QR payloads and reset overlay. The two reset warnings are pixel-identical at the native screen size. `.4` has not yet been flashed.
 
 The previous clean green `2.2.0-sticks3.1` image was flashed, verified in its entirety through the ROM loader before startup, and restarted. The green menu and both buttons were physically confirmed; the receiving-address screen also has physical photographic evidence. Independent host checks cover 78 calculation vectors, 19 CompactSeedQR encoder round trips, native QR/module geometry and production-backend address/text rendering. These are separate from physical button-flow, camera, battery and signing-device checks, which remain incomplete. Complete RAM erasure and an independent security audit are not established.
 

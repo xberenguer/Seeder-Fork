@@ -52,7 +52,7 @@ class PackageTest(unittest.TestCase):
         self.stick.mkdir(parents=True)
         self.wave.mkdir(parents=True)
         boot = image(b'boot', 3)
-        app = image(f'V2.2.0-sticks3.3  {COMMIT[:7]}'.encode() + b'\0' + release.stick_splash(self.root), 3)
+        app = image(f'V2.2.0-sticks3.4  {COMMIT[:7]}'.encode() + b'\0' + release.stick_splash(self.root), 3)
         partitions = table(release.STICK_PARTITIONS)
         ota = b'\xff' * 8192
         merged = bytearray(b'\xff' * (65536 + len(app)))
@@ -62,7 +62,7 @@ class PackageTest(unittest.TestCase):
                            ('boot_app0', ota), ('merged', merged)]:
             (self.stick / f'seeder-sticks3-{name}.bin').write_bytes(data)
         (self.wave / 'seeder-waveshare175c-firmware.bin').write_bytes(
-            image(f'V2.2.0-ws175c.10  {COMMIT[:7]}'.encode() + b'\0', 5))
+            image(f'V2.2.0-ws175c.11  {COMMIT[:7]}'.encode() + b'\0', 5))
 
     def package(self, **kwargs):
         return release.package(self.root, self.artifacts, self.output,
@@ -72,7 +72,7 @@ class PackageTest(unittest.TestCase):
         self.assertEqual((self.stick / 'seeder-sticks3-partitions.bin').stat().st_size, 3072)
         manifest = self.package()
         a, b = manifest['releases']
-        self.assertEqual(a['version'], '2.2.0-sticks3.3')
+        self.assertEqual(a['version'], '2.2.0-sticks3.4')
         self.assertEqual([p['address'] for p in a['parts']], [0, 32768, 57344, 65536])
         self.assertEqual([p['length'] for p in a['parts'][:3]], [32768, 4096, 8192])
         self.assertEqual(b['parts'][0]['address'], 0x200000)
@@ -125,7 +125,7 @@ class PackageTest(unittest.TestCase):
 
     def test_reject_wrong_compiled_splash(self):
         path = self.stick / 'seeder-sticks3-firmware.bin'
-        path.write_bytes(image(f'V2.2.0-sticks3.3  {COMMIT[:7]}'.encode() + b'\0', 3))
+        path.write_bytes(image(f'V2.2.0-sticks3.4  {COMMIT[:7]}'.encode() + b'\0', 3))
         with self.assertRaisesRegex(ValueError, 'compiled splash'):
             self.package()
 
@@ -145,7 +145,7 @@ class PackageTest(unittest.TestCase):
 
     def test_reject_wrong_board(self):
         path = self.wave / 'seeder-waveshare175c-firmware.bin'
-        path.write_bytes(image(f'V2.2.0-ws175c.10  {COMMIT[:7]}'.encode() + b'\0', 3))
+        path.write_bytes(image(f'V2.2.0-ws175c.11  {COMMIT[:7]}'.encode() + b'\0', 3))
         with self.assertRaisesRegex(ValueError, 'flash size'):
             self.package()
 
@@ -157,8 +157,8 @@ class PackageTest(unittest.TestCase):
 
     def test_reject_dirty_or_disconnected_footer_values(self):
         path = self.wave / 'seeder-waveshare175c-firmware.bin'
-        for payload in [f'V2.2.0-ws175c.10  {COMMIT[:7]}*'.encode() + b'\0',
-                        b'2.2.0-ws175c.10\0' + COMMIT[:7].encode() + b'\0']:
+        for payload in [f'V2.2.0-ws175c.11  {COMMIT[:7]}*'.encode() + b'\0',
+                        b'2.2.0-ws175c.11\0' + COMMIT[:7].encode() + b'\0']:
             with self.subTest(payload=payload):
                 path.write_bytes(image(payload, 5))
                 with self.assertRaisesRegex(ValueError, 'footer'):

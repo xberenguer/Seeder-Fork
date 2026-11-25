@@ -1,6 +1,6 @@
 # Seeder on Waveshare AMOLED 1.75C
 
-This manual covers **ESP32-S3-Touch-AMOLED-1.75C**, with current source version `2.2.0-ws175c.10`. It adapts [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab) to the circular display, retaining their seed calculations, graphics language, MIT license and credits.
+This manual covers **ESP32-S3-Touch-AMOLED-1.75C**, with current source version `2.2.0-ws175c.11`. It adapts [BitMaker and Lunaticoin's Seeder v2.2.0](https://github.com/BitMaker-hub/Seeder/tree/ba6e9ebe226222cbb04415a635a934eeae372dab) to the circular display, retaining their seed calculations, graphics language, MIT license and credits.
 
 [Project hub](readme.md) · [Shared use guide](docs/using-seeder.md) · [Full flashing guide](docs/flashing.md) · [Security](SECURITY.md)
 
@@ -108,7 +108,7 @@ Exit overwrites application-owned seed, entropy, key/address and capture fields.
 
 *Software renders of production code using public deterministic fixtures. These are separate from the photograph above and from physical camera-scan testing.*
 
-The round layout keeps the original green palette, glyphs and design language while enlarging and repositioning content for the circle. It adds clearer Export/Watch Only captions and counters, a larger first-address QR, two-module QR margins and a cancellable Exit warning. Version `.9` restores the original HOLD OK control and reuses the input-warning design during the reset hold. The approved button mapping is unchanged. The First Address page retains complete address text at its intended size; five-character groups aid visual comparison. Version .8 corrects the splash spelling to “SOVEREIGN.”
+The `.11` home banner has 48-pixel side margins and stepped corners that match the Dice Seed icon. The round layout keeps the original green palette, glyphs and design language while enlarging and repositioning content for the circle. It adds clearer Export/Watch Only captions and counters, a larger first-address QR, two-module QR margins and a cancellable Exit warning. Version `.9` restores the original HOLD OK control and reuses the input-warning design during the reset hold. The approved button mapping is unchanged. The First Address page retains complete address text at its intended size; five-character groups aid visual comparison. Version .8 corrects the splash spelling to “SOVEREIGN.”
 
 [All 25 rendered screens and 21 original comparisons](docs/screenshots.md) · [Complete adaptation differences](docs/fork-differences.md)
 
